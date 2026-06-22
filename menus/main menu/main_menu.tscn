@@ -1,0 +1,63 @@
+[gd_scene format=3 uid="uid://cuetqgx13tv6s"]
+
+[ext_resource type="Texture2D" uid="uid://blvriyeib4oto" path="res://menus/main menu/main_menu_background.png" id="1_44pu4"]
+[ext_resource type="Script" uid="uid://mkg3caem1j3b" path="res://menus/main menu/main_menu.gd" id="1_iwc1l"]
+
+[node name="MainMenu" type="Control" unique_id=99476665]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_iwc1l")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1290877121]
+
+[node name="MainMenuContainer" type="PanelContainer" parent="CanvasLayer" unique_id=2142633882]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 512.0
+offset_top = 344.0
+offset_right = -512.0
+offset_bottom = -260.71796
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/MainMenuContainer" unique_id=581406369]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainMenuContainer/MarginContainer" unique_id=132391317]
+layout_mode = 2
+
+[node name="PlayOnline" type="Button" parent="CanvasLayer/MainMenuContainer/MarginContainer/VBoxContainer" unique_id=501006811]
+layout_mode = 2
+text = "Play Online"
+
+[node name="PlayOffline" type="Button" parent="CanvasLayer/MainMenuContainer/MarginContainer/VBoxContainer" unique_id=2103594907]
+visible = false
+layout_mode = 2
+text = "Play Offline"
+
+[node name="QuitGame" type="Button" parent="CanvasLayer/MainMenuContainer/MarginContainer/VBoxContainer" unique_id=1435891460]
+layout_mode = 2
+text = "Quit Game"
+
+[node name="Background" type="TextureRect" parent="." unique_id=2066163625]
+layout_mode = 0
+offset_left = -243.03998
+offset_top = -170.88745
+offset_right = 1655.2151
+offset_bottom = 974.52954
+texture = ExtResource("1_44pu4")
+
+[node name="TitleAndVersion" type="Label" parent="." unique_id=1471539165]
+layout_mode = 0
+offset_left = 456.0
+offset_top = 240.0
+offset_right = 816.0
+offset_bottom = 295.83334
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_font_sizes/font_size = 40
+text = "Monkanics (V0.1.1)"

@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://cjmbp55n6h0po"]
+
+[node name="DaisyDriveHouse" type="Node3D"]
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5125122, 74.11606, -96.63306)
+use_collision = true
+size = Vector3(1, 165, 675)
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="CSGBox3D"]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, -15, -0.5)
+transparency = 0.01
+operation = 2
+size = Vector3(30, 135, 225)
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 256.5125, 74.11606, -96.63306)
+use_collision = true
+size = Vector3(1, 165, 675)
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="CSGBox3D2"]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, -15, -0.5)
+transparency = 0.01
+operation = 2
+size = Vector3(30, 135, 225)
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="."]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 129.01251, 74.11606, 233.36694)
+use_collision = true
+size = Vector3(1, 165, 270)
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="."]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 129.01251, 74.11606, -426.63306)
+use_collision = true
+size = Vector3(1, 165, 270)
+
+[node name="CSGBox3D5" type="CSGBox3D" parent="."]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 129.01251, 171.61606, -497.94653)
+use_collision = true
+size = Vector3(143.37305, 360, 135)
+
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="."]
+transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 500, 30, 180, 240)
+use_collision = true
+polygon = PackedVector2Array(30, -30, -105, 105, 30, 105, 30, 45)
+
+[node name="CSGPolygon3D2" type="CSGPolygon3D" parent="."]
+transform = Transform3D(4.3711385e-08, -1, -4.371139e-05, -1, -4.3711385e-08, 0, -3.8213705e-15, 8.742278e-08, -500, 240, 180, -257.5497)
+use_collision = true
+polygon = PackedVector2Array(30, -30, -105, 105, 30, 105, 30, 45)

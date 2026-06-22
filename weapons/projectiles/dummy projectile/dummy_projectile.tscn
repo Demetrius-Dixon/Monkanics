@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://bf2aw1eve6evb"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uc6op"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_400hg"]
+lightmap_size_hint = Vector2i(17, 9)
+
+[sub_resource type="SphereMesh" id="SphereMesh_uc6op"]
+lightmap_size_hint = Vector2i(17, 9)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6rsu2"]
+albedo_color = Color(0, 0, 0, 1)
+
+[node name="DummyProjectile" type="Node3D" unique_id=421461171]
+
+[node name="DefaultDummyMesh" type="MeshInstance3D" parent="." unique_id=1365211000]
+transform = Transform3D(1.6888285, 0, 0, 0, -7.8022495e-08, 1.6169319, 0, -1.7849467, -7.067834e-08, 0, -3.009949e-06, -0.7224419)
+visible = false
+material_override = SubResource("StandardMaterial3D_uc6op")
+mesh = SubResource("SphereMesh_400hg")
+skeleton = NodePath("")
+
+[node name="NewDummyMesh" type="MeshInstance3D" parent="." unique_id=703163045]
+transform = Transform3D(1.6888285, 0, 0, 0, -7.8022495e-08, 1.6169319, 0, -1.7849467, -7.067834e-08, 0, -3.009949e-06, -0.7224419)
+visible = false
+skeleton = NodePath("")
+
+[node name="ProjectileMesh" type="MeshInstance3D" parent="." unique_id=970122431]
+transform = Transform3D(1.0475166, 0, 0, 0, -5.0000388e-08, 1.0252197, 0, -1.1438756, -4.4813774e-08, 0, -3.009949e-06, -0.47262973)
+mesh = SubResource("SphereMesh_uc6op")
+skeleton = NodePath("")
+surface_material_override/0 = SubResource("StandardMaterial3D_6rsu2")

@@ -1,0 +1,267 @@
+[gd_scene format=3 uid="uid://bv5ucnu7shjsd"]
+
+[ext_resource type="Script" uid="uid://5ghw627ti26c" path="res://player/player scene/player_script.gd" id="1_jaj8s"]
+[ext_resource type="Texture2D" uid="uid://bs2imetjial0v" path="res://weapons/crosshairs/test crosshair/test_crosshair.png" id="2_7kfc4"]
+[ext_resource type="Script" uid="uid://b0mk45q6ha64t" path="res://player/player health/player_health_bar.gd" id="3_6e6w6"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_m0ytv"]
+radius = 0.75443
+height = 3.283731
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_qjkh3"]
+size = Vector3(1.4907227, 2.8712158, 1.4303589)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_uk6jr"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4tr7d"]
+albedo_color = Color(0.192157, 0.537255, 1, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_hrypj"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_y3a4q"]
+albedo_color = Color(0.635294, 0.631373, 0.580392, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_emag6"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o126h"]
+albedo_color = Color(0.635294, 0.631373, 0.580392, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_kq7t7"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lux2e"]
+albedo_color = Color(0.191683, 0.535553, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dp41y"]
+albedo_color = Color(0.969228, 0.836702, 3.85046e-07, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_u10yq"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_irac7"]
+albedo_color = Color(0.635294, 0.631373, 0.580392, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_x1k2x"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cuim2"]
+albedo_color = Color(0.634992, 0.630358, 0.58056, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_8aoo4"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7s7pf"]
+albedo_color = Color(0.635294, 0.631373, 0.580392, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8b2kb"]
+albedo_color = Color(0.635294, 0.631373, 0.580392, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_7fu55"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o8o4q"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kt464"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_qjkh3"]
+radius = 0.1
+
+[node name="Player" type="CharacterBody3D" unique_id=1807622953]
+collision_layer = 2
+floor_constant_speed = true
+floor_snap_length = 1.0
+platform_on_leave = 2
+script = ExtResource("1_jaj8s")
+
+[node name="PlayerWorldCollision" type="CollisionShape3D" parent="." unique_id=618227573]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.704959, 0)
+visible = false
+shape = SubResource("CapsuleShape3D_m0ytv")
+
+[node name="PlayerDamageTaker" type="RigidBody3D" parent="." unique_id=948311641]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.704959, 0.017035484)
+collision_layer = 4
+collision_mask = 8
+gravity_scale = 0.0
+can_sleep = false
+freeze = true
+
+[node name="PlayerDamageTakerShape" type="CollisionShape3D" parent="PlayerDamageTaker" unique_id=397687815]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.01977539, -0.10711676, -0.053519487)
+shape = SubResource("BoxShape3D_qjkh3")
+
+[node name="LOSReference" type="Node3D" parent="." unique_id=2139007299]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.679089, 0)
+visible = false
+
+[node name="BodyParts" type="Node3D" parent="." unique_id=2101857998]
+transform = Transform3D(1.2499998, 0, 0, 0, 1.2499998, 0, 0, 0, 1.2499998, 0, 0.12018298, 0)
+
+[node name="Torso" type="Node3D" parent="BodyParts" unique_id=30535280]
+
+[node name="Body" type="MeshInstance3D" parent="BodyParts/Torso" unique_id=385455556]
+transform = Transform3D(0.999998, -0.00125173, 0.000302195, 0.00208652, 0.599998, -0.00101264, -0.000300076, 0.000607961, 0.999999, 0, 0.138749, 0)
+mesh = SubResource("CapsuleMesh_uk6jr")
+skeleton = NodePath("../../../PlayerWorldCollision")
+surface_material_override/0 = SubResource("StandardMaterial3D_4tr7d")
+
+[node name="Belly" type="MeshInstance3D" parent="BodyParts/Torso" unique_id=659521144]
+transform = Transform3D(0.528735, 0, 0, 0, 0.62831, 0, 0, 0, 0.432796, -0.000152302, 0.215441, 0.354943)
+mesh = SubResource("SphereMesh_hrypj")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_y3a4q")
+
+[node name="Hands" type="Node3D" parent="BodyParts" unique_id=421840992]
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0, 0)
+
+[node name="RightHand" type="MeshInstance3D" parent="BodyParts/Hands" unique_id=1196764347]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -1.02491, 0.160331, 0)
+mesh = SubResource("SphereMesh_emag6")
+surface_material_override/0 = SubResource("StandardMaterial3D_o126h")
+
+[node name="LeftHand" type="MeshInstance3D" parent="BodyParts/Hands" unique_id=1507374137]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 1.02283, 0.160331, 0)
+mesh = SubResource("SphereMesh_emag6")
+surface_material_override/0 = SubResource("StandardMaterial3D_o126h")
+
+[node name="Feet" type="Node3D" parent="BodyParts" unique_id=1456805946]
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0, 0)
+
+[node name="RightFoot" type="MeshInstance3D" parent="BodyParts/Feet" unique_id=487806409]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -0.268042, -0.871966, 0)
+mesh = SubResource("SphereMesh_emag6")
+surface_material_override/0 = SubResource("StandardMaterial3D_o126h")
+
+[node name="LeftFoot" type="MeshInstance3D" parent="BodyParts/Feet" unique_id=2099641029]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.263859, -0.881938, 0)
+mesh = SubResource("SphereMesh_emag6")
+surface_material_override/0 = SubResource("StandardMaterial3D_o126h")
+
+[node name="HeadParts" type="Node3D" parent="." unique_id=1795170649]
+transform = Transform3D(1.2499999, 0, 0, 0, 1.2499999, 0, 0, 0, 1.2499999, 0, 0.9483539, 0)
+
+[node name="Head" type="MeshInstance3D" parent="HeadParts" unique_id=571799220]
+transform = Transform3D(0.716454, 0, 0, 0, 0.7, 0, 0, 0, 0.669975, 0, 0.381033, 0)
+mesh = SubResource("SphereMesh_kq7t7")
+skeleton = NodePath("../../BodyParts")
+surface_material_override/0 = SubResource("StandardMaterial3D_lux2e")
+
+[node name="Bulb" type="MeshInstance3D" parent="HeadParts" unique_id=1663073969]
+transform = Transform3D(0.45, 0, 0, 0, 0.44, 0, 0, 0, 0.421, 0, 0.933875, 0)
+mesh = SubResource("SphereMesh_kq7t7")
+skeleton = NodePath("../../BodyParts")
+surface_material_override/0 = SubResource("StandardMaterial3D_dp41y")
+
+[node name="BulbBase" type="MeshInstance3D" parent="HeadParts" unique_id=267557432]
+transform = Transform3D(-1.29805e-09, 1.45124e-09, 0.197714, 0.0048431, 0.0605503, -4.70438e-09, -0.198595, 0.00147662, -1.407e-09, 0.00353282, 0.710259, -0.00813173)
+mesh = SubResource("CylinderMesh_u10yq")
+skeleton = NodePath("../../BodyParts")
+surface_material_override/0 = SubResource("StandardMaterial3D_irac7")
+
+[node name="Ear1" type="MeshInstance3D" parent="HeadParts" unique_id=1931037064]
+transform = Transform3D(-1.24258e-08, -0.204567, -0.0195813, 0.294296, -9.25735e-09, 0, -3.32948e-09, -0.0548136, 0.0730785, -0.41622, 0.381033, 0)
+mesh = SubResource("CapsuleMesh_x1k2x")
+skeleton = NodePath("../../BodyParts")
+surface_material_override/0 = SubResource("StandardMaterial3D_cuim2")
+
+[node name="Ear2" type="MeshInstance3D" parent="HeadParts" unique_id=1475584477]
+transform = Transform3D(-1.24258e-08, -0.204567, 0.0195813, 0.294296, -9.25735e-09, 1.34474e-16, 3.32947e-09, 0.0548136, 0.0730785, 0.396893, 0.381033, 0)
+mesh = SubResource("CapsuleMesh_x1k2x")
+skeleton = NodePath("../../BodyParts")
+surface_material_override/0 = SubResource("StandardMaterial3D_cuim2")
+
+[node name="Mouth" type="MeshInstance3D" parent="HeadParts" unique_id=1084691507]
+transform = Transform3D(3.63079e-15, 6.3479e-09, 0.396675, 0.36476, 0.127143, -4.90044e-09, -0.209154, 0.221735, -8.54626e-09, 0.0166874, 0.218001, 0.390377)
+mesh = SubResource("SphereMesh_8aoo4")
+skeleton = NodePath("../../BodyParts")
+surface_material_override/0 = SubResource("StandardMaterial3D_7s7pf")
+
+[node name="Nose" type="MeshInstance3D" parent="HeadParts" unique_id=1364230490]
+transform = Transform3D(1.61462e-15, 3.54947e-09, 0.146069, 0.0542897, 0.136928, -3.47555e-09, -0.181521, 0.0409527, -1.03948e-09, 0.0165363, 0.423724, 0.360932)
+mesh = SubResource("SphereMesh_8aoo4")
+skeleton = NodePath("../../BodyParts")
+surface_material_override/0 = SubResource("StandardMaterial3D_8b2kb")
+
+[node name="Eye1" type="MeshInstance3D" parent="HeadParts" unique_id=1619156093]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, -0.082307, 0.516117, 0.252076)
+mesh = SubResource("SphereMesh_7fu55")
+skeleton = NodePath("../../BodyParts")
+surface_material_override/0 = SubResource("StandardMaterial3D_o8o4q")
+
+[node name="Eye2" type="MeshInstance3D" parent="HeadParts" unique_id=1122131152]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0.109744, 0.516117, 0.252076)
+mesh = SubResource("SphereMesh_7fu55")
+skeleton = NodePath("../../BodyParts")
+surface_material_override/0 = SubResource("StandardMaterial3D_o8o4q")
+
+[node name="Pupil1" type="MeshInstance3D" parent="HeadParts" unique_id=834394924]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0.109744, 0.532909, 0.309682)
+mesh = SubResource("SphereMesh_7fu55")
+skeleton = NodePath("../../BodyParts")
+surface_material_override/0 = SubResource("StandardMaterial3D_kt464")
+
+[node name="Pupil2" type="MeshInstance3D" parent="HeadParts" unique_id=1318388259]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.0824064, 0.532909, 0.309682)
+mesh = SubResource("SphereMesh_7fu55")
+skeleton = NodePath("../../BodyParts")
+surface_material_override/0 = SubResource("StandardMaterial3D_kt464")
+
+[node name="GlobalMuzzleRaycast" type="RayCast3D" parent="." unique_id=59138222]
+transform = Transform3D(-1.79232, -1.59682e-07, 2.02871e-15, 0, -4.62259e-08, -0.307369, 2.70633e-07, -1.05752, 1.34355e-08, 0.00403987, 1.30823, 0.427277)
+visible = false
+
+[node name="CameraHorizonalRotation" type="Node3D" parent="." unique_id=1674130874]
+
+[node name="CameraVerticalRotation" type="Node3D" parent="CameraHorizonalRotation" unique_id=332764294]
+
+[node name="CameraSpringArm" type="SpringArm3D" parent="CameraHorizonalRotation/CameraVerticalRotation" unique_id=1158340770]
+transform = Transform3D(-0.999827, 0.0176161, -0.00590412, 0.0160472, 0.97896, 0.203419, 0.00936334, 0.203289, -0.979074, 0.172905, 3.32345, -0.0406206)
+shape = SubResource("SphereShape3D_qjkh3")
+spring_length = 8.0
+margin = 1.0
+
+[node name="Camera" type="Camera3D" parent="CameraHorizonalRotation/CameraVerticalRotation/CameraSpringArm" unique_id=1884407364]
+transform = Transform3D(0.99958, 0.0230555, -0.017559, -0.0244362, 0.996253, -0.0829678, 0.0155803, 0.0833621, 0.996397, -0.138757, 0.0314531, 5.01021)
+
+[node name="CameraRaycast" type="RayCast3D" parent="CameraHorizonalRotation/CameraVerticalRotation/CameraSpringArm/Camera" unique_id=2019117839]
+transform = Transform3D(-3589.56, 90.709, -20.1897, -117.827, -149.042, 615.165, 6.16094, 49999.7, 1.87036, 0.0434627, -0.0244007, 0.493888)
+visible = false
+
+[node name="GlobalLOSChecker" type="RayCast3D" parent="CameraHorizonalRotation/CameraVerticalRotation" unique_id=641735174]
+transform = Transform3D(13.4, 0, 0, 0, -2.67559e-07, 2.3, 0, -6.1210394, -1.0053599e-07, 0, 1.2447119, 0.1650495)
+visible = false
+collision_mask = 4
+
+[node name="GlobalProjectileOrigin" type="Node3D" parent="CameraHorizonalRotation/CameraVerticalRotation" unique_id=301358322]
+transform = Transform3D(0.99999964, 0, 0, 0, 0.99999964, 0, 0, 0, 0.99999964, 0.00515091, 1.5837831, 1.2103686)
+visible = false
+
+[node name="PlayerHUD" type="Node" parent="." unique_id=1530719627]
+
+[node name="TestCrosshair" type="TextureRect" parent="PlayerHUD" unique_id=1188489330]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -2.7545166
+offset_top = -3.0792236
+offset_right = 37.245483
+offset_bottom = 36.920776
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.15, 0.15)
+texture = ExtResource("2_7kfc4")
+metadata/_edit_use_anchors_ = true
+
+[node name="PlayerHealthBar" type="ProgressBar" parent="PlayerHUD" unique_id=1104205415]
+anchors_preset = -1
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 76.80829
+offset_top = 236.4425
+offset_right = -921.30927
+offset_bottom = -89.48364
+grow_horizontal = 2
+grow_vertical = 2
+step = 1.0
+value = 100.0
+rounded = true
+script = ExtResource("3_6e6w6")

@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://bn1b4438pxw3l"]
+
+[ext_resource type="Script" uid="uid://ce3vdf7yi6vl6" path="res://weapons/projectiles/universal projectile/universal_projectile.gd" id="1_ppgwo"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_0l2xr"]
+radius = 0.5120082
+
+[sub_resource type="SphereMesh" id="SphereMesh_400hg"]
+lightmap_size_hint = Vector2i(17, 9)
+
+[node name="UniversalProjectile" type="RigidBody3D" unique_id=1709629552]
+collision_layer = 8
+collision_mask = 5
+mass = 0.001
+gravity_scale = 0.0
+can_sleep = false
+lock_rotation = true
+continuous_cd = true
+contact_monitor = true
+max_contacts_reported = 10
+script = ExtResource("1_ppgwo")
+
+[node name="ProjectileHitbox" type="CollisionShape3D" parent="." unique_id=555799937]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, -3.7620334e-06, -0.5151186)
+shape = SubResource("SphereShape3D_0l2xr")
+
+[node name="ProjectileMesh" type="MeshInstance3D" parent="." unique_id=1365211000]
+transform = Transform3D(1.0475166, 0, 0, 0, -5.0000388e-08, 1.0252197, 0, -1.1438756, -4.4813774e-08, 0, -3.009949e-06, -0.47262973)
+mesh = SubResource("SphereMesh_400hg")
+skeleton = NodePath("")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

@@ -1,0 +1,300 @@
+[gd_scene load_steps=30 format=3 uid="uid://bv5ucnu7shjsd"]
+
+[ext_resource type="Script" uid="uid://5ghw627ti26c" path="res://player/player_script.gd" id="1_2ds8u"]
+[ext_resource type="Script" uid="uid://cut3as21ntdpw" path="res://player/player_damage_collision.gd" id="2_wdipm"]
+[ext_resource type="Script" uid="uid://c0bkiubblh8eq" path="res://player/hud/hud.gd" id="3_lm7ka"]
+[ext_resource type="Texture2D" uid="uid://bs2imetjial0v" path="res://player/crosshairs/test_crosshair.png" id="3_qjkh3"]
+[ext_resource type="Script" uid="uid://dv7joa4iqhr4w" path="res://player/hud/health_bar.gd" id="3_skoyr"]
+[ext_resource type="Texture2D" uid="uid://p0d7f6sgfvjp" path="res://player/hud/alt_crosshair.png" id="6_g6k8r"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_m0ytv"]
+radius = 0.75443
+height = 3.42301
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_qjkh3"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_qjkh3"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_uk6jr"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4tr7d"]
+albedo_color = Color(0.192157, 0.537255, 1, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_hrypj"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_y3a4q"]
+albedo_color = Color(0.635294, 0.631373, 0.580392, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_emag6"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o126h"]
+albedo_color = Color(0.635294, 0.631373, 0.580392, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_kq7t7"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lux2e"]
+albedo_color = Color(0.191683, 0.535553, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dp41y"]
+albedo_color = Color(0.969228, 0.836702, 3.85046e-07, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_u10yq"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_irac7"]
+albedo_color = Color(0.635294, 0.631373, 0.580392, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_x1k2x"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cuim2"]
+albedo_color = Color(0.634992, 0.630358, 0.58056, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_8aoo4"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7s7pf"]
+albedo_color = Color(0.635294, 0.631373, 0.580392, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8b2kb"]
+albedo_color = Color(0.635294, 0.631373, 0.580392, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_7fu55"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o8o4q"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kt464"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_lrf4o"]
+radius = 3.30703
+height = 7.18582
+
+[node name="Player" type="CharacterBody3D"]
+collision_layer = 2
+floor_constant_speed = true
+floor_snap_length = 1.0
+platform_on_leave = 2
+script = ExtResource("1_2ds8u")
+
+[node name="PlayerObjectCollision" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.704959, 0)
+visible = false
+shape = SubResource("CapsuleShape3D_m0ytv")
+
+[node name="PlayerDamageCollision" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.820198, 0)
+visible = false
+script = ExtResource("2_wdipm")
+
+[node name="PlayerDamageShape" type="CollisionShape3D" parent="PlayerDamageCollision"]
+shape = SubResource("CapsuleShape3D_m0ytv")
+
+[node name="LOSReference" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.679089, 0)
+visible = false
+
+[node name="GlobalRotationPivot" type="Node3D" parent="."]
+
+[node name="CameraHorizonalRotation" type="Node3D" parent="."]
+
+[node name="CameraVerticalRotation" type="Node3D" parent="CameraHorizonalRotation"]
+
+[node name="TestCrosshair" type="TextureRect" parent="CameraHorizonalRotation/CameraVerticalRotation"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -1.75812
+offset_top = -1.69144
+offset_right = 38.2419
+offset_bottom = 38.3086
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("3_qjkh3")
+
+[node name="CameraSpringArm" type="SpringArm3D" parent="CameraHorizonalRotation/CameraVerticalRotation"]
+transform = Transform3D(-0.999827, 0.0176161, -0.00590412, 0.0160472, 0.97896, 0.203419, 0.00936334, 0.203289, -0.979074, 0.172905, 3.32345, -0.0406206)
+shape = SubResource("SphereShape3D_qjkh3")
+spring_length = 11.0
+margin = 1.0
+
+[node name="Camera" type="Camera3D" parent="CameraHorizonalRotation/CameraVerticalRotation/CameraSpringArm"]
+transform = Transform3D(0.99958, 0.0230555, -0.017559, -0.0244362, 0.996253, -0.0829678, 0.0155803, 0.0833621, 0.996397, -0.138757, 0.0314531, 5.01021)
+
+[node name="CameraRaycast" type="RayCast3D" parent="CameraHorizonalRotation/CameraVerticalRotation/CameraSpringArm/Camera"]
+transform = Transform3D(-3589.56, 90.709, -20.1897, -117.827, -149.042, 615.165, 6.16094, 49999.7, 1.87036, 0.0434627, -0.0244007, 0.493888)
+visible = false
+
+[node name="TempGun" type="Node3D" parent="CameraHorizonalRotation/CameraVerticalRotation"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00515091, 0.917117, 1.65129)
+
+[node name="TempGunModel" type="MeshInstance3D" parent="CameraHorizonalRotation/CameraVerticalRotation/TempGun"]
+transform = Transform3D(0.685814, 0, 0, 0, -2.70883e-08, -0.639557, 0, 0.619708, -2.79559e-08, 0, 0, -0.203584)
+visible = false
+mesh = SubResource("CapsuleMesh_qjkh3")
+
+[node name="TempGunMuzzle" type="Node3D" parent="CameraHorizonalRotation/CameraVerticalRotation/TempGun"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.663219)
+
+[node name="MuzzleRaycast" type="RayCast3D" parent="CameraHorizonalRotation/CameraVerticalRotation"]
+transform = Transform3D(-1.79232, -1.59682e-07, 2.02871e-15, 0, -4.62259e-08, -0.307369, 2.70633e-07, -1.05752, 1.34355e-08, 0.0387498, 1.65615, 0.427277)
+
+[node name="BodyParts" type="Node3D" parent="CameraHorizonalRotation"]
+transform = Transform3D(1.25, 0, 0, 0, 1.25, 0, 0, 0, 1.25, 0, 0.120183, 0)
+
+[node name="Torso" type="Node3D" parent="CameraHorizonalRotation/BodyParts"]
+
+[node name="Body" type="MeshInstance3D" parent="CameraHorizonalRotation/BodyParts/Torso"]
+transform = Transform3D(0.999998, -0.00125173, 0.000302195, 0.00208652, 0.599998, -0.00101264, -0.000300076, 0.000607961, 0.999999, 0, 0.138749, 0)
+mesh = SubResource("CapsuleMesh_uk6jr")
+skeleton = NodePath("../../../../PlayerObjectCollision")
+surface_material_override/0 = SubResource("StandardMaterial3D_4tr7d")
+
+[node name="Belly" type="MeshInstance3D" parent="CameraHorizonalRotation/BodyParts/Torso"]
+transform = Transform3D(0.528735, 0, 0, 0, 0.62831, 0, 0, 0, 0.432796, -0.000152302, 0.215441, 0.354943)
+mesh = SubResource("SphereMesh_hrypj")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_y3a4q")
+
+[node name="Hands" type="Node3D" parent="CameraHorizonalRotation/BodyParts"]
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0, 0)
+
+[node name="RightHand" type="MeshInstance3D" parent="CameraHorizonalRotation/BodyParts/Hands"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -1.02491, 0.160331, 0)
+mesh = SubResource("SphereMesh_emag6")
+surface_material_override/0 = SubResource("StandardMaterial3D_o126h")
+
+[node name="LeftHand" type="MeshInstance3D" parent="CameraHorizonalRotation/BodyParts/Hands"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 1.02283, 0.160331, 0)
+mesh = SubResource("SphereMesh_emag6")
+surface_material_override/0 = SubResource("StandardMaterial3D_o126h")
+
+[node name="Feet" type="Node3D" parent="CameraHorizonalRotation/BodyParts"]
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0, 0)
+
+[node name="RightFoot" type="MeshInstance3D" parent="CameraHorizonalRotation/BodyParts/Feet"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -0.268042, -0.871966, 0)
+mesh = SubResource("SphereMesh_emag6")
+surface_material_override/0 = SubResource("StandardMaterial3D_o126h")
+
+[node name="LeftFoot" type="MeshInstance3D" parent="CameraHorizonalRotation/BodyParts/Feet"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.263859, -0.881938, 0)
+mesh = SubResource("SphereMesh_emag6")
+surface_material_override/0 = SubResource("StandardMaterial3D_o126h")
+
+[node name="HeadVerticalRotation" type="Node3D" parent="CameraHorizonalRotation"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.02754, 0.129638)
+
+[node name="LOSChecker" type="RayCast3D" parent="CameraHorizonalRotation/HeadVerticalRotation"]
+transform = Transform3D(13.4, 0, 0, 0, -2.67559e-07, 2.3, 0, -6.12104, -1.00536e-07, 0, 0.217172, 0.0354115)
+visible = false
+
+[node name="Head" type="Node3D" parent="CameraHorizonalRotation/HeadVerticalRotation"]
+transform = Transform3D(1.25, 0, 0, 0, 1.25, 0, 0, 0, 1.25, 0, -0.079186, -0.129638)
+
+[node name="Head" type="MeshInstance3D" parent="CameraHorizonalRotation/HeadVerticalRotation/Head"]
+transform = Transform3D(0.716454, 0, 0, 0, 0.7, 0, 0, 0, 0.669975, 0, 0.381033, 0)
+mesh = SubResource("SphereMesh_kq7t7")
+skeleton = NodePath("../../../BodyParts")
+surface_material_override/0 = SubResource("StandardMaterial3D_lux2e")
+
+[node name="Bulb" type="MeshInstance3D" parent="CameraHorizonalRotation/HeadVerticalRotation/Head"]
+transform = Transform3D(0.45, 0, 0, 0, 0.44, 0, 0, 0, 0.421, 0, 0.933875, 0)
+mesh = SubResource("SphereMesh_kq7t7")
+skeleton = NodePath("../../../BodyParts")
+surface_material_override/0 = SubResource("StandardMaterial3D_dp41y")
+
+[node name="BulbBase" type="MeshInstance3D" parent="CameraHorizonalRotation/HeadVerticalRotation/Head"]
+transform = Transform3D(-1.29805e-09, 1.45124e-09, 0.197714, 0.0048431, 0.0605503, -4.70438e-09, -0.198595, 0.00147662, -1.407e-09, 0.00353282, 0.710259, -0.00813173)
+mesh = SubResource("CylinderMesh_u10yq")
+skeleton = NodePath("../../../BodyParts")
+surface_material_override/0 = SubResource("StandardMaterial3D_irac7")
+
+[node name="Ear1" type="MeshInstance3D" parent="CameraHorizonalRotation/HeadVerticalRotation/Head"]
+transform = Transform3D(-1.24258e-08, -0.204567, -0.0195813, 0.294296, -9.25735e-09, 0, -3.32948e-09, -0.0548136, 0.0730785, -0.41622, 0.381033, 0)
+mesh = SubResource("CapsuleMesh_x1k2x")
+skeleton = NodePath("../../../BodyParts")
+surface_material_override/0 = SubResource("StandardMaterial3D_cuim2")
+
+[node name="Ear2" type="MeshInstance3D" parent="CameraHorizonalRotation/HeadVerticalRotation/Head"]
+transform = Transform3D(-1.24258e-08, -0.204567, 0.0195813, 0.294296, -9.25735e-09, 1.34474e-16, 3.32947e-09, 0.0548136, 0.0730785, 0.396893, 0.381033, 0)
+mesh = SubResource("CapsuleMesh_x1k2x")
+skeleton = NodePath("../../../BodyParts")
+surface_material_override/0 = SubResource("StandardMaterial3D_cuim2")
+
+[node name="Mouth" type="MeshInstance3D" parent="CameraHorizonalRotation/HeadVerticalRotation/Head"]
+transform = Transform3D(3.63079e-15, 6.3479e-09, 0.396675, 0.36476, 0.127143, -4.90044e-09, -0.209154, 0.221735, -8.54626e-09, 0.0166874, 0.218001, 0.390377)
+mesh = SubResource("SphereMesh_8aoo4")
+skeleton = NodePath("../../../BodyParts")
+surface_material_override/0 = SubResource("StandardMaterial3D_7s7pf")
+
+[node name="Nose" type="MeshInstance3D" parent="CameraHorizonalRotation/HeadVerticalRotation/Head"]
+transform = Transform3D(1.61462e-15, 3.54947e-09, 0.146069, 0.0542897, 0.136928, -3.47555e-09, -0.181521, 0.0409527, -1.03948e-09, 0.0165363, 0.423724, 0.360932)
+mesh = SubResource("SphereMesh_8aoo4")
+skeleton = NodePath("../../../BodyParts")
+surface_material_override/0 = SubResource("StandardMaterial3D_8b2kb")
+
+[node name="Eye1" type="MeshInstance3D" parent="CameraHorizonalRotation/HeadVerticalRotation/Head"]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, -0.082307, 0.516117, 0.252076)
+mesh = SubResource("SphereMesh_7fu55")
+skeleton = NodePath("../../../BodyParts")
+surface_material_override/0 = SubResource("StandardMaterial3D_o8o4q")
+
+[node name="Eye2" type="MeshInstance3D" parent="CameraHorizonalRotation/HeadVerticalRotation/Head"]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0.109744, 0.516117, 0.252076)
+mesh = SubResource("SphereMesh_7fu55")
+skeleton = NodePath("../../../BodyParts")
+surface_material_override/0 = SubResource("StandardMaterial3D_o8o4q")
+
+[node name="Pupil1" type="MeshInstance3D" parent="CameraHorizonalRotation/HeadVerticalRotation/Head"]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0.109744, 0.532909, 0.309682)
+mesh = SubResource("SphereMesh_7fu55")
+skeleton = NodePath("../../../BodyParts")
+surface_material_override/0 = SubResource("StandardMaterial3D_kt464")
+
+[node name="Pupil2" type="MeshInstance3D" parent="CameraHorizonalRotation/HeadVerticalRotation/Head"]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.0824064, 0.532909, 0.309682)
+mesh = SubResource("SphereMesh_7fu55")
+skeleton = NodePath("../../../BodyParts")
+surface_material_override/0 = SubResource("StandardMaterial3D_kt464")
+
+[node name="WrenchHitCollision" type="Area3D" parent="CameraHorizonalRotation/HeadVerticalRotation"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.217172, -0.129638)
+visible = false
+collision_layer = 0
+collision_mask = 0
+
+[node name="WrenchHitShape" type="CollisionShape3D" parent="CameraHorizonalRotation/HeadVerticalRotation/WrenchHitCollision"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 2.60408)
+visible = false
+shape = SubResource("CapsuleShape3D_lrf4o")
+
+[node name="HUD" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("3_lm7ka")
+
+[node name="HealthBar" type="TextureProgressBar" parent="HUD"]
+layout_mode = 0
+offset_left = 59.0
+offset_top = 601.0
+offset_right = 318.0
+offset_bottom = 641.0
+value = 50.0
+script = ExtResource("3_skoyr")
+
+[node name="HealthText" type="Label" parent="HUD/HealthBar"]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 12.0
+offset_right = 65.0
+offset_bottom = 35.0
+text = "0"
+
+[node name="AltCrosshair" type="TextureRect" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("6_g6k8r")

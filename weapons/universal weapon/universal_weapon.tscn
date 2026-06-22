@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://b6cp5kf1f1p0s"]
+
+[ext_resource type="Script" uid="uid://dreg0msdvjmlb" path="res://weapons/universal weapon/universal_weapon.gd" id="1_yovop"]
+
+[node name="UniversalWeapon" type="Node3D"]
+script = ExtResource("1_yovop")
