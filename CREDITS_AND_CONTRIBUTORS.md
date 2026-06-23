@@ -28,4 +28,5 @@ Contribute today and follow the contribution guidelines in the `CONTRIBUTING` fi
 *Put your name on this awesome list via (https://ko-fi.com/monkanics)*
 
 - Pennyloafers
+- WCHC/Kuba
 - Be listed here via (https://ko-fi.com/monkanics)
