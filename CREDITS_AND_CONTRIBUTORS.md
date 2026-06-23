@@ -25,5 +25,7 @@ Contribute today and follow the contribution guidelines in the `CONTRIBUTING` fi
 
 **Financial Backers (All-Time):**
 
+*Put your name on this awesome list via (https://ko-fi.com/monkanics)*
+
 - Pennyloafers
 - Be listed here via (https://ko-fi.com/monkanics)
