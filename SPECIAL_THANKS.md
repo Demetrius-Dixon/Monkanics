@@ -11,7 +11,7 @@
 - The entire Godot Forum.
 - The Monkanics Discord community.
 - The Likemind Discord group.
-- Pennyloafers for invaluable netcode learning and development help.
+- Pennyloafers for invaluable netcode learning and development help AND being the first financial backer of Monkanics.
 - Plants vs Zombies: Battle for Neighborville (PvZ BFN) for kickstarting my long-term interests.
 - The PvZ community for giving me some good times and helping me build my game development skills.
 - YouTube as a whole for providing years of entertainment and my first look into my career path.
