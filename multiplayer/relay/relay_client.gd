@@ -1,6 +1,6 @@
 extends Node
 
-var Relay_Client : PacketPeerUDP
+var Client : PacketPeerUDP
 
 var Is_Registered_With_Relay : bool = false
 var Confirm_Registration_Delay : float = 15.0
@@ -10,7 +10,7 @@ func _ready() -> void:
 	if OS.has_feature("dedicated_server"):
 		queue_free()
 	else:
-		create_relay_client()
+		create_client()
 
 func _process(_delta: float) -> void:
 	
@@ -20,32 +20,32 @@ func _process(_delta: float) -> void:
 		
 		if Is_Registered_With_Relay == false:
 			
-			register_to_relay_server()
+			register_to_ingest_server()
 			
 		if Is_Registered_With_Relay == true:
 			
-			unregister_from_relay_server()
+			unregister_from_ingest_server()
 	
-	poll_relay_client()
+	poll_client()
 
-func create_relay_client() -> void:
+func create_client() -> void:
 	
 	if OS.has_feature("dedicated_server"): 
 		return
 	
-	Relay_Client = PacketPeerUDP.new()
+	Client = PacketPeerUDP.new()
 	
-	Relay_Client.connect_to_host(RelayInfo.RELAY_ROUTER_IPV4, RelayInfo.RELAY_ROUTER_PORT)
+	Client.connect_to_host(RelayInfo.RELAY_ROUTER_IPV4, RelayInfo.RELAY_ROUTER_PORT)
 	
 	set_physics_process(false)
 	
 	print("Client Created")
 
-func poll_relay_client() -> void:
+func poll_client() -> void:
 	
-	if Relay_Client.get_available_packet_count() > 0:
+	if Client.get_available_packet_count() > 0:
 		
-		var Packet : Variant = Relay_Client.get_packet()
+		var Packet : Variant = Client.get_packet()
 		
 		var Packet_String : Variant = Packet.get_string_from_utf8()
 		
@@ -65,22 +65,22 @@ func trigger_client_command(Command:String) -> void:
 		
 		pass
 
-func register_to_relay_server() -> void:
+func register_to_ingest_server() -> void:
 	
-	Relay_Client.put_packet("Register".to_utf8_buffer())
+	Client.put_packet("Register".to_utf8_buffer())
 	
-	#confirm_registration_to_relay_server()
+	#confirm_registration_to_ingest_server()
 
-func confirm_registration_to_relay_server() -> void:
+func confirm_registration_to_ingest_server() -> void:
 	
 	await get_tree().create_timer(Confirm_Registration_Delay).timeout
 	
 	if Is_Registered_With_Relay == false:
 		return
 	
-	register_to_relay_server()
+	register_to_ingest_server()
 	
 	print("Confirmed")
 
-func unregister_from_relay_server() -> void:
-	Relay_Client.put_packet("Unregister".to_utf8_buffer())
+func unregister_from_ingest_server() -> void:
+	Client.put_packet("Unregister".to_utf8_buffer())
