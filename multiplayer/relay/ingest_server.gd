@@ -11,6 +11,8 @@ func _ready() -> void:
 	
 	if not OS.has_feature("dedicated_server"): 
 		queue_free()
+	if not OS.has_feature("ingest"):
+		queue_free()
 	else: 
 		create_ingest_server()
 
