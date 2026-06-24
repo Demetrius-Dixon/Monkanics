@@ -2,7 +2,7 @@ extends Node
 
 var Client : PacketPeerUDP
 
-var Is_Registered_With_Relay : bool = false
+var Is_Registered_With_Ingest_Server : bool = false
 var Confirm_Registration_Delay : float = 15.0
 
 func _ready() -> void:
@@ -18,11 +18,11 @@ func _process(_delta: float) -> void:
 	
 	if Input.is_action_just_pressed("ui_cancel"):
 		
-		if Is_Registered_With_Relay == false:
+		if Is_Registered_With_Ingest_Server == false:
 			
 			register_to_ingest_server()
 			
-		if Is_Registered_With_Relay == true:
+		if Is_Registered_With_Ingest_Server == true:
 			
 			unregister_from_ingest_server()
 	
@@ -56,10 +56,10 @@ func poll_client() -> void:
 func trigger_client_command(Command:String) -> void:
 	
 	if Command == "Confirm_Registration":
-		Is_Registered_With_Relay = true
+		Is_Registered_With_Ingest_Server = true
 	
 	if Command == "Confirm_Unregistration":
-		Is_Registered_With_Relay = false
+		Is_Registered_With_Ingest_Server = false
 	
 	if Command == "Start_Game_As_Host":
 		
@@ -75,7 +75,7 @@ func confirm_registration_to_ingest_server() -> void:
 	
 	await get_tree().create_timer(Confirm_Registration_Delay).timeout
 	
-	if Is_Registered_With_Relay == false:
+	if Is_Registered_With_Ingest_Server == false:
 		return
 	
 	register_to_ingest_server()
