@@ -35,7 +35,7 @@ func create_client() -> void:
 	
 	Client = PacketPeerUDP.new()
 	
-	Client.connect_to_host(RelayInfo.RELAY_ROUTER_IPV4, RelayInfo.RELAY_ROUTER_PORT)
+	Client.connect_to_host(RelayInfo.INGEST_SERVER_IPV4, RelayInfo.INGEST_SERVER_PORT)
 	
 	set_physics_process(false)
 	
