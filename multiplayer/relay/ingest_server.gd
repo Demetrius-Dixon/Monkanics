@@ -1,6 +1,6 @@
 extends Node
 
-var Relay_Server : UDPServer
+var Ingest_Server : UDPServer
 
 var Registered_Relay_Clients : Array[Dictionary] = []
 var Paired_Lobbies : Array[Dictionary] = []
@@ -12,32 +12,32 @@ func _ready() -> void:
 	if not OS.has_feature("dedicated_server"): 
 		queue_free()
 	else: 
-		create_relay_server()
+		create_ingest_server()
 
 func _process(_delta: float) -> void:
 	
-	poll_udp_server()
+	poll_ingest_server()
 	
 	pair_lobby()
 
-func create_relay_server() -> void:
+func create_ingest_server() -> void:
 	
 	if not OS.has_feature("dedicated_server"): 
 		return
 	
-	Relay_Server = UDPServer.new()
+	Ingest_Server = UDPServer.new()
 	
-	Relay_Server.listen(RelayInfo.RELAY_ROUTER_PORT, RelayInfo.RELAY_ROUTER_IPV4)
+	Ingest_Server.listen(RelayInfo.RELAY_ROUTER_PORT, RelayInfo.RELAY_ROUTER_IPV4)
 	
 	print("Server Created")
 
-func poll_udp_server() -> void:
+func poll_ingest_server() -> void:
 	
-	Relay_Server.poll()
+	Ingest_Server.poll()
 	
-	if Relay_Server.is_connection_available():
+	if Ingest_Server.is_connection_available():
 		
-		var Peer : Variant = Relay_Server.take_connection()
+		var Peer : Variant = Ingest_Server.take_connection()
 		
 		var Packet : Variant = Peer.get_packet()
 		
