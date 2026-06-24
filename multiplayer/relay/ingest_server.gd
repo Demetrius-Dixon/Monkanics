@@ -24,14 +24,11 @@ func _process(_delta: float) -> void:
 
 func create_ingest_server() -> void:
 	
-	if not OS.has_feature("dedicated_server"): 
-		return
-	
 	Ingest_Server = UDPServer.new()
 	
 	Ingest_Server.listen(RelayInfo.RELAY_ROUTER_PORT, RelayInfo.RELAY_ROUTER_IPV4)
 	
-	print("Server Created")
+	print("Ingest Server Created")
 
 func poll_ingest_server() -> void:
 	

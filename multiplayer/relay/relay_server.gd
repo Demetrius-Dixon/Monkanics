@@ -24,14 +24,11 @@ func _process(_delta: float) -> void:
 
 func create_relay_server() -> void:
 	
-	if not OS.has_feature("dedicated_server"): 
-		return
-	
 	Relay_Server = UDPServer.new()
 	
 	Relay_Server.listen(RelayInfo.RELAY_ROUTER_PORT, RelayInfo.RELAY_ROUTER_IPV4)
 	
-	print("Server Created")
+	print("Relay Server Created")
 
 func poll_udp_server() -> void:
 	
