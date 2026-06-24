@@ -5,15 +5,14 @@ var Relay_Server : UDPServer
 var Registered_Relay_Clients : Array[Dictionary] = []
 var Paired_Lobbies : Array[Dictionary] = []
 
-@onready var Gameplay_Nodes : Node = $Gameplay
+@onready var Gameplay_Nodes : Node 
 
 func _ready() -> void:
 	
 	if not OS.has_feature("dedicated_server"): 
-		Gameplay_Nodes.queue_free()
 		queue_free()
-	
-	create_relay_server()
+	else: 
+		create_relay_server()
 
 func _process(_delta: float) -> void:
 	
@@ -22,6 +21,9 @@ func _process(_delta: float) -> void:
 	pair_lobby()
 
 func create_relay_server() -> void:
+	
+	if not OS.has_feature("dedicated_server"): 
+		return
 	
 	Relay_Server = UDPServer.new()
 	

@@ -9,8 +9,8 @@ func _ready() -> void:
 	
 	if OS.has_feature("dedicated_server"):
 		queue_free()
-	
-	create_relay_client()
+	else:
+		create_relay_client()
 
 func _process(_delta: float) -> void:
 	
@@ -29,6 +29,9 @@ func _process(_delta: float) -> void:
 	poll_relay_client()
 
 func create_relay_client() -> void:
+	
+	if OS.has_feature("dedicated_server"): 
+		return
 	
 	Relay_Client = PacketPeerUDP.new()
 	
