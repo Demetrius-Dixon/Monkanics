@@ -14,24 +14,9 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	
-	
-	
-	if Input.is_action_just_pressed("ui_cancel"):
-		
-		if Is_Registered_With_Ingest_Server == false:
-			
-			register_to_ingest_server()
-			
-		if Is_Registered_With_Ingest_Server == true:
-			
-			unregister_from_ingest_server()
-	
 	poll_client()
 
 func create_client() -> void:
-	
-	if OS.has_feature("dedicated_server"): 
-		return
 	
 	Client = PacketPeerUDP.new()
 	
