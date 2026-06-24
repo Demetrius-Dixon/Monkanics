@@ -5,8 +5,6 @@ var Ingest_Server : UDPServer
 var Registered_Relay_Clients : Array[Dictionary] = []
 var Paired_Lobbies : Array[Dictionary] = []
 
-@onready var Gameplay_Nodes : Node 
-
 func _ready() -> void:
 	
 	if not OS.has_feature("dedicated_server"): 
