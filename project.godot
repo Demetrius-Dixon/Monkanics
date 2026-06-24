@@ -31,9 +31,9 @@ config/icon="uid://vvac8c3b1en6"
 
 GameQuitter="*uid://cpauojimpws2b"
 RelayInfo="*uid://vjg00ss5mfr7"
-RelayServer="*uid://do5a0ydliwgum"
 RelayClient="*uid://cf75po2rw6uug"
 NetworkManager="*uid://ctngtmcp6jsid"
+IngestServer="*uid://do5a0ydliwgum"
 
 [debug]
 
