@@ -3,7 +3,7 @@ extends Node
 var Client : PacketPeerUDP
 
 var Is_Registered_With_Ingest_Server : bool = false
-var Confirm_Registration_Delay : float = 15.0
+var Confirm_Registration_Delay : float = 5.0
 
 func _ready() -> void:
 	
@@ -54,7 +54,7 @@ func register_to_ingest_server() -> void:
 	
 	Client.put_packet("Register".to_utf8_buffer())
 	
-	#confirm_registration_to_ingest_server()
+	confirm_registration_to_ingest_server()
 
 func confirm_registration_to_ingest_server() -> void:
 	

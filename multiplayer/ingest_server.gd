@@ -5,6 +5,9 @@ var Ingest_Server : UDPServer
 var Registered_Relay_Clients : Array[Dictionary] = []
 var Paired_Lobbies : Array[Dictionary] = []
 
+const Client_Timeout_Limit : float = 30.0
+const END_TIMEOUT_TIMER : float = 0.0
+
 func _ready() -> void:
 	
 	if not OS.has_feature("dedicated_server"): 
@@ -19,6 +22,10 @@ func _process(_delta: float) -> void:
 	poll_ingest_server()
 	
 	pair_lobby()
+
+func _physics_process(delta: float) -> void:
+	
+	tick_client_timeout_timers(delta)
 
 func create_ingest_server() -> void:
 	
@@ -58,6 +65,9 @@ func trigger_server_command(Command:StringName, Peer:Variant, Packet_IP:String) 
 		
 		for registered_client in Registered_Relay_Clients:
 			if registered_client[&"Peer"] == Peer: 
+				
+				registered_client[&"TimeoutTimer"] = Client_Timeout_Limit
+				
 				return
 		
 		var Client_To_Register : Dictionary = {}
@@ -66,7 +76,8 @@ func trigger_server_command(Command:StringName, Peer:Variant, Packet_IP:String) 
 			
 			&"Peer": Peer,
 			&"PeerIP": Packet_IP,
-			&"IsPaired": false
+			&"IsPaired": false,
+			&"TimeoutTimer": Client_Timeout_Limit
 			
 		}
 		
@@ -103,8 +114,6 @@ func trigger_server_command(Command:StringName, Peer:Variant, Packet_IP:String) 
 		print(Registered_Relay_Clients)
 		
 		return
-	
-	
 
 func pair_lobby() -> void:
 	
@@ -129,7 +138,16 @@ func pair_lobby() -> void:
 			
 			
 
-func forward_client_game_packet() -> void:
+func tick_client_timeout_timers(Time_Passed:float) -> void:
 	
-	pass
+	if Registered_Relay_Clients.size() <= 0: return
 	
+	for client in Registered_Relay_Clients:
+		
+		client[&"TimeoutTimer"] = client[&"TimeoutTimer"] - Time_Passed
+		
+		print(client[&"TimeoutTimer"])
+		
+		if client[&"TimeoutTimer"] <= END_TIMEOUT_TIMER:
+			
+			trigger_server_command("Unregister", client[&"Peer"], client[&"PeerIP"])
