@@ -1,5 +1,6 @@
 extends Node
 
+@onready var Main_Scene : Node = $"."
 var Main_Menu_Scene : PackedScene = preload("uid://cuetqgx13tv6s")
 var Gameplay_Scene : PackedScene = preload("uid://f11ymr6ma2f7")
 
@@ -17,4 +18,6 @@ func _ready() -> void:
 
 func load_main_menu() -> void:
 	
-	pass
+	var Main_Menu_To_Load := Main_Menu_Scene.instantiate()
+	
+	Main_Scene.add_child(Main_Menu_To_Load)
