@@ -35,6 +35,7 @@ Monkanics will also be free from in-game microtransactions & FOMO tactics found 
 - `CODE_LICENSE` and `ART_LICENSE` I've already gone over.
 - `CREDITS_AND_CONTRIBUTORS` is a list of everyone who's worked on the project.
 - `SPECIAL_THANKS` is a personal list to show your gratitude to the people/events that've shaped you. You can add to it yourself in your commit.
+- `FUNDING` shows how Monkanics' fund money is used.
 
 --------------------------------------------------------------
 
