@@ -51,15 +51,20 @@ Exporting for Mac, Web, and especially Mobile will result in **SERIOUS compatibi
 
 There are currently 3 export presets found in the `export_presets` file:
 
-- Main Game (Windows) (Runnable)
-- Main Game (Linux) (Runnable)
-- Relay Router (Linux)
+- Main Game (Windows) [x86_64] (Runnable)
+- Main Game (Linux) [x86_64] (Runnable)
+- Ingest Server (Linux only) [x86_64]
+- Relay Server (Linux only) [x86_64]
 
-The 2 main game files for Windows and Linux are playable versions set to x86_64 by default. The archetecture can easily be changed to x86_32 or arm in the export menu.
+The 2 main game files for Windows and Linux are playable versions set to x86_64 by default. The archetecture can easily be changed to x86_32 or arm in the export menu, but keep in mind that support for 32-bit and ARM platforms aren't supported by default.
 
-The Relay Router is an instance of Monkanics' relay server. The key to it's multiplayer working. It is exported as a *dedicated_server*. Meaning all the visuals are stripped and unnesesary gameplay elements will be queued_free by the codebase. 
+The ingest and relay exports are instances of Monkanics' multiplayer archetecture.
 
-The PCK for the Relay Router is also embedded by default, but this **IS NOT** a DRM measure, but instead a way to make file porting a lot easier when going to cloud servers for deployment.
+The PCK for the servers is also embedded by default, **this IS NOT a DRM measure**, but instead a way to make file porting a lot easier when going to cloud servers for deployment.
+
+### Export Feature Tags:
+
+*Will fill in later*
 
 ### Deploying a Relay Server For Monkanics:
 
