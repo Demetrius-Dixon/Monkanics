@@ -117,7 +117,7 @@ func trigger_server_command(Command:StringName, Peer:Variant, Packet_IP:String) 
 
 func pair_lobby() -> void:
 	
-	if Registered_Relay_Clients.size() <= 1: 
+	if Registered_Relay_Clients.size() <= 0: 
 		return
 	
 	var Unpaired_Client_Count : int = 0
@@ -128,14 +128,24 @@ func pair_lobby() -> void:
 	
 	print(Unpaired_Client_Count)
 	
+	if Unpaired_Client_Count >= 1:
+		
+		pass
+		
+		#TODO Start Game Session
+	
 	if Unpaired_Client_Count >= 2:
 		
-		var Lobby_To_Pair : Dictionary = {}
+		pass
 		
-		for client_to_pair in Registered_Relay_Clients:
-			
-			if client_to_pair[&"IsPaired"] == true: continue
-			
+		#TODO Join Game Session
+		
+		#var Lobby_To_Pair : Dictionary = {}
+		#
+		#for client_to_pair in Registered_Relay_Clients:
+			#
+			#if client_to_pair[&"IsPaired"] == true: 
+				#continue
 			
 
 func tick_client_timeout_timers(Time_Passed:float) -> void:
@@ -145,8 +155,6 @@ func tick_client_timeout_timers(Time_Passed:float) -> void:
 	for client in Registered_Relay_Clients:
 		
 		client[&"TimeoutTimer"] = client[&"TimeoutTimer"] - Time_Passed
-		
-		print(client[&"TimeoutTimer"])
 		
 		if client[&"TimeoutTimer"] <= END_TIMEOUT_TIMER:
 			

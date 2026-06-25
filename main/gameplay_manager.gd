@@ -21,3 +21,7 @@ func load_main_menu() -> void:
 	var Main_Menu_To_Load := Main_Menu_Scene.instantiate()
 	
 	Main_Scene.add_child(Main_Menu_To_Load)
+
+func start_game_as_host() -> void:
+	
+	pass
