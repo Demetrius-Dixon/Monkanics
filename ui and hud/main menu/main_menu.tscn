@@ -62,4 +62,5 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 40
 text = "Monkanics (v0.2)"
 
+[connection signal="pressed" from="CanvasLayer/MainMenuContainer/MarginContainer/VBoxContainer/PlayOnline" to="." method="_on_play_online_pressed"]
 [connection signal="pressed" from="CanvasLayer/MainMenuContainer/MarginContainer/VBoxContainer/QuitGame" to="." method="_on_quit_game_pressed"]
