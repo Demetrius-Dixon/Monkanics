@@ -123,9 +123,9 @@ func start_server_game() -> void:
 	var Server : ENetMultiplayerPeer = ENetMultiplayerPeer.new()
 	#var Server_Creation : Error = 
 	
-	Server.set_bind_ip(RelayInfo.RELAY_ROUTER_IPV4)
+	Server.set_bind_ip(ServerInfo.RELAY_ROUTER_IPV4)
 	
-	Server.create_server(RelayInfo.RELAY_ROUTER_PORT)
+	Server.create_server(ServerInfo.RELAY_ROUTER_PORT)
 	
 	# Server creation check
 	#if Server_Creation != OK:

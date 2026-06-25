@@ -24,7 +24,7 @@ func create_ingest_server() -> void:
 	
 	Ingest_Server = UDPServer.new()
 	
-	Ingest_Server.listen(RelayInfo.INGEST_SERVER_PORT, RelayInfo.INGEST_SERVER_IPV4)
+	Ingest_Server.listen(ServerInfo.INGEST_SERVER_PORT, ServerInfo.INGEST_SERVER_IPV4)
 	
 	print("Ingest Server Created")
 
