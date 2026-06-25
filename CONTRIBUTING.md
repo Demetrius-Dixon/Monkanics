@@ -39,14 +39,12 @@ Contributions of any kind are welcome: bug reports, code, art, playtesting feedb
 **It is highly recommended to only export Monkanics using the following export templates. As Monkanics was built for Windows and Linux PCs by default:**
 
 - Windows x86_64
-- Windows x86_32
-- Windows arm64
 - Linux x86_64
-- Linux x86_32
-- Linux arm64
-- Linux arm32
+
+Exporting for 32-bit systems or ARM is theoretically possible, but is not supported by default.
 
 Exporting for Mac, Web, and especially Mobile will result in **SERIOUS compatibility issues**. 
+
 *However, the project files are free to modify. So if you'd like to give yourself a challenge, you can attempt to port Monkanics there yourself. Just let us know how you did it.*
 
 **Monkanics' Export Presets:**
