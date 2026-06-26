@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bn1b4438pxw3l"]
 
-[ext_resource type="Script" uid="uid://ce3vdf7yi6vl6" path="res://weapons/projectiles/universal projectile/universal_projectile.gd" id="1_ppgwo"]
+[ext_resource type="Script" uid="uid://ce3vdf7yi6vl6" path="res://inventions/projectiles/universal projectile/universal_projectile.gd" id="1_ppgwo"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_0l2xr"]
 radius = 0.5120082

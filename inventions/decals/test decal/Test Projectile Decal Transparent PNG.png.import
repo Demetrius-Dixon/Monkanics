@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://p0d7f6sgfvjp"
-path="res://.godot/imported/alt_crosshair.png-b65e7fa22755b4ffba03fc14a147b619.ctex"
+uid="uid://bniymut6axtuw"
+path="res://.godot/imported/Test Projectile Decal Transparent PNG.png-f309efc72b124ba72d80d93068a5638e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://weapons/crosshairs/alt crosshair/alt_crosshair.png"
-dest_files=["res://.godot/imported/alt_crosshair.png-b65e7fa22755b4ffba03fc14a147b619.ctex"]
+source_file="res://inventions/decals/test decal/Test Projectile Decal Transparent PNG.png"
+dest_files=["res://.godot/imported/Test Projectile Decal Transparent PNG.png-f309efc72b124ba72d80d93068a5638e.ctex"]
 
 [params]
 
