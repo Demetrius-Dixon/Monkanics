@@ -2,7 +2,7 @@
 
 This short document serves to show how Monkanics is funded, what the fund money is used for, and the project's monthly funding goals.
 
-**Monkanics' current funding platform is Ko-Fi (https://ko-fi.com/monkanics).**
+**Monkanics' current funding platform is Ko-Fi (https://ko-fi.com/monkanics).** Along with bootstrapping with my personal income.
 
 *You're free to contribute at any time. Any amount helps a ton.*
 

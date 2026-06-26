@@ -11,13 +11,18 @@ In the game, you play as cyborg lab monkeys whose creators have gone on lunch br
 
 --------------------------------------------------------------
 
-### Monkanics is dual licensed:
+### Monkanics is Dual Licensed
+
 - It's code is licensed under the copyleft AGPLv3 (See `CODE_LICENSE`)
 - It's art is licensed under the CC BY-NC-SA 4.0 (See `ART_LICENSE`)
 
 In simple, non-legal terms, anyone can see, use, and fork the source code, but any fork must stay open-source under the same copyleft license.
 
 Art assets are separate: they're free to use and remix *non-commercially*, but can't be sold or used commercially without permission from the copyright holder (AKA, me, Demetrius Dixon & one day, Wackshop Games).
+
+Also, Monkanics is developed using the Godot Engine. **It is licensed separately**:
+- Godot is MIT licensed (See `GODOT_LICENSE`)
+- Godot's external dependencies have an exhaustive list of licenses (See `GODOT_COPYRIGHT`)
 
 **The reason Monkanics is open-source is to allow:**
 - Easy moddability by players (You only need a PCK file with the game export).
@@ -29,11 +34,12 @@ Monkanics will also be free from in-game microtransactions & FOMO tactics found 
 
 --------------------------------------------------------------
 
-### Other Files in the Repo:
+### Other Files in the Repo
 
 - `CONTRIBUTING` will be a guide on how to support this repo. However, it is currently unfinished and will be fleshed out later as development continues.
-- `CODE_LICENSE` and `ART_LICENSE` I've already gone over.
-- `CREDITS_AND_CONTRIBUTORS` is a list of everyone who's worked on the project.
+- `DOCUMENTATION` details how Monkanics source code works.
+- `CODE_LICENSE`, `ART_LICENSE`, `GODOT_LICENSE`, and `GODOT_COPYRIGHT` I've already gone over.
+- `CONTRIBUTOR_CREDITS` is a list of everyone who's worked on the project.
 - `SPECIAL_THANKS` is a personal list to show your gratitude to the people/events that've shaped you. You can add to it yourself in your commit.
 - `FUNDING` shows how Monkanics' fund money is used.
 

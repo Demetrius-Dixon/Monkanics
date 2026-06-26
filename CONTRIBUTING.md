@@ -10,8 +10,8 @@ Contributions of any kind are welcome: bug reports, code, art, playtesting feedb
 
 *These are very strict rules that, if broken, will have your pull request rejected. All rules are subject to change:*
 
-1. *Absolutely positively **DO NOT** edit the `ART_LICENSE` and `CODE_LICENSE` files under any circumstances!!!* I'm not a lawyer, but we NEED those files.
-2. *Do not edit or remove a listing in the `CREDITS_AND_CONTRIBUTORS` or `SPECIAL_THANKS` files that isn't yours*. That's pretty messed up.
+1. *Absolutely positively **DO NOT** edit any licesese/copyright files under any circumstances!!!* I'm not a lawyer, but we NEED those files.
+2. *Do not edit or remove a listing in the `CONTRIBUTOR_CREDITS` or `SPECIAL_THANKS` files that isn't yours*. That's pretty messed up.
 3. *Do not edit the `README` file unless it's for grammar errors*.
 4. *Do not submit joke pull requests with no actual changes/additions*.
 5. *Do not submit AI generated code or art of any kind*. Direct AI output is insanely sloppy and disjointed. Please use your human touch when making commits. We are strictly anti-AI.
@@ -25,7 +25,7 @@ Contributions of any kind are welcome: bug reports, code, art, playtesting feedb
 
 ### Credit
 
-Contributors are added to `CREDITS_AND_CONTRIBUTORS`. You can add yourself to the txt file in your commit if you'd like.
+Contributors are added to `CONTRIBUTOR_CREDITS`. You can add yourself to the txt file in your commit if you'd like.
 
 Or, you'd rather use an alias or outright not be listed, just let us know.
 
