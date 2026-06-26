@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://bnw1cqdcjpa07" path="res://addons/kenney_prototype_textures/dark/texture_08.png" id="1_7lvgc"]
 [ext_resource type="Texture2D" uid="uid://rvypiuysnlbj" path="res://addons/kenney_prototype_textures/orange/texture_02.png" id="2_q7k3k"]
-[ext_resource type="PackedScene" uid="uid://bv5ucnu7shjsd" path="res://player/player scene/player.tscn" id="3_skou3"]
+[ext_resource type="PackedScene" uid="uid://bv5ucnu7shjsd" path="res://player/player_scene/player.tscn" id="3_skou3"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_7lvgc"]
 sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)

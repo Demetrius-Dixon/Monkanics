@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://bv5ucnu7shjsd"]
 
-[ext_resource type="Script" uid="uid://5ghw627ti26c" path="res://player/player scene/player_script.gd" id="1_jaj8s"]
+[ext_resource type="Script" uid="uid://5ghw627ti26c" path="res://player/player_scene/player_script.gd" id="1_jaj8s"]
 [ext_resource type="Texture2D" uid="uid://bs2imetjial0v" path="res://weapons/crosshairs/test crosshair/test_crosshair.png" id="2_7kfc4"]
-[ext_resource type="Script" uid="uid://b0mk45q6ha64t" path="res://player/player health/player_health_bar.gd" id="3_6e6w6"]
+[ext_resource type="Script" uid="uid://b0mk45q6ha64t" path="res://player/player_health/player_health_bar.gd" id="3_6e6w6"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_m0ytv"]
 radius = 0.75443

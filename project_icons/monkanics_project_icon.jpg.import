@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://5q3xj6k27etn"
-path="res://.godot/imported/mk_project_icon_v1.png-0ec30cfa039712dfe15f4abf5f49cd26.ctex"
+uid="uid://vvac8c3b1en6"
+path="res://.godot/imported/monkanics_project_icon.jpg-701ac39ea4834329074b0e590c6199f3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://project icons/mk_project_icon_v1.png"
-dest_files=["res://.godot/imported/mk_project_icon_v1.png-0ec30cfa039712dfe15f4abf5f49cd26.ctex"]
+source_file="res://project_icons/monkanics_project_icon.jpg"
+dest_files=["res://.godot/imported/monkanics_project_icon.jpg-701ac39ea4834329074b0e590c6199f3.ctex"]
 
 [params]
 

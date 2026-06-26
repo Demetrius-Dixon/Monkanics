@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cuetqgx13tv6s"]
 
-[ext_resource type="Texture2D" uid="uid://blvriyeib4oto" path="res://ui and hud/main menu/main_menu_background.png" id="1_44pu4"]
-[ext_resource type="Script" uid="uid://mkg3caem1j3b" path="res://ui and hud/main menu/main_menu.gd" id="1_iwc1l"]
+[ext_resource type="Texture2D" uid="uid://blvriyeib4oto" path="res://user_interface/main menu/main_menu_background.png" id="1_44pu4"]
+[ext_resource type="Script" uid="uid://mkg3caem1j3b" path="res://user_interface/main menu/main_menu.gd" id="1_iwc1l"]
 
 [node name="MainMenu" type="Control" unique_id=99476665]
 layout_mode = 3

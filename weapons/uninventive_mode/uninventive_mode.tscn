@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bvisvcihh15rj"]
+
+[ext_resource type="Script" uid="uid://byalt87p00rcy" path="res://weapons/uninventive_mode/uninventive_mode.gd" id="1_xquwj"]
+
+[node name="UninventiveMode" type="Node3D"]
+script = ExtResource("1_xquwj")
