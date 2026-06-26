@@ -3,7 +3,15 @@
 
 Monkanics is a third-person multiplayer FOSS arena shooter made with Godot 4.7 for Windows 10/11 and Linux x86_64.
 
-In the game, you play as cyborg lab monkeys whose creators have gone on lunch break and never came back. Now, they build weapons of mass misconstruction and fight in crazy arenas to collect bean-anas and whatever scrap they can find.
+In the game, you’ll invent your own weapons of mass misconstruction from the ground up. Directly controlling how, where, and what you shoot. 
+
+Combined with a monkey-like moveset where you run fast, jump high, climb any vertical surface, and grab items/steal from enemies; you'll fight to the death to collect the Monkanics' most precious resource: Bean-anas (A super sweet hybrid of a bean and banana that the monkanics are obsessed with).
+
+Core Game Features:
+
+- Crazy, multiplayer, combat collect-a-thon gameplay.
+- In-depth projectile weaponcrafting.
+- FOSS forever with Godot v4.7+ on Windows and Linux.
 
 --------------------------------------------------------------
 
