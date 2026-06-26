@@ -22,7 +22,7 @@ Art assets are separate: they're free to use and remix *non-commercially*, but c
 
 Also, Monkanics is developed using the Godot Engine. **It is licensed separately**:
 - Godot is MIT licensed (See `GODOT_LICENSE`)
-- Godot's external dependencies have an exhaustive list of licenses (See `GODOT_COPYRIGHT`)
+- Godot's external dependencies have an exhaustive list of licenses which are updated once per year on January 1st (See `GODOT_COPYRIGHT`)
 
 **The reason Monkanics is open-source is to allow:**
 - Easy moddability by players (You only need a PCK file with the game export).
@@ -34,7 +34,7 @@ Monkanics will also be free from in-game microtransactions & FOMO tactics found 
 
 --------------------------------------------------------------
 
-### Other Files in the Repo
+### Other Root Files in the Repo
 
 - `CONTRIBUTING` will be a guide on how to support this repo. However, it is currently unfinished and will be fleshed out later as development continues.
 - `DOCUMENTATION` details how Monkanics source code works.
