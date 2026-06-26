@@ -18,7 +18,7 @@ Contribute today and follow the contribution guidelines in the `CONTRIBUTING` fi
 
 **Monkanics Contributors:**
 
-- MD - Concept Artist
+- Pipo - Concept Artist
 - Luova Kuvilus - Concept Artist
 - Frozen_Fried - Concept Artist
 - Max (Snailsnaps/@snai1snaps) - Concept Artist
