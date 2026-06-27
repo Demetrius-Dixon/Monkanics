@@ -34,7 +34,7 @@ func poll_client() -> void:
 		
 		var Packet_String : Variant = Packet.get_string_from_utf8()
 		
-		print("Client Recieved Packet: ", Packet_String)
+		#print("Client Recieved Packet: ", Packet_String)
 		
 		trigger_client_command(Packet_String)
 
@@ -47,8 +47,10 @@ func trigger_client_command(Command:String) -> void:
 		Is_Registered_With_Ingest_Server = false
 	
 	if Command == "Start_Game_As_Host":
-		
-		pass
+		start_lobby_as_host()
+	
+	if Command == "Join_Game_As_Peer":
+		join_game_as_peer()
 
 func register_to_ingest_server() -> void:
 	
@@ -69,3 +71,15 @@ func confirm_registration_to_ingest_server() -> void:
 
 func unregister_from_ingest_server() -> void:
 	Client.put_packet("Unregister".to_utf8_buffer())
+
+func start_lobby_as_host() -> void:
+	
+	Client.put_packet("Confirm_Lobby_Creation".to_utf8_buffer())
+	
+	GameplayManager.load_game()
+	
+	
+
+func join_game_as_peer() -> void:
+	
+	pass

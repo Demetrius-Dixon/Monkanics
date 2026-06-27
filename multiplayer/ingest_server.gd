@@ -3,7 +3,7 @@ extends Node
 var Ingest_Server : UDPServer
 
 var Registered_Relay_Clients : Array[Dictionary] = []
-var Paired_Lobbies : Array[Dictionary] = []
+var Paired_Lobbies : Array[Variant] = []
 
 const Client_Timeout_Limit : float = 30.0
 const END_TIMEOUT_TIMER : float = 0.0
@@ -114,6 +114,28 @@ func trigger_server_command(Command:StringName, Peer:Variant, Packet_IP:String) 
 		print(Registered_Relay_Clients)
 		
 		return
+	
+	if Command == "Confirm_Lobby_Creation":
+		
+		var Safe_To_Create_Lobby : bool = false
+		
+		var Client_Is_Registered : bool = false
+		var Is_Client_In_Lobby_Already : bool = false
+		
+		for registered_client in Registered_Relay_Clients:
+			if registered_client[&"Peer"] == Peer: 
+				Client_Is_Registered = true
+		
+		for paired_lobby:Variant in Paired_Lobbies:
+			if paired_lobby.has(Peer):
+				Is_Client_In_Lobby_Already = true
+		
+		if Safe_To_Create_Lobby == false: 
+			return
+		
+		
+		
+		Paired_Lobbies.append(Peer)
 
 func pair_lobby() -> void:
 	
@@ -121,22 +143,24 @@ func pair_lobby() -> void:
 		return
 	
 	var Unpaired_Client_Count : int = 0
+	var Unpaired_Clients : Array[Dictionary] = []
 	
 	for client in Registered_Relay_Clients:
 		if client[&"IsPaired"] == false:
 			Unpaired_Client_Count = Unpaired_Client_Count + 1
-	
-	print(Unpaired_Client_Count)
+			Unpaired_Clients.append(client)
 	
 	if Unpaired_Client_Count >= 1:
 		
-		pass
+		var Client_To_Become_Host : Dictionary = Unpaired_Clients.get(0)
+		
+		Client_To_Become_Host[&"Peer"].put_packet("Start_Game_As_Host".to_utf8_buffer())
 		
 		#TODO Start Game Session
 	
-	if Unpaired_Client_Count >= 2:
-		
-		pass
+	#if Unpaired_Client_Count >= 2:
+		#
+		#pass
 		
 		#TODO Join Game Session
 		
