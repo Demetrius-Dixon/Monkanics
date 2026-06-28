@@ -21,7 +21,7 @@ func _process(_delta: float) -> void:
 	
 	poll_ingest_server()
 	
-	pair_lobby()
+	#pair_lobby()
 
 func _physics_process(delta: float) -> void:
 	
@@ -62,57 +62,11 @@ func poll_ingest_server() -> void:
 func trigger_server_command(Command:StringName, Peer:Variant, Packet_IP:String) -> void:
 	
 	if Command == "Register":
-		
-		for registered_client in Registered_Relay_Clients:
-			if registered_client[&"Peer"] == Peer: 
-				
-				registered_client[&"TimeoutTimer"] = Client_Timeout_Limit
-				
-				return
-		
-		var Client_To_Register : Dictionary = {}
-		
-		Client_To_Register = {
-			
-			&"Peer": Peer,
-			&"PeerIP": Packet_IP,
-			&"IsPaired": false,
-			&"TimeoutTimer": Client_Timeout_Limit
-			
-		}
-		
-		Registered_Relay_Clients.append(Client_To_Register)
-		
-		Peer.put_packet("Confirm_Registration".to_utf8_buffer())
-		
-		print("Client Registered")
-		
-		print(Registered_Relay_Clients)
-		
+		register_client(Peer, Packet_IP)
 		return
 	
 	if Command == "Unregister":
-		
-		var Client_To_Unregister : Dictionary
-		var Safe_To_Unregister : bool = false
-		
-		for registered_client in Registered_Relay_Clients:
-			if registered_client[&"Peer"] == Peer:
-				
-				Client_To_Unregister = registered_client
-				
-				Peer.put_packet("Confirm_Unregistration".to_utf8_buffer())
-				
-				Safe_To_Unregister = true
-		
-		if Safe_To_Unregister == true:
-			
-			Registered_Relay_Clients.erase(Client_To_Unregister)
-			
-			Client_To_Unregister[&"Peer"].close()
-		
-		print(Registered_Relay_Clients)
-		
+		unregister_client(Peer)
 		return
 	
 	if Command == "Confirm_Lobby_Creation":
@@ -136,6 +90,56 @@ func trigger_server_command(Command:StringName, Peer:Variant, Packet_IP:String) 
 		
 		
 		Paired_Lobbies.append(Peer)
+
+func register_client(Peer:Variant, Packet_IP:String) -> void:
+	
+	for registered_client in Registered_Relay_Clients:
+		if registered_client[&"Peer"] == Peer: 
+			
+			registered_client[&"TimeoutTimer"] = Client_Timeout_Limit
+			
+			return
+		
+	var Client_To_Register : Dictionary = {}
+	
+	Client_To_Register = {
+		
+		&"Peer": Peer,
+		&"PeerIP": Packet_IP,
+		&"IsPaired": false,
+		&"TimeoutTimer": Client_Timeout_Limit
+		
+	}
+	
+	Registered_Relay_Clients.append(Client_To_Register)
+	
+	Peer.put_packet("Confirm_Registration".to_utf8_buffer())
+	
+	print("Client Registered")
+	
+	print(Registered_Relay_Clients)
+
+func unregister_client(Peer:Variant) -> void:
+	
+	var Client_To_Unregister : Dictionary
+	var Safe_To_Unregister : bool = false
+	
+	for registered_client in Registered_Relay_Clients:
+		if registered_client[&"Peer"] == Peer:
+			
+			Client_To_Unregister = registered_client
+			
+			Peer.put_packet("Confirm_Unregistration".to_utf8_buffer())
+			
+			Safe_To_Unregister = true
+	
+	if Safe_To_Unregister == true:
+		
+		Registered_Relay_Clients.erase(Client_To_Unregister)
+		
+		Client_To_Unregister[&"Peer"].close()
+	
+	print(Registered_Relay_Clients)
 
 func pair_lobby() -> void:
 	
