@@ -2,6 +2,7 @@ extends Node
 
 @onready var Main_Scene : Node = $"."
 var Main_Menu_Scene : PackedScene = preload("uid://cuetqgx13tv6s")
+var Server_Browser_Scene : PackedScene = preload("uid://cltyu1oqpw1v4")
 var Gameplay_Scene : PackedScene = preload("uid://f11ymr6ma2f7")
 
 func _ready() -> void:

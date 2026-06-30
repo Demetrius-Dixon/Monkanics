@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://cltyu1oqpw1v4"]
 
+[ext_resource type="Script" uid="uid://rakfpkdmnxgt" path="res://user_interface/server_browser/server_browser.gd" id="1_uwu3u"]
+
 [node name="ServerBrowser" type="Control" unique_id=1603300139]
 layout_mode = 3
 anchors_preset = 15
@@ -7,3 +9,4 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_uwu3u")
