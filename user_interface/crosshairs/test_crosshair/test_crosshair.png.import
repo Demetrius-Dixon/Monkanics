@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://vvac8c3b1en6"
-path="res://.godot/imported/monkanics_project_icon.jpg-701ac39ea4834329074b0e590c6199f3.ctex"
+uid="uid://bs2imetjial0v"
+path="res://.godot/imported/test_crosshair.png-d148232b4ca96d4a9084f8aa7c4e75b6.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://project_icons/monkanics_project_icon.jpg"
-dest_files=["res://.godot/imported/monkanics_project_icon.jpg-701ac39ea4834329074b0e590c6199f3.ctex"]
+source_file="res://user_interface/crosshairs/test_crosshair/test_crosshair.png"
+dest_files=["res://.godot/imported/test_crosshair.png-d148232b4ca96d4a9084f8aa7c4e75b6.ctex"]
 
 [params]
 

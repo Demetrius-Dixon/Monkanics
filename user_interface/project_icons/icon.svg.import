@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bs2imetjial0v"
-path="res://.godot/imported/test_crosshair.png-52c24ec66252e9512cf358f071230098.ctex"
+uid="uid://cdmki6jnpingb"
+path="res://.godot/imported/icon.svg-f6eba1c5e0a5e140c1f52bba5ab5de18.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://inventions/crosshairs/test_crosshair/test_crosshair.png"
-dest_files=["res://.godot/imported/test_crosshair.png-52c24ec66252e9512cf358f071230098.ctex"]
+source_file="res://user_interface/project_icons/icon.svg"
+dest_files=["res://.godot/imported/icon.svg-f6eba1c5e0a5e140c1f52bba5ab5de18.ctex"]
 
 [params]
 
@@ -38,3 +38,6 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
+svg/scale=1.0
+editor/scale_with_editor_scale=false
+editor/convert_colors_with_editor_theme=false
