@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://blvriyeib4oto"
-path="res://.godot/imported/main_menu_background.png-fd6f83a58beadcb4f48950e1c4f43d2d.ctex"
+uid="uid://bniymut6axtuw"
+path="res://.godot/imported/Test Projectile Decal Transparent PNG.png-6e2bf28a2f6bb307af41a355e0adb377.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://user_interface/main menu/main_menu_background.png"
-dest_files=["res://.godot/imported/main_menu_background.png-fd6f83a58beadcb4f48950e1c4f43d2d.ctex"]
+source_file="res://inventions/decals/test_decal/Test Projectile Decal Transparent PNG.png"
+dest_files=["res://.godot/imported/Test Projectile Decal Transparent PNG.png-6e2bf28a2f6bb307af41a355e0adb377.ctex"]
 
 [params]
 
