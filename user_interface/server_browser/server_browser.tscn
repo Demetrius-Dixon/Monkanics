@@ -10,3 +10,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_uwu3u")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1766343425]
+layout_mode = 0
+offset_left = 75.0
+offset_top = 75.0
+offset_right = 1200.0
+offset_bottom = 675.0
