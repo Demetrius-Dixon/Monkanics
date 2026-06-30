@@ -1,16 +1,26 @@
 [gd_scene format=3 uid="uid://cuetqgx13tv6s"]
 
-[ext_resource type="Texture2D" uid="uid://blvriyeib4oto" path="res://user_interface/main_menu/main_menu_background.png" id="1_44pu4"]
-[ext_resource type="Script" uid="uid://mkg3caem1j3b" path="res://user_interface/main_menu/main_menu.gd" id="1_iwc1l"]
+[ext_resource type="Script" uid="uid://mkg3caem1j3b" path="res://user_interface/main_menu/main_menu.gd" id="1_p78xx"]
+[ext_resource type="Texture2D" uid="uid://blvriyeib4oto" path="res://user_interface/main_menu/main_menu_background.png" id="2_hb773"]
 
 [node name="MainMenu" type="Control" unique_id=99476665]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = -25.0
+offset_bottom = -25.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_iwc1l")
+script = ExtResource("1_p78xx")
+
+[node name="Background" type="TextureRect" parent="." unique_id=2066163625]
+layout_mode = 0
+offset_left = -243.03998
+offset_top = -170.88745
+offset_right = 1655.2151
+offset_bottom = 974.52954
+texture = ExtResource("2_hb773")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1290877121]
 
@@ -18,10 +28,10 @@ script = ExtResource("1_iwc1l")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 75.0
-offset_top = 150.0
-offset_right = -949.0
-offset_bottom = -454.71796
+offset_left = 454.0
+offset_top = 325.0
+offset_right = -455.0
+offset_bottom = -279.71796
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -44,23 +54,33 @@ text = "Play Offline"
 layout_mode = 2
 text = "Quit Game"
 
-[node name="Background" type="TextureRect" parent="." unique_id=2066163625]
+[node name="Title" type="Label" parent="." unique_id=1471539165]
 layout_mode = 0
-offset_left = -243.03998
-offset_top = -170.88745
-offset_right = 1655.2151
-offset_bottom = 974.52954
-texture = ExtResource("1_44pu4")
-
-[node name="TitleAndVersion" type="Label" parent="." unique_id=1471539165]
-layout_mode = 0
-offset_left = 50.0
-offset_top = 50.0
-offset_right = 410.0
-offset_bottom = 105.83334
+offset_left = 535.0
+offset_top = 228.0
+offset_right = 744.0
+offset_bottom = 283.83334
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 40
-text = "Monkanics (v0.2)"
+text = "Monkanics"
+
+[node name="Version" type="Label" parent="." unique_id=1448905408]
+layout_mode = 0
+offset_left = 614.0
+offset_top = 277.0
+offset_right = 666.0
+offset_bottom = 304.91666
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 20
+text = "(v0.2)"
+
+[node name="CenterReference" type="ReferenceRect" parent="." unique_id=483049059]
+layout_mode = 0
+offset_left = 637.0
+offset_top = 357.0
+offset_right = 643.0
+offset_bottom = 363.0
+border_width = 5.0
 
 [connection signal="pressed" from="CanvasLayer/MainMenuContainer/MarginContainer/VBoxContainer/PlayOnline" to="." method="_on_play_online_pressed"]
 [connection signal="pressed" from="CanvasLayer/MainMenuContainer/MarginContainer/VBoxContainer/QuitGame" to="." method="_on_quit_game_pressed"]
