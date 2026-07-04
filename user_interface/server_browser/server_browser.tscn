@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://cltyu1oqpw1v4"]
 
 [ext_resource type="Script" uid="uid://rakfpkdmnxgt" path="res://user_interface/server_browser/server_browser.gd" id="1_uwu3u"]
-[ext_resource type="Texture2D" uid="uid://cy1wybknpe8rm" path="res://user_interface/server_browser/server_browser_background.jpg" id="2_0i71c"]
 
 [node name="ServerBrowser" type="Control" unique_id=1603300139]
 layout_mode = 3
@@ -12,23 +11,23 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_uwu3u")
 
-[node name="TextureRect" type="TextureRect" parent="." unique_id=1523460934]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1243457419]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 75.0
-offset_top = 75.0
-offset_right = -80.0
-offset_bottom = -45.0
-texture = ExtResource("2_0i71c")
+offset_left = 25.0
+offset_top = 25.0
+offset_right = -30.0
+offset_bottom = -20.0
+color = Color(0.1764706, 0.1764706, 0.1764706, 1)
 
 [node name="PanelContainer" type="PanelContainer" parent="." unique_id=1766343425]
 layout_mode = 0
 offset_left = 475.0
-offset_top = 100.0
+offset_top = 50.0
 offset_right = 786.0
-offset_bottom = 175.0
+offset_bottom = 100.0
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=1635714519]
 layout_mode = 2
