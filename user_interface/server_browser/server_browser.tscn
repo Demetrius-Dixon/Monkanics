@@ -11,7 +11,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_uwu3u")
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=1243457419]
+[node name="Background" type="ColorRect" parent="." unique_id=1243457419]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -22,27 +22,28 @@ offset_right = -30.0
 offset_bottom = -20.0
 color = Color(0.1764706, 0.1764706, 0.1764706, 1)
 
-[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1766343425]
+[node name="TabBar" type="TabBar" parent="." unique_id=2110319841]
 layout_mode = 0
-offset_left = 475.0
+offset_left = 400.0
 offset_top = 50.0
-offset_right = 786.0
-offset_bottom = 100.0
+offset_right = 900.0
+offset_bottom = 90.0
+current_tab = 0
+tab_alignment = 1
+tab_count = 3
+tab_0/title = "Join Server"
+tab_1/title = "Create Server"
+tab_2/title = "Your Profile"
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=1635714519]
-layout_mode = 2
+[node name="PanelContainer2" type="PanelContainer" parent="." unique_id=228800476]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.97700006
+anchor_bottom = 1.0
+offset_left = 50.0
+offset_top = 150.0
+offset_right = -25.560059
+offset_bottom = -95.0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer" unique_id=1008398157]
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer2" unique_id=1025216343]
 layout_mode = 2
-
-[node name="JoinServer" type="Button" parent="PanelContainer/MarginContainer/HBoxContainer" unique_id=1489356147]
-layout_mode = 2
-text = "Join Server"
-
-[node name="CreateServer" type="Button" parent="PanelContainer/MarginContainer/HBoxContainer" unique_id=789881722]
-layout_mode = 2
-text = "Create Server"
-
-[node name="YourProfile" type="Button" parent="PanelContainer/MarginContainer/HBoxContainer" unique_id=717427812]
-layout_mode = 2
-text = "Your Profile"
