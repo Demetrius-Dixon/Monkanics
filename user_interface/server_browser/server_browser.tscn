@@ -11,39 +11,56 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_uwu3u")
 
-[node name="Background" type="ColorRect" parent="." unique_id=1243457419]
+[node name="Background" type="ColorRect" parent="." unique_id=1271542421]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 25.0
-offset_top = 25.0
-offset_right = -30.0
-offset_bottom = -20.0
-color = Color(0.1764706, 0.1764706, 0.1764706, 1)
+offset_left = -175.0
+offset_top = -75.0
+offset_right = 95.0
+offset_bottom = 230.0
+color = Color(0, 0.36078432, 0.6745098, 1)
 
-[node name="TabBar" type="TabBar" parent="." unique_id=2110319841]
-layout_mode = 0
-offset_left = 400.0
-offset_top = 50.0
-offset_right = 900.0
-offset_bottom = 90.0
-current_tab = 0
+[node name="TabContainer" type="TabContainer" parent="." unique_id=1471392528]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -5.0
+offset_bottom = 5.0
+grow_horizontal = 2
+grow_vertical = 2
 tab_alignment = 1
-tab_count = 3
-tab_0/title = "Join Server"
-tab_1/title = "Create Server"
-tab_2/title = "Your Profile"
+current_tab = 0
 
-[node name="PanelContainer2" type="PanelContainer" parent="." unique_id=228800476]
+[node name="Join Server" type="Button" parent="TabContainer" unique_id=768660214]
+layout_mode = 2
+disabled = true
+metadata/_tab_index = 0
+
+[node name="PanelContainer2" type="PanelContainer" parent="TabContainer/Join Server" unique_id=228800476]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 0.97700006
 anchor_bottom = 1.0
-offset_left = 50.0
-offset_top = 150.0
-offset_right = -25.560059
-offset_bottom = -95.0
+offset_left = 25.0
+offset_top = 69.0
+offset_right = 4.324951
+offset_bottom = -150.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer2" unique_id=1025216343]
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Join Server/PanelContainer2" unique_id=1025216343]
+visible = false
 layout_mode = 2
+
+[node name="Create Server" type="Button" parent="TabContainer" unique_id=1042765280]
+visible = false
+layout_mode = 2
+disabled = true
+metadata/_tab_index = 1
+
+[node name="Your Profile" type="Button" parent="TabContainer" unique_id=1262719880]
+visible = false
+layout_mode = 2
+disabled = true
+metadata/_tab_index = 2
