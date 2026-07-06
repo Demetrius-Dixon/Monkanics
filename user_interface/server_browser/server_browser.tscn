@@ -28,10 +28,10 @@ color = Color(0, 0.36078432, 0.6745098, 1)
 [node name="PanelContainer" type="PanelContainer" parent="." unique_id=411188560]
 layout_mode = 1
 anchors_preset = -1
-anchor_right = 0.99600005
-anchor_bottom = 1.0070001
-offset_right = 0.11987305
-offset_bottom = -0.040039063
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 20.0
+offset_bottom = 30.0
 
 [node name="TabContainer" type="TabContainer" parent="." unique_id=1471392528]
 layout_mode = 1
@@ -41,7 +41,7 @@ anchor_bottom = 1.0
 offset_left = 25.0
 offset_top = 25.0
 offset_right = -30.0
-offset_bottom = -70.0
+offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 2
 tab_alignment = 1

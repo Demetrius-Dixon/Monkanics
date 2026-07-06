@@ -50,10 +50,6 @@ window/size/mode=2
 
 project/assembly_name="InventionGame"
 
-[editor_plugins]
-
-enabled=PackedStringArray("res://addons/script-ide/plugin.cfg")
-
 [gui]
 
 theme/default_font_multichannel_signed_distance_field=true
