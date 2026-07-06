@@ -8,12 +8,6 @@
 
 config_version=5
 
-[GD-Sync]
-
-version="1.0"
-publicKey="9521a02d475bb572"
-privateKey="ce4e8a07442584b0"
-
 [animation]
 
 compatibility/default_parent_skeleton_in_mesh_instance_3d=true
@@ -49,6 +43,10 @@ window/size/mode=2
 [dotnet]
 
 project/assembly_name="InventionGame"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/script-ide/plugin.cfg")
 
 [gui]
 
