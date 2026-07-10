@@ -21,3 +21,4 @@
 ### [Your Name Here] Thanks...
 
 - Any person, event, thing, etc in your life that shaped you.
+- (Please copy & paste this template for the next person)
