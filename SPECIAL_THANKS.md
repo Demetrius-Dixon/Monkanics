@@ -17,6 +17,7 @@
 - YouTube as a whole for providing years of entertainment and my first look into my career path.
 - GD-Sync devs for helping me reverse engineer Monkanics’ relay server.
 - Ezcha for helping me figure out the correct Bash commands for the relay server.
+- Retobe33 for promoting Monkanics and my YouTube content.
 
 ### [Your Name Here] Thanks...
 
