@@ -12,7 +12,7 @@ Contribute today and follow the contribution guidelines in the `CONTRIBUTING` fi
 
 **Software/Plugins/Addons Used:**
 
-- The Godot Engine (Juan Linietsky, Ariel Manzur, Contributors, and The Godot Foundation)
+- The Godot Engine (Juan Linietsky, Ariel Manzur, their Contributors, and The Godot Foundation)
 - Kenny Prototype Textures (Kenney Vleugels)
 - Script-IDE Plugin (Marius Hanl)
 
