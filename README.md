@@ -1,7 +1,7 @@
 ### Monkanics (monkey + mechanics)
 **The D-I-Why Combat Collect-a-Thon that's (un)serious monkey business**
 
-Monkanics is a third-person multiplayer FOSS arena shooter made with Godot 4.7 for Windows 10/11 and Linux x86_64.
+Monkanics is a D-I-Why, FOSS arena shooter made with Godot 4.7 for Windows 10/11 and Linux x86_64. It is also a grassroots live-service game (I coined this term to differentiate Monkanics from other PvP live-service shooters).
 
 In the game, you’ll invent your own weapons of mass misconstruction from the ground up. Directly controlling how, where, and what you shoot. 
 
@@ -38,7 +38,19 @@ Also, Monkanics is developed using the Godot Engine. **It is licensed separately
 - The community to support Monkanics’ development directly.
 - And the ability for the game to survive without me (the relay server code is in the game files and costs almost nothing to run on any public IPv4 on a Linux distro/image).
 
-Monkanics will also be free from in-game microtransactions & FOMO tactics found in modern day live-service shooters. Focusing more on creating a really fun game.
+--------------------------------------------------------------
+
+### What is a "Grassroots Live-Service Game"
+
+Like a live-service game, Monkanics will be getting content updates after its release.
+
+HOWEVER, unlike most live-service/free-to-play games, Monkanics is actually 100% free. *The game will have absolutely NO in-game microtransactions, FOMO, and other predatory tactics found in the gaming industry nowadays.*
+
+Also, due to the server archetecture being open-source, Monkanics will never have an end-of-service. I've designed the game to outlive me.
+
+The reason I did this is because I want to focus my game development career on creating a really fun game, with great people like you, the reader. Instead of chasing profit endlessly. 
+
+I plan to fund Monkanics' development via croudfunding, bootstrapping, and other sources. View more information in the `FUNDING` file.
 
 --------------------------------------------------------------
 
@@ -49,7 +61,7 @@ Monkanics will also be free from in-game microtransactions & FOMO tactics found 
 - `CODE_LICENSE`, `ART_LICENSE`, `GODOT_LICENSE`, and `GODOT_COPYRIGHT` I've already gone over.
 - `CONTRIBUTOR_CREDITS` is a list of everyone who's worked on the project.
 - `SPECIAL_THANKS` is a personal list to show your gratitude to the people/events that've shaped you. You can add to it yourself in your commit.
-- `FUNDING` shows how Monkanics' fund money is used.
+- `FUNDING` shows how Monkanics' fund money is used and monthly income goals.
 
 --------------------------------------------------------------
 
