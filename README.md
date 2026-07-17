@@ -61,7 +61,7 @@ I plan to fund Monkanics' development via croudfunding, bootstrapping, and other
 - `CONTRIBUTING` will be a guide on how to support this repo. However, it is currently unfinished and will be fleshed out later as development continues.
 - `DOCUMENTATION` details how Monkanics source code works.
 - `CODE_LICENSE`, `ART_LICENSE`, `GODOT_LICENSE`, and `GODOT_COPYRIGHT` I've already gone over.
-- `CONTRIBUTOR_CREDITS` is a list of everyone who's worked on the project.
+- `CREDITS` is a list of everyone who's worked on the project.
 - `SPECIAL_THANKS` is a personal list to show your gratitude to the people/events that've shaped you. You can add to it yourself in your commit.
 - `FUNDING` shows how Monkanics' fund money is used and monthly income goals.
 

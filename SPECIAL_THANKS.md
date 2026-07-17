@@ -2,7 +2,7 @@
 
 **This file is loosely kept list to show gratitude to everyone who hasn't directly contributed to the project, but instead, contributed to yourself as a person.**
 
-*In order to be added to this list, you must have made a contribution to the repo and be listed in the `CREDITS_AND_CONTRIBUTORS` file.*
+*In order to be added to this list, you must have made a contribution to the repo and be listed in the `CREDITS` file.*
 
 ### Demetrius Dixon Thanks...
 

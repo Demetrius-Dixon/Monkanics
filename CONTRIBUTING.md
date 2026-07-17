@@ -25,7 +25,7 @@ Contributions of any kind are welcome: bug reports, code, art, playtesting feedb
 
 ### Credit
 
-Contributors are added to `CONTRIBUTOR_CREDITS`. You can add yourself to the txt file in your commit if you'd like.
+Contributors are added to the `CREDITS` file. You can add yourself to the txt file in your commit if you'd like.
 
 Or, you'd rather use an alias or outright not be listed, just let us know.
 
