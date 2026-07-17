@@ -1,7 +1,7 @@
 ### Monkanics (monkey + mechanics)
 **The D-I-Why Combat Collect-a-Thon that's (un)serious monkey business**
 
-Monkanics is a D-I-Why, FOSS arena shooter made with Godot 4.7 for Windows 10/11 and Linux x86_64.
+Monkanics is a D-I-Why, FOSS arena shooter made with Godot for Windows 10/11 and Linux x86_64.
 
 Monkanics is also a grassroots live-service game (I coined this term to differentiate Monkanics from other PvP live-service shooters).
 

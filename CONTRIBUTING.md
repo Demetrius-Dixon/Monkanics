@@ -1,6 +1,6 @@
 ### Contributing to Monkanics (Doc is a WIP)
 
-Monkanics is developed in **Godot version 4.7 in GDscript only** (so, no C#/GDextention)
+Monkanics is developed in **Godot version 4.7+ in GDscript only** (so, no C#/GDextention)
 
 Monkanics' project file can be downloaded on any operating system Godot 4 natively supports. However, the game was built for Windows and Linux first. Meaning Mac development is quite rocky and Web + Mobile development was not built to be supported.
 
