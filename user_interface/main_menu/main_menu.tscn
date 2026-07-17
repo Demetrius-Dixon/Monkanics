@@ -30,10 +30,13 @@ offset_left = -175.0
 offset_top = -75.0
 offset_right = 95.0
 offset_bottom = 230.0
+grow_horizontal = 2
+grow_vertical = 2
 color = Color(0, 0.36078432, 0.6745098, 1)
 
 [node name="MainScreen" type="Control" parent="." unique_id=2128371209]
 layout_mode = 1
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 625.0
