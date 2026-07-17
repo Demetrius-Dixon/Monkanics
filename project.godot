@@ -29,6 +29,7 @@ Client="*uid://cf75po2rw6uug"
 GameplayManager="*uid://ctngtmcp6jsid"
 IngestServer="*uid://do5a0ydliwgum"
 RelayServer="*uid://crrcqmy2l1p2t"
+MathFormulas="*uid://xf0ux6vog54b"
 
 [debug]
 
