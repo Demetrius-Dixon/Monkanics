@@ -69,27 +69,13 @@ func trigger_server_command(Command:StringName, Peer:Variant, Packet_IP:String) 
 		unregister_client(Peer)
 		return
 	
+	if Command == "Create_Lobby":
+		create_lobby(Peer)
+		return
+	
 	if Command == "Confirm_Lobby_Creation":
 		
-		var Safe_To_Create_Lobby : bool = false
-		
-		var Client_Is_Registered : bool = false
-		var Is_Client_In_Lobby_Already : bool = false
-		
-		for registered_client in Registered_Relay_Clients:
-			if registered_client[&"Peer"] == Peer: 
-				Client_Is_Registered = true
-		
-		for paired_lobby:Variant in Paired_Lobbies:
-			if paired_lobby.has(Peer):
-				Is_Client_In_Lobby_Already = true
-		
-		if Safe_To_Create_Lobby == false: 
-			return
-		
-		
-		
-		Paired_Lobbies.append(Peer)
+		pass
 
 func register_client(Peer:Variant, Packet_IP:String) -> void:
 	
@@ -141,40 +127,60 @@ func unregister_client(Peer:Variant) -> void:
 	
 	print(Registered_Relay_Clients)
 
-func pair_lobby() -> void:
+func create_lobby(Peer:Variant) -> void:
 	
-	if Registered_Relay_Clients.size() <= 0: 
-		return
-	
-	var Unpaired_Client_Count : int = 0
-	var Unpaired_Clients : Array[Dictionary] = []
-	
-	for client in Registered_Relay_Clients:
-		if client[&"IsPaired"] == false:
-			Unpaired_Client_Count = Unpaired_Client_Count + 1
-			Unpaired_Clients.append(client)
-	
-	if Unpaired_Client_Count >= 1:
-		
-		var Client_To_Become_Host : Dictionary = Unpaired_Clients.get(0)
-		
-		Client_To_Become_Host[&"Peer"].put_packet("Start_Game_As_Host".to_utf8_buffer())
-		
-		#TODO Start Game Session
-	
-	#if Unpaired_Client_Count >= 2:
-		#
-		#pass
-		
-		#TODO Join Game Session
-		
-		#var Lobby_To_Pair : Dictionary = {}
-		#
-		#for client_to_pair in Registered_Relay_Clients:
-			#
-			#if client_to_pair[&"IsPaired"] == true: 
-				#continue
+	for registered_client in Registered_Relay_Clients:
+		if registered_client[&"Peer"] == Peer: 
 			
+			print("Is Registered")
+			pass
+		else:
+			return
+	
+	for paired_lobby:Variant in Paired_Lobbies:
+		if paired_lobby.has(Peer):
+			return
+	
+	
+	
+	Paired_Lobbies.append(Peer)
+	
+	print("Lobby Created")
+
+#func pair_lobby() -> void:
+	#
+	#if Registered_Relay_Clients.size() <= 0: 
+		#return
+	#
+	#var Unpaired_Client_Count : int = 0
+	#var Unpaired_Clients : Array[Dictionary] = []
+	#
+	#for client in Registered_Relay_Clients:
+		#if client[&"IsPaired"] == false:
+			#Unpaired_Client_Count = Unpaired_Client_Count + 1
+			#Unpaired_Clients.append(client)
+	#
+	#if Unpaired_Client_Count >= 1:
+		#
+		#var Client_To_Become_Host : Dictionary = Unpaired_Clients.get(0)
+		#
+		#Client_To_Become_Host[&"Peer"].put_packet("Start_Game_As_Host".to_utf8_buffer())
+		#
+		##TODO Start Game Session
+	#
+	##if Unpaired_Client_Count >= 2:
+		##
+		##pass
+		#
+		##TODO Join Game Session
+		#
+		##var Lobby_To_Pair : Dictionary = {}
+		##
+		##for client_to_pair in Registered_Relay_Clients:
+			##
+			##if client_to_pair[&"IsPaired"] == true: 
+				##continue
+			#
 
 func tick_client_timeout_timers(Time_Passed:float) -> void:
 	

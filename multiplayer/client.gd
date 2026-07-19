@@ -72,6 +72,12 @@ func confirm_registration_to_ingest_server() -> void:
 func unregister_from_ingest_server() -> void:
 	Client.put_packet("Unregister".to_utf8_buffer())
 
+func create_lobby() -> void:
+	
+	Client.put_packet("Create_Lobby".to_utf8_buffer())
+	
+	
+
 func start_lobby_as_host() -> void:
 	
 	Client.put_packet("Confirm_Lobby_Creation".to_utf8_buffer())
