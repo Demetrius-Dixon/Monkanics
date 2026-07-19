@@ -14,7 +14,7 @@ size = Vector3(1.4907227, 2.8712158, 1.4303589)
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_uk6jr"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4tr7d"]
-albedo_color = Color(0.192157, 0.537255, 1, 1)
+albedo_color = Color(0.07058824, 0.18431373, 0.79607844, 1)
 
 [sub_resource type="SphereMesh" id="SphereMesh_hrypj"]
 
@@ -29,10 +29,10 @@ albedo_color = Color(0.635294, 0.631373, 0.580392, 1)
 [sub_resource type="SphereMesh" id="SphereMesh_kq7t7"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lux2e"]
-albedo_color = Color(0.191683, 0.535553, 1, 1)
+albedo_color = Color(0.07058824, 0.18431373, 0.79607844, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dp41y"]
-albedo_color = Color(0.969228, 0.836702, 3.85046e-07, 1)
+albedo_color = Color(1, 0.9529412, 0, 1)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_u10yq"]
 
@@ -76,6 +76,7 @@ shape = SubResource("CapsuleShape3D_m0ytv")
 
 [node name="PlayerDamageTaker" type="RigidBody3D" parent="." unique_id=948311641]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.704959, 0.017035484)
+visible = false
 collision_layer = 4
 collision_mask = 8
 gravity_scale = 0.0
@@ -88,7 +89,6 @@ shape = SubResource("BoxShape3D_qjkh3")
 
 [node name="LOSReference" type="Node3D" parent="." unique_id=2139007299]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.679089, 0)
-visible = false
 
 [node name="BodyParts" type="Node3D" parent="." unique_id=2101857998]
 transform = Transform3D(1.2499998, 0, 0, 0, 1.2499998, 0, 0, 0, 1.2499998, 0, 0.12018298, 0)
