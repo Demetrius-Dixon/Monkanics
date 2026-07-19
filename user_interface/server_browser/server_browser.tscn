@@ -47,7 +47,7 @@ grow_vertical = 2
 tab_alignment = 1
 current_tab = 1
 
-[node name="Join Server" type="ItemList" parent="TabContainer" unique_id=1337249967]
+[node name="Join Lobby" type="ItemList" parent="TabContainer" unique_id=1337249967]
 visible = false
 layout_mode = 2
 item_count = 3
@@ -56,12 +56,12 @@ item_1/text = "Item 2"
 item_2/text = "Item 3"
 metadata/_tab_index = 0
 
-[node name="Create Server" type="Button" parent="TabContainer" unique_id=1042765280]
+[node name="Create Lobby" type="Button" parent="TabContainer" unique_id=1042765280]
 layout_mode = 2
 disabled = true
 metadata/_tab_index = 1
 
-[node name="CreateLobby" type="Button" parent="TabContainer/Create Server" unique_id=1821736404]
+[node name="CreateLobbyButton" type="Button" parent="TabContainer/Create Lobby" unique_id=1821736404]
 layout_mode = 0
 offset_left = 75.0
 offset_top = 244.0
@@ -69,4 +69,4 @@ offset_right = 1150.0
 offset_bottom = 288.0
 text = "Create Lobby"
 
-[connection signal="pressed" from="TabContainer/Create Server/CreateLobby" to="." method="_on_create_lobby_pressed"]
+[connection signal="pressed" from="TabContainer/Create Lobby/CreateLobbyButton" to="." method="_on_create_lobby_pressed"]
