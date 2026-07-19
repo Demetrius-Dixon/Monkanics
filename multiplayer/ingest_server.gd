@@ -3,7 +3,8 @@ extends Node
 var Ingest_Server : UDPServer
 
 var Registered_Relay_Clients : Array[Dictionary] = []
-var Paired_Lobbies : Array[Variant] = []
+
+var Active_Lobbies : Array[Dictionary] = []
 
 const Client_Timeout_Limit : float = 30.0
 const END_TIMEOUT_TIMER : float = 0.0
@@ -20,8 +21,6 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	
 	poll_ingest_server()
-	
-	#pair_lobby()
 
 func _physics_process(delta: float) -> void:
 	
@@ -92,7 +91,7 @@ func register_client(Peer:Variant, Packet_IP:String) -> void:
 		
 		&"Peer": Peer,
 		&"PeerIP": Packet_IP,
-		&"IsPaired": false,
+		&"IsInLobby": false,
 		&"TimeoutTimer": Client_Timeout_Limit
 		
 	}
@@ -131,19 +130,25 @@ func create_lobby(Peer:Variant) -> void:
 	
 	for registered_client in Registered_Relay_Clients:
 		if registered_client[&"Peer"] == Peer: 
-			
-			print("Is Registered")
 			pass
 		else:
 			return
 	
-	for paired_lobby:Variant in Paired_Lobbies:
-		if paired_lobby.has(Peer):
+	for client in Registered_Relay_Clients:
+		if client[&"IsInLobby"] == true:
 			return
 	
+	Active_Lobbies.append(
 	
+	{
+		
+		
+		
+	}
 	
-	Paired_Lobbies.append(Peer)
+	)
+	
+	Peer[&"IsInLobby"] = true
 	
 	print("Lobby Created")
 
