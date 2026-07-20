@@ -45,18 +45,14 @@ offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 2
 tab_alignment = 1
-current_tab = 1
+current_tab = 0
 
 [node name="Join Lobby" type="ItemList" parent="TabContainer" unique_id=1337249967]
-visible = false
 layout_mode = 2
-item_count = 3
-item_0/text = "Item 1"
-item_1/text = "Item 2"
-item_2/text = "Item 3"
 metadata/_tab_index = 0
 
 [node name="Create Lobby" type="Button" parent="TabContainer" unique_id=1042765280]
+visible = false
 layout_mode = 2
 disabled = true
 metadata/_tab_index = 1
