@@ -134,21 +134,25 @@ func create_lobby(Peer:Variant) -> void:
 		else:
 			return
 	
-	for client in Registered_Relay_Clients:
-		if client[&"IsInLobby"] == true:
+	for lobby in Active_Lobbies:
+		if lobby[&"Players"].has(Peer):
 			return
 	
 	Active_Lobbies.append(
 	
 	{
 		
-		
+		&"Host": Peer,
+		&"GameMode": "Bean-anza",
+		&"Map": "Zoolag",
+		&"MaxPlayers": 6,
+		&"Players": [Peer]
 		
 	}
 	
 	)
 	
-	Peer[&"IsInLobby"] = true
+	print(Active_Lobbies)
 	
 	print("Lobby Created")
 
