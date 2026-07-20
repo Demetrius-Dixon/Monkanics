@@ -46,11 +46,13 @@ func trigger_client_command(Command:String) -> void:
 	if Command == "Confirm_Unregistration":
 		Is_Registered_With_Ingest_Server = false
 	
-	if Command == "Start_Game_As_Host":
-		start_lobby_as_host()
 	
-	if Command == "Join_Game_As_Peer":
-		join_game_as_peer()
+	
+	#if Command == "Start_Game_As_Host":
+		#start_lobby_as_host()
+	#
+	#if Command == "Join_Game_As_Peer":
+		#join_game_as_peer()
 
 func register_to_ingest_server() -> void:
 	
@@ -78,13 +80,13 @@ func create_lobby() -> void:
 	
 	
 
-func start_lobby_as_host() -> void:
-	
-	Client.put_packet("Confirm_Lobby_Creation".to_utf8_buffer())
-	
-	GameplayManager.load_game()
-	
-	
+#func start_lobby_as_host() -> void:
+	#
+	#Client.put_packet("Confirm_Lobby_Creation".to_utf8_buffer())
+	#
+	#GameplayManager.load_game()
+	#
+	#
 
 func join_game_as_peer() -> void:
 	
