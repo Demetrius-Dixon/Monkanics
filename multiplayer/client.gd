@@ -5,6 +5,9 @@ var Client : PacketPeerUDP
 var Is_Registered_With_Ingest_Server : bool = false
 var Confirm_Registration_Delay : float = 5.0
 
+var Is_In_Lobby : bool = false
+var Is_Host : bool = false
+
 func _ready() -> void:
 	
 	if OS.has_feature("dedicated_server"):
@@ -46,13 +49,8 @@ func trigger_client_command(Command:String) -> void:
 	if Command == "Confirm_Unregistration":
 		Is_Registered_With_Ingest_Server = false
 	
-	
-	
-	#if Command == "Start_Game_As_Host":
-		#start_lobby_as_host()
-	#
-	#if Command == "Join_Game_As_Peer":
-		#join_game_as_peer()
+	if Command == "Confirm_Is_In_Lobby":
+		Is_In_Lobby = true
 
 func register_to_ingest_server() -> void:
 	
@@ -78,16 +76,13 @@ func create_lobby() -> void:
 	
 	Client.put_packet("Create_Lobby".to_utf8_buffer())
 	
+	await get_tree().create_timer(1).timeout
 	
-
-#func start_lobby_as_host() -> void:
-	#
-	#Client.put_packet("Confirm_Lobby_Creation".to_utf8_buffer())
-	#
-	#GameplayManager.load_game()
-	#
-	#
-
-func join_game_as_peer() -> void:
+	if Is_In_Lobby == false:
+		Client.put_packet("Create_Lobby".to_utf8_buffer())
 	
-	pass
+	if Is_In_Lobby == true:
+		
+		Is_Host = true
+		
+		GameplayManager.load_game()

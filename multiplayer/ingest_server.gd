@@ -72,9 +72,6 @@ func trigger_server_command(Command:StringName, Peer:Variant, Packet_IP:String) 
 		create_lobby(Peer)
 		return
 	
-	if Command == "Confirm_Lobby_Creation":
-		
-		pass
 
 func register_client(Peer:Variant, Packet_IP:String) -> void:
 	
@@ -148,45 +145,10 @@ func create_lobby(Peer:Variant) -> void:
 		
 	})
 	
-	
+	Peer.put_packet("Confirm_Is_In_Lobby".to_utf8_buffer())
 	
 	print(Active_Lobbies)
 	print("Lobby Created")
-
-#func pair_lobby() -> void:
-	#
-	#if Registered_Relay_Clients.size() <= 0: 
-		#return
-	#
-	#var Unpaired_Client_Count : int = 0
-	#var Unpaired_Clients : Array[Dictionary] = []
-	#
-	#for client in Registered_Relay_Clients:
-		#if client[&"IsPaired"] == false:
-			#Unpaired_Client_Count = Unpaired_Client_Count + 1
-			#Unpaired_Clients.append(client)
-	#
-	#if Unpaired_Client_Count >= 1:
-		#
-		#var Client_To_Become_Host : Dictionary = Unpaired_Clients.get(0)
-		#
-		#Client_To_Become_Host[&"Peer"].put_packet("Start_Game_As_Host".to_utf8_buffer())
-		#
-		##TODO Start Game Session
-	#
-	##if Unpaired_Client_Count >= 2:
-		##
-		##pass
-		#
-		##TODO Join Game Session
-		#
-		##var Lobby_To_Pair : Dictionary = {}
-		##
-		##for client_to_pair in Registered_Relay_Clients:
-			##
-			##if client_to_pair[&"IsPaired"] == true: 
-				##continue
-			#
 
 func tick_client_timeout_timers(Time_Passed:float) -> void:
 	
