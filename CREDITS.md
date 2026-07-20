@@ -31,4 +31,5 @@ Contribute today and follow the contribution guidelines in the `CONTRIBUTING` fi
 
 - Pennyloafers
 - WCHC/Kuba
+- Max (Snailsnaps/@snai1snaps)
 - Be listed here via (https://ko-fi.com/monkanics)
