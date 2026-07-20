@@ -47,7 +47,7 @@ project/assembly_name="InventionGame"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/script-ide/plugin.cfg")
+enabled=PackedStringArray("res://addons/quill-ide/plugin.cfg")
 
 [gui]
 
