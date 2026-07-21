@@ -14,11 +14,6 @@ Monkanics is open-source under a dual license:
 - Code under AGPLv3 and (See `CODE_LICENSE`)
 - Art under CC BY-NC-SA 4.0 (See `ART_LICENSE`). 
 
-Monkanics is also developed using the Godot Engine:
-- Godot is MIT licensed (See `GODOT_LICENSE`)
-- Godot's external dependencies have an exhaustive list of licenses which are updated once per year on January 1st (See `GODOT_COPYRIGHT`)
-- **Please keep in mind that you will not have to worry about these licenses when forking Monkanics. Just keep the files in the project folder like the other licenses and you'll be fine.**
-
 ### Cloning Monkanics' Source Code
 
 *Will be filled out later*
