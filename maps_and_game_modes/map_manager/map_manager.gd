@@ -3,9 +3,9 @@ extends Node
 var Current_Map : Node
 var Next_Map_To_Load : PackedScene
 
-var Beanaza_Maps : Dictionary = {
+var Map_List : Dictionary = {
 	
-	&"Zoolag": "uid://b1vrb25aej0x1"
+	&"bnza_zoolag": "uid://b1vrb25aej0x1"
 	
 }
 
@@ -16,11 +16,20 @@ func _ready() -> void:
 	else:
 		pass
 
-func load_map() -> void:
-	pass
+func load_map(Map_To_Load:String) -> void:
 	
+	Map_To_Load = Map_List[Map_To_Load]
 	
+	Next_Map_To_Load = load(Map_To_Load)
+	
+	var Map_Instantiation := Next_Map_To_Load.instantiate()
+	
+	Current_Map = Map_Instantiation
+	
+	add_child(Map_Instantiation)
+	
+	Next_Map_To_Load = null
 
 func unload_map() -> void:
-	pass
-	
+	Current_Map.queue_free()
+	Current_Map = null
