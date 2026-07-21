@@ -99,7 +99,7 @@ func load_main_menu() -> void:
 	
 	Main_Menu = Main_Menu_To_Load
 	
-	Main_Scene.add_child(Main_Menu)
+	add_child(Main_Menu)
 
 func unload_main_menu() -> void:
 	Main_Menu.queue_free()
