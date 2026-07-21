@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://f11ymr6ma2f7"]
 
-[ext_resource type="PackedScene" uid="uid://b1vrb25aej0x1" path="res://maps/zoolag/zoolag.tscn" id="1_rtqoc"]
+[ext_resource type="PackedScene" uid="uid://b1vrb25aej0x1" path="res://maps_and_game_modes/beananza_maps/bnza_zoolag/bnza_zoolag.tscn" id="1_rtqoc"]
 [ext_resource type="Script" uid="uid://bi44adryi50av" path="res://multiplayer/client_manager(depricated).gd" id="2_uccmh"]
 [ext_resource type="Script" uid="uid://4rw567h6iuei" path="res://multiplayer/server_manager(depricated).gd" id="3_dynxe"]
 
