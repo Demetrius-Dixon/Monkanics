@@ -15,6 +15,8 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="Monkanics"
+config/description="Monkanics (monkey + mechanics): The D-I-Why, FOSS arena shooter that's serious monkey business."
+config/version="0.2"
 run/main_scene="uid://ddp0b4mlaollc"
 config/features=PackedStringArray("4.7", "Forward Plus")
 boot_splash/bg_color=Color(0, 0, 0, 1)
