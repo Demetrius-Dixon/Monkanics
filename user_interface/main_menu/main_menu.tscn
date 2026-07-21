@@ -43,6 +43,8 @@ offset_left = 625.0
 offset_top = 375.0
 offset_right = -615.0
 offset_bottom = -305.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="MainMenuContainer" type="PanelContainer" parent="MainScreen" unique_id=2142633882]
 layout_mode = 1
