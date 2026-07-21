@@ -110,6 +110,4 @@ func load_game() -> void:
 	
 	MapManager.load_map("bnza_zoolag")
 	
-	await get_tree().create_timer(5).timeout
 	
-	MapManager.unload_map()
