@@ -1,16 +1,15 @@
 extends Node
 
-#var Relay_Server : UDPServer
+var Relay_Server : UDPServer
 
 func _ready() -> void:
 	
-	pass
-	
-	#if not OS.has_feature("dedicated_server"): 
-		#queue_free()
-	#if not OS.has_feature("relay"):
-		#queue_free()
-	#else: 
+	if not OS.has_feature("dedicated_server"): 
+		queue_free()
+	if not OS.has_feature("relay"):
+		queue_free()
+	else: 
+		pass
 		#create_relay_server()
 
 func _process(_delta: float) -> void:
