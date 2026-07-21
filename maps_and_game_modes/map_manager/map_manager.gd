@@ -1,7 +1,7 @@
 extends Node
 
-var Current_Map : Node
-var Next_Map_To_Load : PackedScene
+var Current_Map : Node = null
+var Next_Map_To_Load : PackedScene = null
 
 var Map_List : Dictionary = {
 	
@@ -17,6 +17,9 @@ func _ready() -> void:
 		pass
 
 func load_map(Map_To_Load:String) -> void:
+	
+	if Current_Map != null:
+		unload_map()
 	
 	Map_To_Load = Map_List[Map_To_Load]
 	
