@@ -18,6 +18,10 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	
 	poll_client()
+	
+	if Input.is_action_just_pressed("ui_cancel"):
+		
+		MouseManager.toggle_mouse()
 
 func create_client() -> void:
 	
@@ -93,4 +97,6 @@ func load_game() -> void:
 	
 	MapManager.load_map("bnza_zoolag")
 	
+	PlayerSpawnManager.spawn_your_player()
 	
+	MouseManager.hide_mouse()

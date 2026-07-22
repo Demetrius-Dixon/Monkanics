@@ -1,48 +1,24 @@
 extends CharacterBody3D
-#------------------------------------------#
-"""
-
-This script controls the player's mechanics.
-
-A player is given to a client upon loading the game.
-
-The server is in charge of this script + every other script.
-
-Functions are triggered via client-server communication.
-Variables are changed via client-server communication.
-
-"""
-#------------------------------------------#
-
-#------------------------------------------#
-# Variables/Constants:
-#------------------------------------------#
-
-# Mouse
 
 var Mouse_Sensitivity : float = 0.003
 var Player_Mouse_Visible : bool = true
 
-# Current Player Status
-
 var Is_Airborne : bool = false
 var Is_Moving : bool = false
 
-# Model Rotation
-
 enum PLAYER_BODY_ROTATION_DIRECTION{FOLLOW_MOVEMENT, FOLLOW_CAMERA}
-var Current_Player_Body_Rotation_Direction : PLAYER_BODY_ROTATION_DIRECTION = PLAYER_BODY_ROTATION_DIRECTION.FOLLOW_MOVEMENT
+var Current_Player_Body_Rotation_Direction : \
+PLAYER_BODY_ROTATION_DIRECTION = PLAYER_BODY_ROTATION_DIRECTION.FOLLOW_MOVEMENT
 var Is_Body_Rotation_Overwritten : bool = false
 
 enum CURRENT_PLAYER_HEAD_Y_ROTATION_DIRECTION{FOLLOW_MOVEMENT, FOLLOW_CAMERA}
-var Current_Player_Head_Y_Rotation_Direction : CURRENT_PLAYER_HEAD_Y_ROTATION_DIRECTION = CURRENT_PLAYER_HEAD_Y_ROTATION_DIRECTION.FOLLOW_MOVEMENT
+var Current_Player_Head_Y_Rotation_Direction : \
+CURRENT_PLAYER_HEAD_Y_ROTATION_DIRECTION = CURRENT_PLAYER_HEAD_Y_ROTATION_DIRECTION.FOLLOW_MOVEMENT
 var Is_Head_Y_Rotation_Overwritten : bool = false
 
 var Global_Body_And_Head_Movement_Rotation : float
 const BODY_AND_HEAD_ROTATION_INTERPOLATION_WEIGHT : float = 0.95
 const CAMERA_ALIGNMENT_ROTATION_INTERPOLATION_WEIGHT : float = 0.6
-
-# Movement
 
 var Is_Movement_Input_Held : bool = false
 
@@ -68,8 +44,6 @@ const MOVEMENT_DECELERATION_RATE_AIRBORNE : float = 0.0
 var Global_Movement_Direction : Vector3 
 var Movement_Direction_X : float
 var Movement_Direction_Z : float
-
-# Jumping
 
 var Can_Jump : bool = true 
 var Is_Jumping : bool = false 
@@ -104,26 +78,14 @@ var Current_Gravity_Force : float = 115.0
 const DEFUALT_GRAVITY_FORCE : float = 115.0
 const MIN_GRAVITY_FORCE : float = 0.0
 
-# Health
-
 var Current_Health : int = 100
 var Current_Max_Health : int = 100
 const DEFAULT_MAX_HEALTH : int = 100
 const MIN_HEALTH : int = 0
 
-# Gunplay
-
 var Can_Operate : bool = true
 var Is_Operating : bool = false
 var Is_Operate_Input_Held : bool = false
-
-# Multiplayer
-
-var Client_ID : String
-var Client_Ping : float = -1.0
-var Client_Packet_Loss_Percentage : float = -1.0
-
-# Camera
 
 @onready var Camera : Node = $CameraHorizonalRotation/CameraVerticalRotation/CameraSpringArm/Camera
 @onready var Camera_Horizonal_Rotation : Node = $CameraHorizonalRotation
@@ -131,12 +93,8 @@ var Client_Packet_Loss_Percentage : float = -1.0
 const MAX_LOOK_DEGREES : int = 75
 const MIN_LOOK_DEGREES : int = -75
 
-# Player Model
-
 @onready var Body_Parts : Node = $BodyParts
 @onready var Head_Parts : Node = $HeadParts
-
-# Univeral Gunplay Nodes
 
 @onready var Player_Hitbox : Node = $PlayerDamageTaker
 @onready var Global_LOS_Checker : Node = $CameraHorizonalRotation/CameraVerticalRotation/GlobalLOSChecker
@@ -150,13 +108,7 @@ const END_PROJECTILE_SHOOT_DISTANCE : float = 3.0
 
 @onready var Global_Projectile_Origin : Node = $CameraHorizonalRotation/CameraVerticalRotation/GlobalProjectileOrigin
 
-# HUD
-
 @onready var Health_Bar : Node = $PlayerHUD/PlayerHealthBar
-
-#------------------------------------------#
-# Virtual Functions:
-#------------------------------------------#
 
 func _physics_process(delta: float) -> void:
 	
@@ -174,43 +126,23 @@ func _physics_process(delta: float) -> void:
 	
 	# Check if the player is operating or not every frame
 	check_and_change_player_model_rotation_direction()
-
-#------------------------------------------#
-# Network Sync and General Setup Functions:
-#------------------------------------------#
-
-func update_player_id(id:String) -> void:
 	
-	# Sets the player's id variable to the sent client id
-	Client_ID = id
+	move_and_slide()
 
-func update_current_cam(id:String) -> void:
-	
-	# Checks if the client's id is the same as the player's id
-	if id == Client_ID:
-		
-		# Makes the client's camera current
-		Camera.current = true
-		
-	else: return
+func update_current_cam() -> void:
+	Camera.current = true
 
 func delete_unnecessary_player_nodes_for_self() -> void:
 	
-	# Delete all unnecessary self player nodes to predict collision
 	$PlayerDamageTaker.queue_free()
 
 func delete_unnecessary_player_nodes_for_others() -> void:
 	
-	# Delete all unnecessary player nodes to save memory
 	$PlayerWorldCollision.queue_free()
 	$LOSReference.queue_free()
 	$GlobalMuzzleRaycast.queue_free()
 	$CameraHorizonalRotation.queue_free()
 	$PlayerHUD.queue_free()
-
-#------------------------------------------#
-# Movement Controls:
-#------------------------------------------#
 
 func start_moving(input:Vector2, delta:float) -> void:
 	
@@ -495,17 +427,10 @@ func check_velocity() -> void:
 	# Print velocity X,Y,Z (Testing only)
 	#print("X: ", Current_Velocity_X, " Y: ", Current_Velocity_Y, " Z: ", Current_Velocity_Z)
 
-#------------------------------------------#
-# Camera Controls:
-#------------------------------------------#
-
 func _unhandled_input(event:InputEvent) -> void: # Camera Controls
 	
-	# Checks if the client is correct
-	if Client_ID != name: return
-	
 	# Checks if the mouse is invisible/captured
-	if Player_Mouse_Visible == true: return
+	if MouseManager.Is_Mouse_Visible == true: return
 	
 	# ---------------------------
 	
@@ -592,10 +517,6 @@ New_Camera_Horizontal_Rotation:float, New_Camera_Vertical_Rotation:float) -> voi
 	# Update the server's camera horizontal rotation
 	Camera_Vertical_Rotation.rotation.x = New_Camera_Vertical_Rotation
 
-#------------------------------------------#
-# Gunplay Controls:
-#------------------------------------------#
-
 func player_take_damage(Damage:int) -> void:
 	
 	# Checks if health is greater than 0
@@ -674,6 +595,3 @@ func check_and_change_player_model_rotation_direction() -> void:
 	#else:
 		#
 		#Alt_Crosshair.hide()
-
-#------------------------------------------#
-#------------------------------------------#
