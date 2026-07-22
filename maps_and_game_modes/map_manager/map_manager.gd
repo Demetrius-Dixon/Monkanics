@@ -34,5 +34,9 @@ func load_map(Map_To_Load:String) -> void:
 	Next_Map_To_Load = null
 
 func unload_map() -> void:
+	
+	if Current_Map == null:
+		return
+	
 	Current_Map.queue_free()
 	Current_Map = null
