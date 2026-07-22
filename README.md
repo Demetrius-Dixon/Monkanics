@@ -1,5 +1,5 @@
-### Monkanics (monkey + mechanics)
-**The D-I-Why Combat Collect-a-Thon that's (un)serious monkey business**
+# Monkanics (Monkey + Mechanics)
+**The D-I-Why, Combat Collect-a-Thon that's serious monkey business!**
 
 Monkanics is a D-I-Why, FOSS arena shooter made with Godot for Windows 10/11 and Linux x86_64.
 
@@ -15,13 +15,18 @@ Core Game Features:
 - In-depth projectile weaponcrafting.
 - FOSS forever with Godot v4.7+ on Windows and Linux.
 
+Side Features:
+- In-depth monkanic customization (Purely visual).
+- A vibrant low-poly art style.
+- A simple excuse plot (that’s only used to support the gameplay).
+
 --------------------------------------------------------------
 
 *NOTE: This project is still very early in development and has no public version as of yet, so features will be incomplete for now. However, I've decided to open-source the code early in order to get the hang of open-source development (by actually developing while open-source).*
 
 --------------------------------------------------------------
 
-### Monkanics is Dual Licensed
+## Monkanics is Dual Licensed
 
 - It's code is licensed under the copyleft AGPLv3 (See `CODE_LICENSE`)
 - It's art is licensed under the CC BY-NC-SA 4.0 (See `ART_LICENSE`)
@@ -38,7 +43,7 @@ Art assets are separate: they're free to use and remix *non-commercially*, but c
 
 --------------------------------------------------------------
 
-### What is a "Grassroots Live-Service Game"
+## What is a "Grassroots Live-Service Game"
 
 Like a live-service game, Monkanics will be getting content updates after its release.
 
@@ -52,7 +57,7 @@ I plan to fund Monkanics' development via croudfunding, bootstrapping, and other
 
 --------------------------------------------------------------
 
-### Other Root Files in the Repo
+## Other Root Files in the Repo
 
 - `CONTRIBUTING` will be a guide on how to support this repo. However, it is currently unfinished and will be fleshed out later as development continues.
 - `DOCUMENTATION` details how Monkanics source code works.
@@ -63,7 +68,7 @@ I plan to fund Monkanics' development via croudfunding, bootstrapping, and other
 
 --------------------------------------------------------------
 
-### Monkanics' Socials & Links
+## Monkanics' Socials & Links
 
 - Join the Monkanics Discord community: https://discord.gg/kRkvwdnaVz
 - Watch video updates on the Monkanics YouTube: https://www.youtube.com/@MonkanicsDev
