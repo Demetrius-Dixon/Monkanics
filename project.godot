@@ -28,7 +28,6 @@ config/icon="uid://vvac8c3b1en6"
 IngestServer="*uid://do5a0ydliwgum"
 RelayServer="*uid://crrcqmy2l1p2t"
 ServerInfo="*uid://vjg00ss5mfr7"
-ClientManager="*uid://cf75po2rw6uug"
 MapManager="*uid://dtda6dwx66grs"
 UiManager="*uid://pcgp85abfuro"
 GameQuitterManager="*uid://cpauojimpws2b"
@@ -36,6 +35,7 @@ MathManager="*uid://xf0ux6vog54b"
 MouseManager="*uid://gl0ld5qkqn1s"
 PlayerMasterManager="*uid://mnq8jw8w24h0"
 ProjectPruneManager="*uid://6fcmtxxxlogt"
+ClientManager="*uid://bvx2a8r8bv2bt"
 
 [debug]
 
