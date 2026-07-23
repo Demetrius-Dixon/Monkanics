@@ -11,6 +11,7 @@ Contribute today and follow the contribution guidelines in the `CONTRIBUTING` fi
 ## Wackshop Games' Core Team
 
 - Demetrius Dixon - Creator of Monkanics, Project Lead, Founder of Wackshop Games
+- Max (@snai1snaps) - Freelance 2D Concept Artist
 
 ## Software/Plugins/Addons Used
 
@@ -23,7 +24,6 @@ Contribute today and follow the contribution guidelines in the `CONTRIBUTING` fi
 - Pipo - Concept Artist
 - Luova Kuvilus - Concept Artist
 - Frozen_Fried - Concept Artist
-- Max (Snailsnaps/@snai1snaps) - Concept Artist
 
 ## Financial Backers (All-Time)
 
