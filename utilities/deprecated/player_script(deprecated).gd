@@ -92,7 +92,7 @@ var can_operate : bool = true
 var is_operating : bool = false
 var is_operate_input_held : bool = false
 
-@onready var camera : Node = $CameraHorizonalRotation/CameraVerticalRotation/CameraSpringArm/camera
+@onready var camera : Node = $CameraHorizonalRotation/CameraVerticalRotation/CameraSpringArm/Camera
 @onready var camera_horizonal_rotation : Node = $CameraHorizonalRotation
 @onready var camera_vertical_rotation : Node = $CameraHorizonalRotation/CameraVerticalRotation
 const MAX_LOOK_DEGREES : int = 75
@@ -105,7 +105,7 @@ const MIN_LOOK_DEGREES : int = -75
 @onready var global_los_checker : Node = $CameraHorizonalRotation/CameraVerticalRotation/GlobalLOSChecker
 @onready var los_reference : Node = $LOSReference
 
-@onready var camera_raycast : Node = $CameraHorizonalRotation/CameraVerticalRotation/CameraSpringArm/camera/CameraRaycast
+@onready var camera_raycast : Node = $CameraHorizonalRotation/CameraVerticalRotation/CameraSpringArm/Camera/CameraRaycast
 @onready var global_muzzle_raycast : Node = $GlobalMuzzleRaycast
 
 const MIN_PROJECTILE_SHOOT_DISTANCE : float = 9.5
@@ -435,7 +435,7 @@ func check_velocity() -> void:
 func _unhandled_input(event:InputEvent) -> void: #INFO camera Controls
 	
 	# Checks if the mouse is invisible/captured
-	if MouseManager.Is_Mouse_Visible == true: return
+	if MouseManager.is_mouse_visible == true: return
 	
 	# ---------------------------
 	
