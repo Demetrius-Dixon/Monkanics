@@ -1,4 +1,4 @@
-### Special Thanks
+# Monkanics' Special Thanks
 
 **This file is loosely kept list to show gratitude to everyone who hasn't directly contributed to the project, but instead, contributed to yourself as a person.**
 

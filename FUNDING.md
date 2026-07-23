@@ -1,4 +1,4 @@
-### Monkanics' Funding
+# Monkanics' Funding
 
 This short document serves to show how Monkanics is funded, what the fund money is used for, and the project's monthly funding goals.
 
@@ -8,7 +8,7 @@ This short document serves to show how Monkanics is funded, what the fund money 
 
 Funding sources will be expanded as Monkanics develops and the community grows, such as YouTube ad revenue, merch, etc.
 
-### Monthly Funding Goals (From All Sources Combined):
+## Monthly Funding Goals (From All Sources Combined):
 
 - **$100/month**: Server infrastructure is fully funded. Meaning the main ingest server in the US, and the relays all around the globe.
 
@@ -21,3 +21,9 @@ Funding sources will be expanded as Monkanics develops and the community grows, 
 - **$10,000/month**: I (Demetrius Dixon) can go full-time and quit my day job and work on Monkanics exclusively. **Monkanics becomes my job, as I will be compensated $5,000 a month (minus taxes) for my work**.
 
 *Note: Further funding beyond $10,001 will be used for further Monkanics' development*
+
+## Budget and Spending
+
+**This section is used to detail how crowdfunded money is made and spent.** This does not include bootstrapping income/spending because that is my own finances I invest into Monkanics.
+
+*Section will be filled out later*
