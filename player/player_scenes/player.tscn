@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bv5ucnu7shjsd"]
 
-[ext_resource type="Script" uid="uid://5ghw627ti26c" path="res://utilities/deprecated/player_script(deprecated).gd" id="1_u8j1c"]
+[ext_resource type="Script" uid="uid://mnq8jw8w24h0" path="res://player/player_master_manager/player_master_manager.gd" id="1_u8j1c"]
 [ext_resource type="Texture2D" uid="uid://bs2imetjial0v" path="res://user_interface/crosshairs/test_crosshair/test_crosshair.png" id="2_t2vf2"]
 [ext_resource type="Script" uid="uid://b0mk45q6ha64t" path="res://user_interface/health_bars/player_health/player_health_bar.gd" id="3_j1hju"]
 
@@ -265,3 +265,5 @@ step = 1.0
 value = 100.0
 rounded = true
 script = ExtResource("3_j1hju")
+
+[node name="SpawnManager" type="Node" parent="." unique_id=1451431737]
