@@ -1,0 +1,163 @@
+[gd_scene format=3 uid="uid://byomjy8wiwd5j"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_uk6jr"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4tr7d"]
+albedo_color = Color(0.07058824, 0.18431373, 0.79607844, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_hrypj"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_y3a4q"]
+albedo_color = Color(0.635294, 0.631373, 0.580392, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_emag6"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o126h"]
+albedo_color = Color(0.635294, 0.631373, 0.580392, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_kq7t7"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lux2e"]
+albedo_color = Color(0.07058824, 0.18431373, 0.79607844, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dp41y"]
+albedo_color = Color(1, 0.9529412, 0, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_u10yq"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_irac7"]
+albedo_color = Color(0.635294, 0.631373, 0.580392, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_x1k2x"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cuim2"]
+albedo_color = Color(0.634992, 0.630358, 0.58056, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_8aoo4"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7s7pf"]
+albedo_color = Color(0.635294, 0.631373, 0.580392, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8b2kb"]
+albedo_color = Color(0.635294, 0.631373, 0.580392, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_7fu55"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o8o4q"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kt464"]
+
+[node name="DummyPlayer" type="Node3D" unique_id=794087526]
+
+[node name="BodyParts" type="Node3D" parent="." unique_id=2101857998]
+transform = Transform3D(1.2499998, 0, 0, 0, 1.2499998, 0, 0, 0, 1.2499998, 0, 0.12018298, 0)
+
+[node name="Torso" type="Node3D" parent="BodyParts" unique_id=30535280]
+
+[node name="Body" type="MeshInstance3D" parent="BodyParts/Torso" unique_id=385455556]
+transform = Transform3D(0.999998, -0.00125173, 0.000302195, 0.00208652, 0.599998, -0.00101264, -0.000300076, 0.000607961, 0.999999, 0, 0.138749, 0)
+mesh = SubResource("CapsuleMesh_uk6jr")
+skeleton = NodePath("")
+surface_material_override/0 = SubResource("StandardMaterial3D_4tr7d")
+
+[node name="Belly" type="MeshInstance3D" parent="BodyParts/Torso" unique_id=659521144]
+transform = Transform3D(0.528735, 0, 0, 0, 0.62831, 0, 0, 0, 0.432796, -0.000152302, 0.215441, 0.354943)
+mesh = SubResource("SphereMesh_hrypj")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_y3a4q")
+
+[node name="Hands" type="Node3D" parent="BodyParts" unique_id=421840992]
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0, 0)
+
+[node name="RightHand" type="MeshInstance3D" parent="BodyParts/Hands" unique_id=1196764347]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -1.02491, 0.160331, 0)
+mesh = SubResource("SphereMesh_emag6")
+surface_material_override/0 = SubResource("StandardMaterial3D_o126h")
+
+[node name="LeftHand" type="MeshInstance3D" parent="BodyParts/Hands" unique_id=1507374137]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 1.02283, 0.160331, 0)
+mesh = SubResource("SphereMesh_emag6")
+surface_material_override/0 = SubResource("StandardMaterial3D_o126h")
+
+[node name="Feet" type="Node3D" parent="BodyParts" unique_id=1456805946]
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0, 0)
+
+[node name="RightFoot" type="MeshInstance3D" parent="BodyParts/Feet" unique_id=487806409]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -0.268042, -0.871966, 0)
+mesh = SubResource("SphereMesh_emag6")
+surface_material_override/0 = SubResource("StandardMaterial3D_o126h")
+
+[node name="LeftFoot" type="MeshInstance3D" parent="BodyParts/Feet" unique_id=2099641029]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.263859, -0.881938, 0)
+mesh = SubResource("SphereMesh_emag6")
+surface_material_override/0 = SubResource("StandardMaterial3D_o126h")
+
+[node name="HeadParts" type="Node3D" parent="." unique_id=1795170649]
+transform = Transform3D(1.2499999, 0, 0, 0, 1.2499999, 0, 0, 0, 1.2499999, 0, 0.9483539, 0)
+
+[node name="Head" type="MeshInstance3D" parent="HeadParts" unique_id=571799220]
+transform = Transform3D(0.716454, 0, 0, 0, 0.7, 0, 0, 0, 0.669975, 0, 0.381033, 0)
+mesh = SubResource("SphereMesh_kq7t7")
+skeleton = NodePath("../../BodyParts")
+surface_material_override/0 = SubResource("StandardMaterial3D_lux2e")
+
+[node name="Bulb" type="MeshInstance3D" parent="HeadParts" unique_id=1663073969]
+transform = Transform3D(0.45, 0, 0, 0, 0.44, 0, 0, 0, 0.421, 0, 0.933875, 0)
+mesh = SubResource("SphereMesh_kq7t7")
+skeleton = NodePath("../../BodyParts")
+surface_material_override/0 = SubResource("StandardMaterial3D_dp41y")
+
+[node name="BulbBase" type="MeshInstance3D" parent="HeadParts" unique_id=267557432]
+transform = Transform3D(-1.29805e-09, 1.45124e-09, 0.197714, 0.0048431, 0.0605503, -4.70438e-09, -0.198595, 0.00147662, -1.407e-09, 0.00353282, 0.710259, -0.00813173)
+mesh = SubResource("CylinderMesh_u10yq")
+skeleton = NodePath("../../BodyParts")
+surface_material_override/0 = SubResource("StandardMaterial3D_irac7")
+
+[node name="Ear1" type="MeshInstance3D" parent="HeadParts" unique_id=1931037064]
+transform = Transform3D(-1.24258e-08, -0.204567, -0.0195813, 0.294296, -9.25735e-09, 0, -3.32948e-09, -0.0548136, 0.0730785, -0.41622, 0.381033, 0)
+mesh = SubResource("CapsuleMesh_x1k2x")
+skeleton = NodePath("../../BodyParts")
+surface_material_override/0 = SubResource("StandardMaterial3D_cuim2")
+
+[node name="Ear2" type="MeshInstance3D" parent="HeadParts" unique_id=1475584477]
+transform = Transform3D(-1.24258e-08, -0.204567, 0.0195813, 0.294296, -9.25735e-09, 1.34474e-16, 3.32947e-09, 0.0548136, 0.0730785, 0.396893, 0.381033, 0)
+mesh = SubResource("CapsuleMesh_x1k2x")
+skeleton = NodePath("../../BodyParts")
+surface_material_override/0 = SubResource("StandardMaterial3D_cuim2")
+
+[node name="Mouth" type="MeshInstance3D" parent="HeadParts" unique_id=1084691507]
+transform = Transform3D(3.63079e-15, 6.3479e-09, 0.396675, 0.36476, 0.127143, -4.90044e-09, -0.209154, 0.221735, -8.54626e-09, 0.0166874, 0.218001, 0.390377)
+mesh = SubResource("SphereMesh_8aoo4")
+skeleton = NodePath("../../BodyParts")
+surface_material_override/0 = SubResource("StandardMaterial3D_7s7pf")
+
+[node name="Nose" type="MeshInstance3D" parent="HeadParts" unique_id=1364230490]
+transform = Transform3D(1.61462e-15, 3.54947e-09, 0.146069, 0.0542897, 0.136928, -3.47555e-09, -0.181521, 0.0409527, -1.03948e-09, 0.0165363, 0.423724, 0.360932)
+mesh = SubResource("SphereMesh_8aoo4")
+skeleton = NodePath("../../BodyParts")
+surface_material_override/0 = SubResource("StandardMaterial3D_8b2kb")
+
+[node name="Eye1" type="MeshInstance3D" parent="HeadParts" unique_id=1619156093]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, -0.082307, 0.516117, 0.252076)
+mesh = SubResource("SphereMesh_7fu55")
+skeleton = NodePath("../../BodyParts")
+surface_material_override/0 = SubResource("StandardMaterial3D_o8o4q")
+
+[node name="Eye2" type="MeshInstance3D" parent="HeadParts" unique_id=1122131152]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0.109744, 0.516117, 0.252076)
+mesh = SubResource("SphereMesh_7fu55")
+skeleton = NodePath("../../BodyParts")
+surface_material_override/0 = SubResource("StandardMaterial3D_o8o4q")
+
+[node name="Pupil1" type="MeshInstance3D" parent="HeadParts" unique_id=834394924]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0.109744, 0.532909, 0.309682)
+mesh = SubResource("SphereMesh_7fu55")
+skeleton = NodePath("../../BodyParts")
+surface_material_override/0 = SubResource("StandardMaterial3D_kt464")
+
+[node name="Pupil2" type="MeshInstance3D" parent="HeadParts" unique_id=1318388259]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, -0.0824064, 0.532909, 0.309682)
+mesh = SubResource("SphereMesh_7fu55")
+skeleton = NodePath("../../BodyParts")
+surface_material_override/0 = SubResource("StandardMaterial3D_kt464")
