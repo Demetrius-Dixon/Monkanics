@@ -1,12 +1,5 @@
 extends Node
 
-func _ready() -> void:
-	
-	if OS.has_feature("dedicated_server"):
-		queue_free()
-	else:
-		pass
-
 func quit_monkanics() -> void:
 	
 	if Client.is_registered_with_ingest_server == true:

@@ -9,11 +9,7 @@ var is_in_lobby : bool = false
 var is_host : bool = false
 
 func _ready() -> void:
-	
-	if OS.has_feature("dedicated_server"):
-		queue_free()
-	else:
-		create_client()
+	create_client()
 
 func _process(_delta: float) -> void:
 	
@@ -24,6 +20,8 @@ func _process(_delta: float) -> void:
 		MouseManager.toggle_mouse()
 
 func create_client() -> void:
+	
+	if OS.has_feature("dedicated_server"): return
 	
 	Client = PacketPeerUDP.new()
 	
@@ -96,7 +94,5 @@ func load_game() -> void:
 	UiManager.unload_main_menu()
 	
 	MapManager.load_map("bnza_zoolag")
-	
-	PlayerSpawnManager.spawn_your_player()
 	
 	MouseManager.hide_mouse()

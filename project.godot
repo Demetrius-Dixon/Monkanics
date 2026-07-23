@@ -27,7 +27,6 @@ config/icon="uid://vvac8c3b1en6"
 
 Client="*uid://cf75po2rw6uug"
 MapManager="*uid://dtda6dwx66grs"
-PlayerSpawnManager="*uid://oylpkixktb7v"
 UiManager="*uid://pcgp85abfuro"
 IngestServer="*uid://do5a0ydliwgum"
 RelayServer="*uid://crrcqmy2l1p2t"
@@ -36,6 +35,7 @@ GameQuitter="*uid://cpauojimpws2b"
 MathFormulas="*uid://xf0ux6vog54b"
 MouseManager="*uid://gl0ld5qkqn1s"
 PlayerMasterManager="*uid://mnq8jw8w24h0"
+ProjectPruneManager="*uid://6fcmtxxxlogt"
 
 [debug]
 

@@ -2,13 +2,6 @@ extends Node
 
 var is_mouse_visible : bool = true
 
-func _ready() -> void:
-	
-	if OS.has_feature("dedicated_server"):
-		queue_free()
-	else:
-		pass
-
 func show_mouse() -> void:
 	
 	if is_mouse_visible == false:
