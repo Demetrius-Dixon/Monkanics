@@ -1,4 +1,4 @@
-### Contributing to Monkanics (Doc is a WIP)
+# Contributing to Monkanics (Doc is a WIP)
 
 Monkanics is developed in **Godot version 4.7+ in GDscript only** (so, no C#/GDextention)
 
@@ -6,7 +6,7 @@ Monkanics' project file can be downloaded on any operating system Godot 4 native
 
 Contributions of any kind are welcome: bug reports, code, art, playtesting feedback, localization, etc. However, development is too early for frequent non-development commits until further notice.
 
-### Pull Request Rules:
+## Pull Request Rules:
 
 *These are very strict rules that, if broken, will have your pull request rejected. All rules are subject to change:*
 
@@ -23,10 +23,73 @@ Contributions of any kind are welcome: bug reports, code, art, playtesting feedb
 
 *Also, every commit is a case-by-case basis. So a pull request could be rejected outside of these rules. We'll always provide an explanation if this is the case.*
 
-### Credit
+## Code Style Guide
+
+Monkanics *mostly* follows Godot's official style guide in order to align with new contributors. Please take a look before contributing code.
+
+**View the official guide here:** (https://docs.godotengine.org/en/stable/tutorials/scripting/gdscript/gdscript_styleguide.html)
+
+**Jump straight to the casing guide:** (https://docs.godotengine.org/en/stable/tutorials/scripting/gdscript/gdscript_styleguide.html#:~:text=small_number%20%3D%2012_345-,Naming%20conventions,%EF%83%81,-These%20naming%20conventions)
+
+## Credit
 
 Contributors are added to the `CREDITS` file. You can add yourself to the txt file in your commit if you'd like.
 
 Or, you'd rather use an alias or outright not be listed, just let us know.
 
 Also, you can add whoever or whatever you want to the `SPECIAL_THANKS` file.
+
+# Monkanics Codebase Documentation (WIP)
+
+**Please note that I (Demetrius Dixon) specialize in game development (programming & design), rather than pure software development. They're 2 separate things. So if this documentation seems less technical with very little command line usage, that's why.**
+
+*Also, please view the official documentation of Godot 4.7+. Either via within the engine or via the website (https://docs.godotengine.org/en/stable/). It is an invaluble tool for Godot developers*
+
+This section details how Monkanics' codebase operates. While most folders, files, and functions are self-explanatory via their name, the way they connect aren't.
+
+Feel free to reference this offline copy whenever you're working with the files.
+
+## Cloning Monkanics' Source Code
+
+*Will be filled out later*
+
+## Exporting Monkanics On Your Machine:
+
+**EXPORT TEMPLATES AND EXPORT PRESETS ARE 2 DIFFERENT THINGS!!!**
+
+- Export Templates are Godot's pre-compiled binaries of the engine *saved on your computer globally, and NOT in the Monkanics project files*. You'll need to download or import them the first time you export Monkanics on a new machine.
+- Export Presets are Monkanics' pre-set settings for exporting and *are saved in the project files*.
+
+**It is highly recommended to only export Monkanics using the following export templates. As Monkanics was built for Windows and Linux PCs by default:**
+
+- Windows x86_64
+- Linux x86_64
+
+Exporting for 32-bit systems or ARM is theoretically possible, but is not supported by default.
+
+Exporting for Mac, Web, and especially Mobile will result in **SERIOUS compatibility issues**. 
+
+*However, the project files are free to modify. So if you'd like to give yourself a challenge, you can attempt to port Monkanics there yourself. Just let us know how you did it.*
+
+**Monkanics' Export Presets:**
+
+There are currently 3 export presets found in the `export_presets` file:
+
+- Main Game (Windows) [x86_64] (Runnable)
+- Main Game (Linux) [x86_64] (Runnable)
+- Ingest Server (Linux only) [x86_64]
+- Relay Server (Linux only) [x86_64]
+
+The 2 main game files for Windows and Linux are playable versions set to x86_64 by default. The archetecture can easily be changed to x86_32 or arm in the export menu, but keep in mind that support for 32-bit and ARM platforms aren't supported by default.
+
+The ingest and relay exports are instances of Monkanics' multiplayer archetecture.
+
+The PCK for the servers is also embedded by default, **this IS NOT a DRM measure**, but instead a way to make file porting a lot easier when going to cloud servers for deployment.
+
+## Export Feature Tags:
+
+*Will fill in later*
+
+## Deploying a Relay Server For Monkanics:
+
+*This section will be filled out later. As I have to rewrite the gameplay netcode for Monkanics version 0.2*
