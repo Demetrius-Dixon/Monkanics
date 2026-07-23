@@ -2,11 +2,11 @@ extends Node
 
 var Client : PacketPeerUDP
 
-var Is_Registered_With_Ingest_Server : bool = false
-var Confirm_Registration_Delay : float = 5.0
+var is_registered_with_ingest_server : bool = false
+var confirm_registration_delay : float = 5.0
 
-var Is_In_Lobby : bool = false
-var Is_Host : bool = false
+var is_in_lobby : bool = false
+var is_host : bool = false
 
 func _ready() -> void:
 	
@@ -37,36 +37,36 @@ func poll_client() -> void:
 	
 	if Client.get_available_packet_count() > 0:
 		
-		var Packet : Variant = Client.get_packet()
+		var packet : Variant = Client.get_packet()
 		
-		var Packet_String : Variant = Packet.get_string_from_utf8()
+		var packet_string : Variant = packet.get_string_from_utf8()
 		
-		#print("Client Recieved Packet: ", Packet_String)
+		#print("Client Recieved packet: ", packet_string)
 		
-		trigger_client_command(Packet_String)
+		trigger_client_command(packet_string)
 
-func trigger_client_command(Command:String) -> void:
+func trigger_client_command(command:String) -> void:
 	
-	if Command == "Confirm_Registration":
-		Is_Registered_With_Ingest_Server = true
+	if command == "confirm_registration":
+		is_registered_with_ingest_server = true
 	
-	if Command == "Confirm_Unregistration":
-		Is_Registered_With_Ingest_Server = false
+	if command == "confirm_unregistration":
+		is_registered_with_ingest_server = false
 	
-	if Command == "Confirm_Is_In_Lobby":
-		Is_In_Lobby = true
+	if command == "confirm_is_in_lobby":
+		is_in_lobby = true
 
 func register_to_ingest_server() -> void:
 	
-	Client.put_packet("Register".to_utf8_buffer())
+	Client.put_packet("register".to_utf8_buffer())
 	
 	confirm_registration_to_ingest_server()
 
 func confirm_registration_to_ingest_server() -> void:
 	
-	await get_tree().create_timer(Confirm_Registration_Delay).timeout
+	await get_tree().create_timer(confirm_registration_delay).timeout
 	
-	if Is_Registered_With_Ingest_Server == false:
+	if is_registered_with_ingest_server == false:
 		return
 	
 	register_to_ingest_server()
@@ -74,20 +74,20 @@ func confirm_registration_to_ingest_server() -> void:
 	print("Confirmed")
 
 func unregister_from_ingest_server() -> void:
-	Client.put_packet("Unregister".to_utf8_buffer())
+	Client.put_packet("unregister".to_utf8_buffer())
 
 func create_lobby() -> void:
 	
-	Client.put_packet("Create_Lobby".to_utf8_buffer())
+	Client.put_packet("create_lobby".to_utf8_buffer())
 	
 	await get_tree().create_timer(1).timeout
 	
-	if Is_In_Lobby == false:
-		Client.put_packet("Create_Lobby".to_utf8_buffer())
+	if is_in_lobby == false:
+		Client.put_packet("create_lobby".to_utf8_buffer())
 	
-	if Is_In_Lobby == true:
+	if is_in_lobby == true:
 		
-		Is_Host = true
+		is_host = true
 		
 		load_game()
 

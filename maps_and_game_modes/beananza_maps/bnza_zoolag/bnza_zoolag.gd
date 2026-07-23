@@ -1,8 +1,8 @@
 extends Node3D
 
-@onready var Spawn_Point_Container : Node = $PlayerSpawnPoints
+@onready var spawn_point_container : Node = $PlayerSpawnPoints
 
-@onready var Spawn_Points : Array[Vector3] = [
+@onready var spawn_points : Array[Vector3] = [
 	$"PlayerSpawnPoints/1".global_position,
 	$"PlayerSpawnPoints/2".global_position,
 	$"PlayerSpawnPoints/3".global_position,
@@ -16,4 +16,4 @@ extends Node3D
 
 func select_spawn_point() -> Vector3:
 	
-	return Spawn_Points.pick_random()
+	return spawn_points.pick_random()

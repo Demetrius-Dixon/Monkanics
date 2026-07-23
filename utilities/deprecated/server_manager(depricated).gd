@@ -6,7 +6,7 @@ This script controls:
 	- Server creation
 	- Server-to-client communication
 	- Game management
-	- Client management
+	- client management
 	
 Make sure to:
 	Have all server actions be checked with:
@@ -26,7 +26,7 @@ var Temp_Server_IP : String = ""
 
 const NULL_SERVER_RETURN_VALUE : float = -1.0
 
-# Client Info Arrays
+# client Info Arrays
 
 var Connected_Client_IDs : Array[int] = []
 var Connected_Client_Players : Array[Node] = []
@@ -57,7 +57,7 @@ const MAX_SERVER_CLOCK_TIME : float = 3_600 # 1 hour
 @onready var Player : PackedScene = preload("uid://bv5ucnu7shjsd")
 
 @onready var Projectile_Container : Node = $"../Projectiles"
-@onready var Universal_Projectile : PackedScene = preload("uid://bn1b4438pxw3l")
+@onready var universal_projectile : PackedScene = preload("uid://bn1b4438pxw3l")
 @onready var Dummy_Projectile : PackedScene = preload("uid://bf2aw1eve6evb")
 
 const DAMAGE_TAKER_NAME : StringName = &"PlayerDamageTaker"
@@ -91,7 +91,7 @@ func _physics_process(delta: float) -> void:
 	# Get and set all client ping/packet loss
 	update_all_clients_network_info()
 	
-	#var Current_Map : Node = 
+	#var current_map : Node = 
 	
 	#print(Map_Container.get_child(0).name)
 	
@@ -179,13 +179,13 @@ func server_spawn_new_players(id: int) -> void:
 	if not multiplayer.is_server(): return
 	
 	# Creates player
-	var Player_Ref : Node = Player.instantiate()
+	var player_ref : Node = Player.instantiate()
 	
 	# Updates player node name to the client's id
-	Player_Ref.name = str(id)
+	player_ref.name = str(id)
 	
 	# Adds the player to the server scene
-	Player_Container.add_child(Player_Ref, true)
+	Player_Container.add_child(player_ref, true)
 	
 	# Check if the scene has the player node
 	if Player_Container.has_node(str(id)):
@@ -260,7 +260,7 @@ func server_despawn_player(id_to_despawm: int) -> void:
 	else: return
 
 #------------------------------------------#
-# Networked Client/Server Input Management:
+# Networked client/Server Input Management:
 #------------------------------------------#
 
 @rpc("any_peer","call_remote","unreliable_ordered",0)
@@ -276,7 +276,7 @@ func server_apply_client_movement_input(Sender_Client_ID:int, input:Vector2, del
 	const START_MOVING : StringName = &"START_MOVING"
 	const STOP_MOVING : StringName = &"STOP_MOVING"
 	
-	# Client movement intention var
+	# client movement intention var
 	var Current_Client_Player_Movement_Intention : StringName = Client_Movement_Intention
 	
 	# The client wants their player to start moving
@@ -307,7 +307,7 @@ func server_apply_client_button_input(Sender_Client_ID:int, Client_Player_Input_
 	const START_JUMPING : StringName = &"START_JUMPING"
 	const STOP_JUMPING : StringName = &"STOP_JUMPING"
 	
-	# Client movement intention var
+	# client movement intention var
 	var Current_Client_Player_Input_Intention : StringName = Client_Player_Input_Intention
 	
 	# Tells to the client's player to start jumping
@@ -324,7 +324,7 @@ func server_apply_client_button_input(Sender_Client_ID:int, Client_Player_Input_
 	else: return
 
 #------------------------------------------#
-# Client <-> Server Player Management:
+# client <-> Server Player Management:
 #------------------------------------------#
 
 @rpc("any_peer","call_remote","unreliable_ordered",0) @warning_ignore("unused_parameter")
@@ -336,7 +336,7 @@ func send_client_position_to_server(Sender_Client_ID:int, Client_Position:Vector
 	# Checks if the client player exists
 	if not Player_Container.has_node(str(Sender_Client_ID)): return
 	
-	# Client player location vars
+	# client player location vars
 	var Min_Accep_Position : Vector3
 	var Max_Accep_Position : Vector3
 	const ACCEP_POS_X : float = 1.0
@@ -388,7 +388,7 @@ func server_set_client_position() -> void:
 @rpc("any_peer","call_remote","unreliable_ordered",0)
 func send_client_player_rotation_to_server(Sender_Client_ID:int, 
 Player_Body_Rotation:Vector3, Player_Head_Rotation:Vector3,
-Camera_Horizonal_Rotation:float, Camera_Vertical_Rotation:float) -> void:
+camera_horizonal_rotation:float, camera_vertical_rotation:float) -> void:
 	
 	# Checks if this is the server
 	if not multiplayer.is_server(): return
@@ -398,10 +398,10 @@ Camera_Horizonal_Rotation:float, Camera_Vertical_Rotation:float) -> void:
 	
 	# Change the player's body and head rotation
 	Player_Container.get_node(str(Sender_Client_ID)).change_player_rotation_for_server(\
-	Player_Body_Rotation, Player_Head_Rotation, Camera_Horizonal_Rotation, Camera_Vertical_Rotation)
+	Player_Body_Rotation, Player_Head_Rotation, camera_horizonal_rotation, camera_vertical_rotation)
 
 #------------------------------------------#
-# Client <-> Server Projectile Management:
+# client <-> Server Projectile Management:
 #------------------------------------------#
 
 @rpc("any_peer","call_remote","reliable",0)
@@ -418,29 +418,29 @@ Client_Camera_Rotation:Vector3) -> void:
 	# ------------------------------
 	
 	# Instantiate universal projectile
-	var Projectile_Ref : Node = Universal_Projectile.instantiate()
+	var Projectile_Ref : Node = universal_projectile.instantiate()
 	
 	# ------------------------------
 	
 	# Apply client projectile stats
-	Projectile_Ref.Assigned_Projectile_Speed = Client_Projectile_Speed
-	Projectile_Ref.Assigned_Spawn_Position = Client_Projectile_Spawn_Position
+	Projectile_Ref.assigned_projectile_speed = Client_Projectile_Speed
+	Projectile_Ref.assigned_spawn_position = Client_Projectile_Spawn_Position
 	
 	# Check if the client's hit distance isn't too close
 	if Client_Raycast_Hit_Distance <= MIN_PROJECTILE_SHOOT_DISTANCE:
 		
 		# If too close, rotate projectile to the client's camera rotation
-		Projectile_Ref.Assigned_Target_Rotation = Client_Camera_Rotation
+		Projectile_Ref.assigned_target_rotation = Client_Camera_Rotation
 		
 	else:
 		
 		# If ok, rotate toward the client's camera raycast hit position
-		Projectile_Ref.Assigned_Target_Position = Client_Projectile_Target_Position
+		Projectile_Ref.assigned_target_position = Client_Projectile_Target_Position
 	
 	# ------------------------------
 	
 	# Designate owning client
-	Projectile_Ref.Assigned_Owning_Client = str(Sender_Client_ID)
+	Projectile_Ref.assigned_owning_client = str(Sender_Client_ID)
 	
 	# ------------------------------
 	
@@ -448,7 +448,7 @@ Client_Camera_Rotation:Vector3) -> void:
 	Projectile_Container.add_child(Projectile_Ref)
 	
 	# Connect projectile notifier signal
-	Projectile_Ref.connect("notify_Collision_For_Server", \
+	Projectile_Ref.connect("notify_collision_for_server", \
 	process_projectile_collision)
 	
 	# Gives the projectile a pseudo id number for replication
@@ -457,7 +457,7 @@ Client_Camera_Rotation:Vector3) -> void:
 	# Check if the client's hit distance isn't too close
 	if Client_Raycast_Hit_Distance <= END_PROJECTILE_SHOOT_DISTANCE:
 		
-		Projectile_Ref.Ready_For_Deletion = true
+		Projectile_Ref.ready_for_deletion = true
 		
 	elif Client_Raycast_Hit_Distance <= MIN_PROJECTILE_SHOOT_DISTANCE:
 		
@@ -481,7 +481,7 @@ Client_Camera_Rotation:Vector3) -> void:
 	str(Sender_Client_ID), \
 	Projectile_Ref.name, \
 	Projectile_Ref.get_path(),
-	Projectile_Ref.Assigned_Spawn_Position)
+	Projectile_Ref.assigned_spawn_position)
 
 func process_projectile_collision(
 Body:Node,
@@ -506,18 +506,18 @@ Projectile_NodePath:NodePath) -> void:
 		
 		Hit_Player.player_take_damage(Projectile_Damage)
 		
-		print(Hit_Player.Current_Health)
+		print(Hit_Player.current_health)
 		
-		if Hit_Player.Current_Health <= 0:
+		if Hit_Player.current_health <= 0:
 			
 			server_respawn_player(Hit_Player)
 		
-		Projectile_To_Process.Ready_For_Deletion = true
+		Projectile_To_Process.ready_for_deletion = true
 		
 	# If the projectile hits geometry
 	else:
 		
-		Projectile_To_Process.Ready_For_Deletion = true
+		Projectile_To_Process.ready_for_deletion = true
 
 @rpc("authority","call_remote","reliable",0) @warning_ignore("unused_parameter")
 func spawn_dummy_projectile_on_all_clients(
@@ -561,14 +561,14 @@ func tick_all_projectile_lifetime_counters(delta:float) -> void:
 	for active_projectile in Active_Projectiles:
 		
 		# Tick the lifetime counters down by delta
-		active_projectile.Current_Projectile_Lifetime \
-		= active_projectile.Current_Projectile_Lifetime + delta
+		active_projectile.current_projectile_lifetime \
+		= active_projectile.current_projectile_lifetime + delta
 		
 		# Remove expired projectiles
-		if active_projectile.Current_Projectile_Lifetime \
+		if active_projectile.current_projectile_lifetime \
 		>= active_projectile.MAX_PROJECTILE_LIFETIME \
 		
-		or active_projectile.Ready_For_Deletion == true:
+		or active_projectile.ready_for_deletion == true:
 			
 			despawn_dummy_projectile_on_all_clients.rpc(
 			active_projectile.get_path())
@@ -636,8 +636,8 @@ func get_new_gamestate() -> void:
 			&"NodePath": player.get_path(),
 			&"Position": player.global_position,
 			&"Velocity": player.velocity,
-			&"BodyRotation": player.Body_Parts.rotation,
-			&"HeadRotation": player.Head_Parts.rotation,
+			&"BodyRotation": player.body_parts.rotation,
+			&"HeadRotation": player.head_parts.rotation,
 			&"Ping": get_client_ping(int(player.name)),
 			&"PacketLoss": get_client_packet_loss(int(player.name))
 			
@@ -653,11 +653,11 @@ func get_new_gamestate() -> void:
 				&"NN": player.get_name(), # Node Name
 				&"NP": player.get_path(), # Node Path
 				&"POS": player.global_position, # Position
-				&"BR": player.Body_Parts.rotation, # Body Rotation
-				&"HR": player.Head_Parts.rotation, # Head Rotation
-				&"H": player.Current_Health, # Health
+				&"BR": player.body_parts.rotation, # Body Rotation
+				&"HR": player.head_parts.rotation, # Head Rotation
+				&"H": player.current_health, # Health
 				&"P": get_client_ping(int(player.name)), # Ping
-				&"PL": get_client_packet_loss(int(player.name)) # Packet Loss
+				&"PL": get_client_packet_loss(int(player.name)) # packet Loss
 				
 			}
 			
@@ -702,7 +702,7 @@ func broadcast_new_projectile_positions() -> void:
 		# Send separate RPCs for every projectile
 		broadcast_new_projectile_positions.rpc(projectile_to_replicate.get_path(), 
 		projectile_to_replicate.global_position,
-		projectile_to_replicate.Assigned_Owning_Client)
+		projectile_to_replicate.assigned_owning_client)
 
 func collect_player_state_history(New_Player_State:Array[Dictionary]) -> void:
 	
@@ -722,7 +722,7 @@ func collect_player_state_history(New_Player_State:Array[Dictionary]) -> void:
 		Player_State_History.push_front(New_Player_State)
 
 #------------------------------------------#
-# Client <-> Server Stat Management:
+# client <-> Server Stat Management:
 #------------------------------------------#
 
 @rpc("any_peer","call_remote","unreliable",0)

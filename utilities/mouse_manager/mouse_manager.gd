@@ -1,6 +1,6 @@
 extends Node
 
-var Is_Mouse_Visible : bool = true
+var is_mouse_visible : bool = true
 
 func _ready() -> void:
 	
@@ -11,29 +11,29 @@ func _ready() -> void:
 
 func show_mouse() -> void:
 	
-	if Is_Mouse_Visible == false:
+	if is_mouse_visible == false:
 		
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-		Is_Mouse_Visible = true
+		is_mouse_visible = true
 		
 	else:
 		return
 
 func hide_mouse() -> void:
 	
-	if Is_Mouse_Visible == true:
+	if is_mouse_visible == true:
 		
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-		Is_Mouse_Visible = false
+		is_mouse_visible = false
 		
 	else:
 		return
 
 func toggle_mouse() -> void:
 	
-	if Is_Mouse_Visible == false:
+	if is_mouse_visible == false:
 		show_mouse()
-	elif Is_Mouse_Visible == true:
+	elif is_mouse_visible == true:
 		hide_mouse()
 	else:
 		return

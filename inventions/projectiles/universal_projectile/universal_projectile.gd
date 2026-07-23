@@ -16,26 +16,26 @@ This script controls:
 
 # Projectile Stats
 
-var Assigned_Owning_Client : String
+var assigned_owning_client : String
 
-var Assigned_Spawn_Position : Vector3
-var Assigned_Target_Position : Vector3
-var Assigned_Target_Rotation : Vector3
+var assigned_spawn_position : Vector3
+var assigned_target_position : Vector3
+var assigned_target_rotation : Vector3
 
-var Assigned_Projectile_Speed : float
+var assigned_projectile_speed : float
 const MAX_PROJECTILE_SPEED : float = 1_000.0
 const MIN_PROJECTILE_SPEED : float = 1.0
 
-var Assigned_Projectile_Damage : float = 10.0
+var assigned_projectile_damage : float = 10.0
 
-var Current_Projectile_Lifetime : float = 0.0
+var current_projectile_lifetime : float = 0.0
 const MAX_PROJECTILE_LIFETIME : float = 45.0
 
 # Projectile State
 
-var Ready_For_Deletion : bool = false
-var Spawned_Too_Close : bool = false
-var Can_Act_By_Itself : bool = false
+var ready_for_deletion : bool = false
+var spawned_too_close : bool = false
+var can_act_by_itself : bool = false
 
 # Projectile Nodes
 
@@ -43,7 +43,7 @@ var Can_Act_By_Itself : bool = false
 
 # Projectile Notifiers
 
-signal notify_Collision_For_Server
+signal notify_collision_for_server
 
 #------------------------------------------#
 # Projectile Functions:
@@ -51,51 +51,51 @@ signal notify_Collision_For_Server
 
 func _physics_process(delta: float) -> void:
 	
-	if Spawned_Too_Close == true:
+	if spawned_too_close == true:
 		
-		Ready_For_Deletion = true
+		ready_for_deletion = true
 	
 	# Allow the client predicted projectile to move
-	if Can_Act_By_Itself == true:
+	if can_act_by_itself == true:
 		
 		move_projectile()
 	
 	# Allow the client predicted projectile to tick it's lifetime
-	if Can_Act_By_Itself == true:
+	if can_act_by_itself == true:
 		
-		Current_Projectile_Lifetime = \
-		Current_Projectile_Lifetime + delta
+		current_projectile_lifetime = \
+		current_projectile_lifetime + delta
 		
-		if Current_Projectile_Lifetime >= MAX_PROJECTILE_LIFETIME:
+		if current_projectile_lifetime >= MAX_PROJECTILE_LIFETIME:
 			
-			Ready_For_Deletion = true
+			ready_for_deletion = true
 	
 	# Allow the client predicted projectile to delete itself
-	if Can_Act_By_Itself == true \
-	and Ready_For_Deletion == true:
+	if can_act_by_itself == true \
+	and ready_for_deletion == true:
 		
 		delete_projectile()
 
 func initialize_projectile() -> void:
 	
 	# Set the projectile's position to the muzzle of the player's weapon
-	global_position = Assigned_Spawn_Position
+	global_position = assigned_spawn_position
 	
 	# Rotate the projectile toward the camera raycast's target position
-	look_at(Assigned_Target_Position)
+	look_at(assigned_target_position)
 
 func initialize_projectile_when_too_close() -> void:
 	
 	# Spawn the projectile from the player's muzzle when-
 	# -the player model is too close to an object
 	
-	global_position = Assigned_Spawn_Position
+	global_position = assigned_spawn_position
 	
-	global_rotation = Assigned_Target_Rotation
+	global_rotation = assigned_target_rotation
 
 func move_projectile() -> void:
 	
-	linear_velocity = -global_transform.basis.z * Assigned_Projectile_Speed
+	linear_velocity = -global_transform.basis.z * assigned_projectile_speed
 
 func _on_body_entered(body:Node) -> void:
 	
@@ -110,13 +110,13 @@ func _on_body_entered(body:Node) -> void:
 @warning_ignore("unused_parameter")
 func process_client_predicted_collision(body:Node) -> void:
 	
-	Ready_For_Deletion = true
+	ready_for_deletion = true
 
 func process_true_server_collision(body:Node) -> void:
 	
-	notify_Collision_For_Server.emit(body, \
-	Assigned_Projectile_Damage, \
-	Assigned_Owning_Client,
+	notify_collision_for_server.emit(body, \
+	assigned_projectile_damage, \
+	assigned_owning_client,
 	get_path())
 
 func delete_projectile() -> void:

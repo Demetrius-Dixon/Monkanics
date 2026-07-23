@@ -1,7 +1,7 @@
 extends Node
 
-var Client_Player : Node = null
-var Player_Preload : PackedScene = preload("uid://bv5ucnu7shjsd")
+var client_player : Node = null
+var player_preload : PackedScene = preload("uid://bv5ucnu7shjsd")
 
 func _ready() -> void:
 	
@@ -12,9 +12,9 @@ func _ready() -> void:
 
 func spawn_your_player() -> void:
 	
-	var Player_Ref : Node = Player_Preload.instantiate()
+	var player_ref : Node = player_preload.instantiate()
 	
-	add_child(Player_Ref)
+	add_child(player_ref)
 
 func despawn_your_player() -> void:
 	pass

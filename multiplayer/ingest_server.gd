@@ -1,12 +1,12 @@
 extends Node
 
-var Ingest_Server : UDPServer
+var ingest_server : UDPServer
 
-var Registered_Relay_Clients : Array[Dictionary] = []
+var registered_clients : Array[Dictionary] = []
 
-var Active_Lobbies : Array[Dictionary] = []
+var active_lobbies : Array[Dictionary] = []
 
-const Client_Timeout_Limit : float = 30.0
+const CLIENT_TIMEOUT_LIMIT : float = 30.0
 const END_TIMEOUT_TIMER : float = 0.0
 
 func _ready() -> void:
@@ -28,136 +28,136 @@ func _physics_process(delta: float) -> void:
 
 func create_ingest_server() -> void:
 	
-	Ingest_Server = UDPServer.new()
+	ingest_server = UDPServer.new()
 	
-	Ingest_Server.listen(ServerInfo.INGEST_SERVER_PORT, ServerInfo.INGEST_SERVER_IPV4)
+	ingest_server.listen(ServerInfo.INGEST_SERVER_PORT, ServerInfo.INGEST_SERVER_IPV4)
 	
 	print("Ingest Server Created")
 
 func poll_ingest_server() -> void:
 	
-	Ingest_Server.poll()
+	ingest_server.poll()
 	
-	if Ingest_Server.is_connection_available():
+	if ingest_server.is_connection_available():
 		
-		var Peer : Variant = Ingest_Server.take_connection()
+		var peer : Variant = ingest_server.take_connection()
 		
-		var Packet : Variant = Peer.get_packet()
+		var packet : Variant = peer.get_packet()
 		
-		print("Server received data: ", Packet.get_string_from_utf8())
+		print("Server received data: ", packet.get_string_from_utf8())
 		
-		trigger_server_command(Packet.get_string_from_utf8(), Peer, Peer.get_packet_ip())
+		trigger_server_command(packet.get_string_from_utf8(), peer, peer.get_packet_ip())
 	
-	for registered_client in Registered_Relay_Clients:
+	for registered_client in registered_clients:
 		
-		if registered_client[&"Peer"].get_available_packet_count() > 0:
+		if registered_client[&"peer"].get_available_packet_count() > 0:
 			
-			var Packet : Variant = registered_client[&"Peer"].get_packet()
+			var packet : Variant = registered_client[&"peer"].get_packet()
 			
-			print("Server received data: ", Packet.get_string_from_utf8())
+			print("Server received data: ", packet.get_string_from_utf8())
 			
-			trigger_server_command(Packet.get_string_from_utf8(), registered_client[&"Peer"], registered_client[&"Peer"].get_packet_ip())
+			trigger_server_command(packet.get_string_from_utf8(), registered_client[&"peer"], registered_client[&"peer"].get_packet_ip())
 
-func trigger_server_command(Command:StringName, Peer:Variant, Packet_IP:String) -> void:
+func trigger_server_command(command:StringName, peer:Variant, packet_ip:String) -> void:
 	
-	if Command == "Register":
-		register_client(Peer, Packet_IP)
+	if command == "register":
+		register_client(peer, packet_ip)
 		return
 	
-	if Command == "Unregister":
-		unregister_client(Peer)
+	if command == "unregister":
+		unregister_client(peer)
 		return
 	
-	if Command == "Create_Lobby":
-		create_lobby(Peer)
+	if command == "create_lobby":
+		create_lobby(peer)
 		return
 	
 
-func register_client(Peer:Variant, Packet_IP:String) -> void:
+func register_client(peer:Variant, packet_ip:String) -> void:
 	
-	for registered_client in Registered_Relay_Clients:
-		if registered_client[&"Peer"] == Peer: 
+	for registered_client in registered_clients:
+		if registered_client[&"peer"] == peer: 
 			
-			registered_client[&"TimeoutTimer"] = Client_Timeout_Limit
+			registered_client[&"TimeoutTimer"] = CLIENT_TIMEOUT_LIMIT
 			
 			return
 		
-	var Client_To_Register : Dictionary = {}
+	var client_to_register : Dictionary = {}
 	
-	Client_To_Register = {
+	client_to_register = {
 		
-		&"Peer": Peer,
-		&"PeerIP": Packet_IP,
+		&"peer": peer,
+		&"PeerIP": packet_ip,
 		&"IsInLobby": false,
-		&"TimeoutTimer": Client_Timeout_Limit
+		&"TimeoutTimer": CLIENT_TIMEOUT_LIMIT
 		
 	}
 	
-	Registered_Relay_Clients.append(Client_To_Register)
+	registered_clients.append(client_to_register)
 	
-	Peer.put_packet("Confirm_Registration".to_utf8_buffer())
+	peer.put_packet("confirm_registration".to_utf8_buffer())
 	
 	print("Client Registered")
 	
-	print(Registered_Relay_Clients)
+	print(registered_clients)
 
-func unregister_client(Peer:Variant) -> void:
+func unregister_client(peer:Variant) -> void:
 	
-	var Client_To_Unregister : Dictionary
-	var Safe_To_Unregister : bool = false
+	var client_to_unregister : Dictionary
+	var safe_to_unregister : bool = false
 	
-	for registered_client in Registered_Relay_Clients:
-		if registered_client[&"Peer"] == Peer:
+	for registered_client in registered_clients:
+		if registered_client[&"peer"] == peer:
 			
-			Client_To_Unregister = registered_client
+			client_to_unregister = registered_client
 			
-			Peer.put_packet("Confirm_Unregistration".to_utf8_buffer())
+			peer.put_packet("confirm_unregistration".to_utf8_buffer())
 			
-			Safe_To_Unregister = true
+			safe_to_unregister = true
 	
-	if Safe_To_Unregister == true:
+	if safe_to_unregister == true:
 		
-		Registered_Relay_Clients.erase(Client_To_Unregister)
+		registered_clients.erase(client_to_unregister)
 		
-		Client_To_Unregister[&"Peer"].close()
+		client_to_unregister[&"peer"].close()
 	
-	print(Registered_Relay_Clients)
+	print(registered_clients)
 
-func create_lobby(Peer:Variant) -> void:
+func create_lobby(peer:Variant) -> void:
 	
-	for registered_client in Registered_Relay_Clients:
-		if registered_client[&"Peer"] == Peer: 
+	for registered_client in registered_clients:
+		if registered_client[&"peer"] == peer: 
 			pass
 		else:
 			return
 	
-	for lobby in Active_Lobbies:
-		if lobby[&"Players"].has(Peer):
+	for lobby in active_lobbies:
+		if lobby[&"Players"].has(peer):
 			return
 	
-	Active_Lobbies.append({
+	active_lobbies.append({
 		
-		&"Host": Peer,
+		&"Host": peer,
 		&"GameMode": "Bean-anza",
 		&"Map": "Zoolag",
 		&"MaxPlayers": 6,
-		&"Players": [Peer]
+		&"Players": [peer]
 		
 	})
 	
-	Peer.put_packet("Confirm_Is_In_Lobby".to_utf8_buffer())
+	peer.put_packet("confirm_is_in_lobby".to_utf8_buffer())
 	
-	print(Active_Lobbies)
+	print(active_lobbies)
 	print("Lobby Created")
 
-func tick_client_timeout_timers(Time_Passed:float) -> void:
+func tick_client_timeout_timers(time_passed:float) -> void:
 	
-	if Registered_Relay_Clients.size() <= 0: return
+	if registered_clients.size() <= 0: return
 	
-	for client in Registered_Relay_Clients:
+	for client in registered_clients:
 		
-		client[&"TimeoutTimer"] = client[&"TimeoutTimer"] - Time_Passed
+		client[&"TimeoutTimer"] = client[&"TimeoutTimer"] - time_passed
 		
 		if client[&"TimeoutTimer"] <= END_TIMEOUT_TIMER:
 			
-			trigger_server_command("Unregister", client[&"Peer"], client[&"PeerIP"])
+			trigger_server_command("unregister", client[&"peer"], client[&"PeerIP"])

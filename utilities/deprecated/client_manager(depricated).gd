@@ -5,7 +5,7 @@ extends Node
 
 This script controls: 
 	
-	- Client creation
+	- client creation
 	- Sending input to the server
 	- Mouse controls and visibility when the player isn't loaded.
 
@@ -21,7 +21,7 @@ The client has authority over this script via:
 # Variables:
 #------------------------------------------#
 
-# Client Network Info
+# client Network Info
 
 var Port : int = 2006
 var Temp_Server_IP : String = ""
@@ -35,7 +35,7 @@ const CLOCK_DESYNC_TOLERANCE_RANGE : float = 0.25
 const MIN_CLIENT_CLOCK_TIME : float = 0.0
 const MAX_CLIENT_CLOCK_TIME : float = 3_600 # 1 hour
 
-var Client_Player : CharacterBody3D
+var client_player : CharacterBody3D
 var Client_ID_For_Client : String
 var Client_ID_For_Server : int
 
@@ -65,27 +65,27 @@ var Previous_Client_Position : Vector3
 
 const PROJECTILE_POSITION_INTERPOLATION_WEIGHT : float = 0.5
 
-# Client Movement Input
+# client Movement Input
 
 var Is_Holding_Move_Forward_Input : bool = false
 var Is_Holding_Move_Backward_Input : bool = false
 var Is_Holding_Move_Left_Input : bool = false
 var Is_Holding_Move_Right_Input : bool = false
 
-# Client Mouse Input
+# client Mouse Input
 
 var Client_Mouse_Visible : bool = true
 
-# Client Jump Input
+# client Jump Input
 
 var Is_Pressing_Jump_Input : bool = false
 var Is_Jump_Input_New : bool = true
 
-# Client Operate and Invention Input
+# client Operate and Invention Input
 
 var Is_Pressing_Operate_Input : bool = false
 var Is_Operate_Input_New : bool = true
-var Is_Operating : bool = false
+var is_operating : bool = false
 
 enum INVENTION_INVENTORY{
 	UNINVENTIVE_0,
@@ -100,7 +100,7 @@ const DEFAULT_EQUIPPED_INVENTION : INVENTION_INVENTORY = INVENTION_INVENTORY.UNI
 
 @onready var Player : PackedScene = preload("uid://bv5ucnu7shjsd")
 
-@onready var Universal_Projectile : PackedScene = preload("uid://bn1b4438pxw3l")
+@onready var universal_projectile : PackedScene = preload("uid://bn1b4438pxw3l")
 @onready var Dummy_Projectile : PackedScene = preload("uid://bf2aw1eve6evb")
 @onready var Projectile_Container : Node = $"../Projectiles"
 
@@ -145,9 +145,9 @@ func _physics_process(delta: float) -> void:
 	
 	# Send client player rotation to the server for replication
 	send_client_player_rotation_to_server.rpc_id(1, Client_ID_For_Server, \
-	Client_Player.Body_Parts.rotation, Client_Player.Head_Parts.rotation, \
-	Client_Player.Camera_Horizonal_Rotation.rotation.y, \
-	Client_Player.Camera_Vertical_Rotation.rotation.x)
+	client_player.body_parts.rotation, client_player.head_parts.rotation, \
+	client_player.camera_horizonal_rotation.rotation.y, \
+	client_player.camera_vertical_rotation.rotation.x)
 
 @warning_ignore("unused_parameter")
 func _process(delta: float) -> void:
@@ -180,7 +180,7 @@ func _process(delta: float) -> void:
 	trigger_operate_input()
 
 #------------------------------------------#
-# Client Creation:
+# client Creation:
 #------------------------------------------#
 
 func client_check() -> void:
@@ -199,12 +199,12 @@ func start_client_game() -> void:
 	# -as the player will enter a client-side state before joining a server.
 	
 	# Create client
-	var Client : ENetMultiplayerPeer = ENetMultiplayerPeer.new()
+	var client : ENetMultiplayerPeer = ENetMultiplayerPeer.new()
 	
-	Client.create_client(ServerInfo.RELAY_ROUTER_IPV4, ServerInfo.RELAY_ROUTER_PORT)
+	client.create_client(ServerInfo.RELAY_ROUTER_IPV4, ServerInfo.RELAY_ROUTER_PORT)
 	
 	# Make the client's multiplayer_peer the client
-	multiplayer.multiplayer_peer = Client
+	multiplayer.multiplayer_peer = client
 	
 	# Prevents error from sending an RPC too early
 	await get_tree().create_timer(0.5).timeout
@@ -223,7 +223,7 @@ func start_client_game() -> void:
 	#pass
 
 #------------------------------------------#
-# Client-Side Inputs:
+# client-Side Inputs:
 #------------------------------------------#
 
 func track_movement_input() -> void:
@@ -261,7 +261,7 @@ func track_movement_input() -> void:
 	or Is_Holding_Move_Left_Input == true \
 	or Is_Holding_Move_Right_Input == true:
 		
-		Client_Player.Is_Movement_Input_Held = true
+		client_player.is_movement_input_held = true
 		
 	# Updates the player script if a movement input isn't held
 	if Is_Holding_Move_Forward_Input == false \
@@ -269,11 +269,11 @@ func track_movement_input() -> void:
 	and Is_Holding_Move_Right_Input == false \
 	and Is_Holding_Move_Left_Input == false:
 		
-		Client_Player.Is_Movement_Input_Held = false
+		client_player.is_movement_input_held = false
 
 func trigger_movement_input(delta:float) -> void:
 	
-	# Client predicted movement call
+	# client predicted movement call
 	
 	# Checks if the node is in the scene tree
 	if not Player_Container.has_node(Client_ID_For_Client): return
@@ -288,7 +288,7 @@ func trigger_movement_input(delta:float) -> void:
 		var input:Vector2 = Input.get_vector("move_right", "move_left", "move_backward", "move_forward")
 		
 		# Move the player on the client
-		Client_Player.start_moving(input, delta)
+		client_player.start_moving(input, delta)
 		
 		# Server start moving trigger
 		server_apply_client_movement_input.rpc_id(1, \
@@ -302,8 +302,8 @@ func trigger_movement_input(delta:float) -> void:
 	and Is_Holding_Move_Right_Input == false \
 	and Is_Holding_Move_Left_Input == false:
 		
-		# Client-side stop moving trigger
-		Client_Player.stop_moving(delta)
+		# client-side stop moving trigger
+		client_player.stop_moving(delta)
 		
 		# Server-side stop moving trigger
 		server_apply_client_movement_input.rpc_id(1, Client_ID_For_Server, Vector2(0,0), \
@@ -328,10 +328,10 @@ func track_all_button_input() -> void:
 		
 		# Trigger player jump buffer upon client jump input
 		if Player_Container.has_node(Client_ID_For_Client) \
-		and Player_Container.get_node(Client_ID_For_Client).Is_Airborne == true:
+		and Player_Container.get_node(Client_ID_For_Client).is_airborne == true:
 			
 			# Set player jump buffer to true
-			Player_Container.get_node(Client_ID_For_Client).Is_Jump_Input_Buffered = true
+			Player_Container.get_node(Client_ID_For_Client).is_jump_input_buffered = true
 			
 			# Start player jump buffer time
 			Player_Container.get_node(Client_ID_For_Client).start_jump_buffer_timer()
@@ -349,21 +349,21 @@ func track_all_button_input() -> void:
 		
 		Is_Pressing_Operate_Input = true
 		
-		Client_Player.Is_Operate_Input_Held = true
+		client_player.is_operate_input_held = true
 	
 	if Input.is_action_just_released("operate") \
 	and Is_Pressing_Operate_Input == true: # <- Checks if the input was held
 		
 		Is_Pressing_Operate_Input = false
 		
-		Client_Player.Is_Operate_Input_Held = false
+		client_player.is_operate_input_held = false
 
 func trigger_jump_input() -> void:
 	
 	# Check if the client's node tree has their player node
 	if not Player_Container.has_node(Client_ID_For_Client): return
 	
-	# Client predicted jump call (and synced server call)
+	# client predicted jump call (and synced server call)
 	
 	# Checks if the player is pressing the jump input-
 	# -and if the jump input is new
@@ -371,7 +371,7 @@ func trigger_jump_input() -> void:
 	and Is_Jump_Input_New == true:
 		
 		# Trigger client start jumping function
-		Client_Player.start_jumping()
+		client_player.start_jumping()
 		
 		# Server start jumping call
 		server_apply_client_button_input.rpc_id(1, Client_ID_For_Server, &"START_JUMPING")
@@ -385,7 +385,7 @@ func trigger_jump_input() -> void:
 	and Is_Jump_Input_New == false:
 		
 		# Trigger client stop jumping function
-		Client_Player.stop_jumping()
+		client_player.stop_jumping()
 		
 		# Server stop jumping call
 		server_apply_client_button_input.rpc_id(1, Client_ID_For_Server, &"STOP_JUMPING")
@@ -423,21 +423,21 @@ func trigger_move_and_slide_on_client() -> void:
 	if Player_Container.has_node(Client_ID_For_Client):
 		
 		# Trigger client player's move_and_slide
-		Client_Player.trigger_move_and_slide()
+		client_player.trigger_move_and_slide()
 
 func start_operating() -> void:
 	
-	Is_Operating = true
+	is_operating = true
 	
-	Client_Player.Is_Operating = true
+	client_player.is_operating = true
 	
 	get_player_shooting_parameters()
 
 func stop_operating() -> void:
 	
-	Is_Operating = false
+	is_operating = false
 	
-	Client_Player.Is_Operating = false
+	client_player.is_operating = false
 
 func show_mouse_cursor() -> void:
 	
@@ -482,7 +482,7 @@ func server_apply_client_button_input(Sender_Client_ID:int, Client_Player_Input_
 	pass
 
 #------------------------------------------#
-# Client <-> Server Spawn Management:
+# client <-> Server Spawn Management:
 #------------------------------------------#
 
 @rpc("authority","call_remote","reliable",0)
@@ -508,7 +508,7 @@ func server_spawn_new_players(id: int) -> void:
 		Player_Container.get_node(str(id)).delete_unnecessary_player_nodes_for_self()
 		
 		# Set the client player variable (To save space)
-		Client_Player = Player_Container.get_node(str(id))
+		client_player = Player_Container.get_node(str(id))
 		
 		# Set player spawn to true
 		Is_Player_Spawned_In = true
@@ -555,7 +555,7 @@ func server_despawn_player(id_to_despawm: int) -> void:
 	else: return
 
 #------------------------------------------#
-# Client <-> Server Movement Management:
+# client <-> Server Movement Management:
 #------------------------------------------#
 
 func track_client_position() -> void:
@@ -564,7 +564,7 @@ func track_client_position() -> void:
 	Previous_Client_Position = Current_Client_Position
 	
 	# Set the new local client position
-	Current_Client_Position = Client_Player.global_position
+	Current_Client_Position = client_player.global_position
 
 @rpc("any_peer","call_remote","unreliable_ordered",0) @warning_ignore("unused_parameter")
 func send_client_position_to_server(Sender_Client_ID:int, Client_Position:Vector3, Prev_Client_Position:Vector3) -> void:
@@ -581,19 +581,19 @@ func server_set_client_position() -> void:
 	# -but was intentionally left incomplete due to the lack of practical data
 	
 	## Reset the client's position to the last valid one
-	#Client_Player.global_position = lerp(Client_Player.global_position, \
+	#client_player.global_position = lerp(client_player.global_position, \
 	#Previous_Client_Position, INTERPOLATION_WEIGHT)
 
 @rpc("any_peer","call_remote","unreliable_ordered",0) @warning_ignore("unused_parameter")
 func send_client_player_rotation_to_server(Sender_Client_ID:int, 
 Player_Body_Rotation:Vector3, Player_Head_Rotation:Vector3,
-Camera_Horizonal_Rotation:float, Camera_Vertical_Rotation:float) -> void:
+camera_horizonal_rotation:float, camera_vertical_rotation:float) -> void:
 	
 	# Does nothing intentionally. Only used to communicate with the server
 	pass
 
 #------------------------------------------#
-# Client <-> Server Invention and Projectile Management:
+# client <-> Server Invention and Projectile Management:
 #------------------------------------------#
 
 func spawn_all_inventions_on_client() -> void:
@@ -606,8 +606,8 @@ func spawn_all_inventions_on_client() -> void:
 	
 	Invention_Zero_Container.add_child(Invention_Zero_Ref)
 	
-	Invention_Zero_Ref.setup_node_references(Client_Player,
-	Client_Player.Global_Projectile_Origin)
+	Invention_Zero_Ref.setup_node_references(client_player,
+	client_player.global_projectile_origin)
 
 func swap_invention_on_client() -> void:
 	
@@ -615,29 +615,29 @@ func swap_invention_on_client() -> void:
 
 func get_player_shooting_parameters() -> void:
 	
-	if Client_Player.Can_Operate == false: return
+	if client_player.can_operate == false: return
 	
 	# Update the camera raycast
-	Client_Player.Camera_Raycast.force_raycast_update()
+	client_player.camera_raycast.force_raycast_update()
 	
 	# Create collision variables
-	var Camera_Raycast_Collision_Point : Vector3 = \
-	Client_Player.Camera_Raycast.get_collision_point()
+	var camera_raycast_collision_point : Vector3 = \
+	client_player.camera_raycast.get_collision_point()
 	
-	var New_Muzzle_Raycast_Collision_Point : Vector3 = \
-	Client_Player.Global_Muzzle_Raycast.to_local(Camera_Raycast_Collision_Point)
+	var new_muzzle_raycast_collision_point : Vector3 = \
+	client_player.global_muzzle_raycast.to_local(camera_raycast_collision_point)
 	
 	# Update muzzle raycast to go toward camera raycast hit location
-	Client_Player.Global_Muzzle_Raycast.target_position = \
-	New_Muzzle_Raycast_Collision_Point
-	Client_Player.Global_Muzzle_Raycast.force_raycast_update()
+	client_player.global_muzzle_raycast.target_position = \
+	new_muzzle_raycast_collision_point
+	client_player.global_muzzle_raycast.force_raycast_update()
 	
 	# Create hit distance variable
-	var Muzzle_Raycast_Hit_Distance : float
+	var muzzle_raycast_hit_distance : float
 	
 	# Get the distance between the start/end of the muzzle raycast
-	Muzzle_Raycast_Hit_Distance = Client_Player.Global_Muzzle_Raycast.global_position\
-	.distance_to(Client_Player.Camera_Raycast.get_collision_point())
+	muzzle_raycast_hit_distance = client_player.global_muzzle_raycast.global_position\
+	.distance_to(client_player.camera_raycast.get_collision_point())
 	
 	#--------------------------------------------------------------------------#
 	
@@ -645,29 +645,29 @@ func get_player_shooting_parameters() -> void:
 	spawn_player_projectile_on_server.rpc_id(1, \
 	Client_ID_For_Server, \
 	500.0, \
-	Client_Player.Global_Projectile_Origin.global_position, \
-	Camera_Raycast_Collision_Point, \
-	Muzzle_Raycast_Hit_Distance, \
-	Client_Player.Camera.global_rotation)
+	client_player.global_projectile_origin.global_position, \
+	camera_raycast_collision_point, \
+	muzzle_raycast_hit_distance, \
+	client_player.camera.global_rotation)
 	
-	# Client predicted projectile
+	# client predicted projectile
 	shoot_client_predicted_projectile(500.0, \
-	Client_Player.Global_Projectile_Origin.global_position, \
-	Camera_Raycast_Collision_Point, \
-	Muzzle_Raycast_Hit_Distance)
+	client_player.global_projectile_origin.global_position, \
+	camera_raycast_collision_point, \
+	muzzle_raycast_hit_distance)
 	
 	#--------------------------------------------------------------------------#
 	
 	# Add fire rate delay
-	Client_Player.Can_Operate = false
+	client_player.can_operate = false
 	
 	# Fire rate timer and action re-enabling
 	await get_tree().create_timer(calculate_operation_delay(500)).timeout
 	
-	Client_Player.Can_Operate = true
+	client_player.can_operate = true
 	
 	# Check if the operate input is held for auto fire
-	if Client_Player.Is_Operating == true: 
+	if client_player.is_operating == true: 
 		
 		get_player_shooting_parameters()
 
@@ -676,21 +676,21 @@ Predicted_Projectile_Spawn_Position:Vector3,
 Predicted_Projectile_Target_Position:Vector3, 
 Client_Raycast_Hit_Distance:float) -> void:
 	
-	var Projectile_To_Spawn : Object = Universal_Projectile.instantiate()
+	var Projectile_To_Spawn : Object = universal_projectile.instantiate()
 	
 	# Add projectile to client scene
 	Projectile_Container.add_child(Projectile_To_Spawn)
 	
-	# Client predicted projectile doesn't rely on client/server calls
-	Projectile_To_Spawn.Can_Act_By_Itself = true
+	# client predicted projectile doesn't rely on client/server calls
+	Projectile_To_Spawn.can_act_by_itself = true
 	
 	# Check if the player is too close to a wall
-	if Client_Raycast_Hit_Distance <= Client_Player.END_PROJECTILE_SHOOT_DISTANCE:
+	if Client_Raycast_Hit_Distance <= client_player.END_PROJECTILE_SHOOT_DISTANCE:
 		
-		Projectile_To_Spawn.Spawned_Too_Close = true
+		Projectile_To_Spawn.spawned_too_close = true
 		
 		Projectile_To_Spawn.global_position = \
-		Client_Player.Global_Projectile_Origin.global_position
+		client_player.global_projectile_origin.global_position
 		
 		return
 		
@@ -701,15 +701,15 @@ Client_Raycast_Hit_Distance:float) -> void:
 		Predicted_Projectile_Spawn_Position
 	
 	# Don't rotate the projectile if the model is too close
-	if Client_Raycast_Hit_Distance <= Client_Player.END_PROJECTILE_SHOOT_DISTANCE:
+	if Client_Raycast_Hit_Distance <= client_player.END_PROJECTILE_SHOOT_DISTANCE:
 		
 		pass
 		
 	# Check if the muzzle raycast is too close for look_at() to work
-	elif Client_Raycast_Hit_Distance <= Client_Player.MIN_PROJECTILE_SHOOT_DISTANCE:
+	elif Client_Raycast_Hit_Distance <= client_player.MIN_PROJECTILE_SHOOT_DISTANCE:
 		
 		# If too close, rotate the projectile in the camera's direction
-		Projectile_To_Spawn.rotation = Client_Player.Camera.global_rotation
+		Projectile_To_Spawn.rotation = client_player.camera.global_rotation
 		
 	else: 
 		
@@ -717,7 +717,7 @@ Client_Raycast_Hit_Distance:float) -> void:
 		Projectile_To_Spawn.look_at(Predicted_Projectile_Target_Position)
 	
 	# Set projectile speed
-	Projectile_To_Spawn.Assigned_Projectile_Speed = \
+	Projectile_To_Spawn.assigned_projectile_speed = \
 	Predicted_Projectile_Speed
 
 @rpc("any_peer","call_remote","reliable",0) 
@@ -781,7 +781,7 @@ func server_respawn_player(Player_To_Respawn:NodePath, Respawm_Position:Vector3)
 	get_node(Player_To_Respawn).respawn_player(Respawm_Position)
 
 #------------------------------------------#
-# Client-Side Gamestate Managment:
+# client-Side Gamestate Managment:
 #------------------------------------------#
 
 @rpc("authority","call_remote","unreliable_ordered",0)
@@ -813,8 +813,8 @@ func broadcast_new_player_state(New_Player_State:Array[Dictionary]) -> void:
 			Display_Ping = int(state[&"P"])
 			Display_Packet_Loss = int(state[&"PL"])
 			
-			All_Players.Current_Health = state[&"H"]
-			Client_Player.Health_Bar.change_health_value(state[&"H"])
+			All_Players.current_health = state[&"H"]
+			client_player.health_bar.change_health_value(state[&"H"])
 		
 		# Apply all other global player positions client-side-
 		# -and interpolate between the last and current state
@@ -830,9 +830,9 @@ func broadcast_new_player_state(New_Player_State:Array[Dictionary]) -> void:
 		# Own rotation is local (No prediction or correction needed)
 		if Name != Client_ID_For_Client and Is_Connected_To_Server == true:
 			
-			All_Players.Body_Parts.rotation = state[&"BR"]
-			All_Players.Head_Parts.rotation = state[&"HR"]
-			All_Players.Current_Health = state[&"H"]
+			All_Players.body_parts.rotation = state[&"BR"]
+			All_Players.head_parts.rotation = state[&"HR"]
+			All_Players.current_health = state[&"H"]
 			
 		else: pass
 	
@@ -861,7 +861,7 @@ Owning_Client:String) -> void:
 		PROJECTILE_POSITION_INTERPOLATION_WEIGHT)
 
 #------------------------------------------#
-# Client <-> Server Clock Management:
+# client <-> Server Clock Management:
 #------------------------------------------#
 
 func set_synced_client_clock(New_Synced_Client_Time:float) -> void:
@@ -877,8 +877,8 @@ func tick_client_clocks(delta:float) -> void:
 	# Add to the local unsynced client clock
 	Local_Client_Clock += clampf(delta, MIN_CLIENT_CLOCK_TIME, MAX_CLIENT_CLOCK_TIME)
 	
-	#print("Client Time: ", Synced_Client_Clock)
-	#print("Local Client Time: ", Local_Client_Clock)
+	#print("client Time: ", Synced_Client_Clock)
+	#print("Local client Time: ", Local_Client_Clock)
 
 func request_server_round_trip_time() -> void:
 	

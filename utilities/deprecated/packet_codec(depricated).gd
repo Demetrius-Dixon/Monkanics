@@ -38,9 +38,9 @@ Is_Reliable:bool,Is_Confirmation_Packet:bool) -> void:
 	
 	Packet_Sender.put_packet(Encoded_Packet)
 
-func receive_udp_packet(Packet:Variant) -> Dictionary:
+func receive_udp_packet(packet:Variant) -> Dictionary:
 	
-	var Decoded_Packet : Variant = Packet.get_string_from_utf8()
+	var Decoded_Packet : Variant = packet.get_string_from_utf8()
 	
 	print(Decoded_Packet.get_packet_ip())
 	

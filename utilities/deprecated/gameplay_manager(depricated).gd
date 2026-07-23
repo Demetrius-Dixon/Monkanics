@@ -2,12 +2,12 @@ extends Node
 
 @onready var Main_Scene : Node = $"."
 
-var Main_Menu : Node
-var Main_Menu_Preload : PackedScene = preload("uid://cuetqgx13tv6s")
+var main_menu : Node
+var main_menu_preload : PackedScene = preload("uid://cuetqgx13tv6s")
 
 var Gameplay_Scene : PackedScene = preload("uid://f11ymr6ma2f7")
 
-var Current_Map : Variant
+var current_map : Variant
 
 func _ready() -> void:
 	
@@ -23,22 +23,22 @@ func _ready() -> void:
 
 func load_main_menu() -> void:
 	
-	var Main_Menu_To_Load := Main_Menu_Preload.instantiate()
+	var main_menu_to_load := main_menu_preload.instantiate()
 	
-	Main_Menu = Main_Menu_To_Load
+	main_menu = main_menu_to_load
 	
-	Main_Scene.add_child(Main_Menu)
+	Main_Scene.add_child(main_menu)
 
 func unload_main_menu() -> void:
-	Main_Menu.queue_free()
+	main_menu.queue_free()
 
 func load_current_map() -> void:
 	
-	var Map_To_Load := preload("uid://b1vrb25aej0x1")
+	var map_to_load := preload("uid://b1vrb25aej0x1")
 	
-	Current_Map = Map_To_Load
+	current_map = map_to_load
 	
-	Main_Scene.add_child(Current_Map)
+	Main_Scene.add_child(current_map)
 
 func load_game() -> void:
 	

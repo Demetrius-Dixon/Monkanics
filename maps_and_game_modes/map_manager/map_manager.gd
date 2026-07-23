@@ -1,9 +1,9 @@
 extends Node
 
-var Current_Map : Node = null
-var Next_Map_To_Load : PackedScene = null
+var current_map : Node = null
+var next_map_to_load : PackedScene = null
 
-var Map_List : Dictionary = {
+var map_list : Dictionary = {
 	
 	&"bnza_zoolag": "uid://b1vrb25aej0x1"
 	
@@ -16,27 +16,27 @@ func _ready() -> void:
 	else:
 		pass
 
-func load_map(Map_To_Load:String) -> void:
+func load_map(map_to_load:String) -> void:
 	
-	if Current_Map != null:
+	if current_map != null:
 		unload_map()
 	
-	Map_To_Load = Map_List[Map_To_Load]
+	map_to_load = map_list[map_to_load]
 	
-	Next_Map_To_Load = load(Map_To_Load)
+	next_map_to_load = load(map_to_load)
 	
-	var Map_Instantiation := Next_Map_To_Load.instantiate()
+	var map_instantiation := next_map_to_load.instantiate()
 	
-	Current_Map = Map_Instantiation
+	current_map = map_instantiation
 	
-	add_child(Map_Instantiation)
+	add_child(map_instantiation)
 	
-	Next_Map_To_Load = null
+	next_map_to_load = null
 
 func unload_map() -> void:
 	
-	if Current_Map == null:
+	if current_map == null:
 		return
 	
-	Current_Map.queue_free()
-	Current_Map = null
+	current_map.queue_free()
+	current_map = null

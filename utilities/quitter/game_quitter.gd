@@ -9,7 +9,7 @@ func _ready() -> void:
 
 func quit_monkanics() -> void:
 	
-	if Client.Is_Registered_With_Ingest_Server == true:
+	if Client.is_registered_with_ingest_server == true:
 		Client.unregister_from_ingest_server()
 	
 	get_tree().root.propagate_notification(NOTIFICATION_WM_CLOSE_REQUEST)
