@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://bv5ucnu7shjsd"]
 
-[ext_resource type="Script" uid="uid://5ghw627ti26c" path="res://utilities/deprecated/player_script(deprecated).gd" id="1_jaj8s"]
-[ext_resource type="Texture2D" uid="uid://bs2imetjial0v" path="res://user_interface/crosshairs/test_crosshair/test_crosshair.png" id="2_7kfc4"]
-[ext_resource type="Script" uid="uid://b0mk45q6ha64t" path="res://user_interface/health_bars/player_health/player_health_bar.gd" id="3_6e6w6"]
+[ext_resource type="Script" uid="uid://5ghw627ti26c" path="res://utilities/deprecated/player_script(deprecated).gd" id="1_u8j1c"]
+[ext_resource type="Texture2D" uid="uid://bs2imetjial0v" path="res://user_interface/crosshairs/test_crosshair/test_crosshair.png" id="2_t2vf2"]
+[ext_resource type="Script" uid="uid://b0mk45q6ha64t" path="res://user_interface/health_bars/player_health/player_health_bar.gd" id="3_j1hju"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_m0ytv"]
 radius = 0.75443
@@ -67,7 +67,7 @@ collision_layer = 2
 floor_constant_speed = true
 floor_snap_length = 1.0
 platform_on_leave = 2
-script = ExtResource("1_jaj8s")
+script = ExtResource("1_u8j1c")
 
 [node name="PlayerWorldCollision" type="CollisionShape3D" parent="." unique_id=618227573]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.704959, 0)
@@ -247,7 +247,7 @@ offset_bottom = 36.920776
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.15, 0.15)
-texture = ExtResource("2_7kfc4")
+texture = ExtResource("2_t2vf2")
 metadata/_edit_use_anchors_ = true
 
 [node name="PlayerHealthBar" type="ProgressBar" parent="PlayerHUD" unique_id=1104205415]
@@ -264,4 +264,4 @@ grow_vertical = 2
 step = 1.0
 value = 100.0
 rounded = true
-script = ExtResource("3_6e6w6")
+script = ExtResource("3_j1hju")

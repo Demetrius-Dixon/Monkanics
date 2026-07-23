@@ -6,17 +6,15 @@ func _ready() -> void:
 func prune_project() -> void:
 	
 	if OS.has_feature("dedicated_server"):
-		
-		Client.queue_free()
+		ClientManager.queue_free()
 		MapManager.queue_free()
 		PlayerMasterManager.queue_free()
 		UiManager.queue_free()
-		GameQuitter.queue_free()
-		MathFormulas.queue_free()
+		GameQuitterManager.queue_free()
+		MathManager.queue_free()
 		MouseManager.queue_free()
 	
 	elif OS.has_feature("ingest"):
-		
 		RelayServer.queue_free()
 	
 	elif OS.has_feature("relay"):

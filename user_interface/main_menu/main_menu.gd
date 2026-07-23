@@ -13,11 +13,11 @@ func _ready() -> void:
 
 func _on_play_pressed() -> void:
 	
-	Client.register_to_ingest_server()
+	ClientManager.register_to_ingest_server()
 	
 	main_screen_nodes.hide()
 	
 	server_browser_scene.show()
 
 func _on_quit_game_pressed() -> void:
-	GameQuitter.quit_monkanics()
+	GameQuitterManager.quit_monkanics()

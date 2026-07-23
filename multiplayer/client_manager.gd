@@ -1,6 +1,6 @@
 extends Node
 
-var ClientManager : PacketPeerUDP
+var Client : PacketPeerUDP
 
 var is_registered_with_ingest_server : bool = false
 var confirm_registration_delay : float = 5.0
@@ -23,9 +23,9 @@ func create_client() -> void:
 	
 	if OS.has_feature("dedicated_server"): return
 	
-	ClientManager = PacketPeerUDP.new()
+	Client = PacketPeerUDP.new()
 	
-	ClientManager.connect_to_host(ServerInfo.INGEST_SERVER_IPV4, ServerInfo.INGEST_SERVER_PORT)
+	Client.connect_to_host(ServerInfo.INGEST_SERVER_IPV4, ServerInfo.INGEST_SERVER_PORT)
 	
 	set_physics_process(false)
 	
@@ -33,9 +33,9 @@ func create_client() -> void:
 
 func poll_client() -> void:
 	
-	if ClientManager.get_available_packet_count() > 0:
+	if Client.get_available_packet_count() > 0:
 		
-		var packet : Variant = ClientManager.get_packet()
+		var packet : Variant = Client.get_packet()
 		
 		var packet_string : Variant = packet.get_string_from_utf8()
 		
@@ -56,7 +56,7 @@ func trigger_client_command(command:String) -> void:
 
 func register_to_ingest_server() -> void:
 	
-	ClientManager.put_packet("register".to_utf8_buffer())
+	Client.put_packet("register".to_utf8_buffer())
 	
 	confirm_registration_to_ingest_server()
 
@@ -72,16 +72,16 @@ func confirm_registration_to_ingest_server() -> void:
 	print("Confirmed")
 
 func unregister_from_ingest_server() -> void:
-	ClientManager.put_packet("unregister".to_utf8_buffer())
+	Client.put_packet("unregister".to_utf8_buffer())
 
 func create_lobby() -> void:
 	
-	ClientManager.put_packet("create_lobby".to_utf8_buffer())
+	Client.put_packet("create_lobby".to_utf8_buffer())
 	
 	await get_tree().create_timer(1).timeout
 	
 	if is_in_lobby == false:
-		ClientManager.put_packet("create_lobby".to_utf8_buffer())
+		Client.put_packet("create_lobby".to_utf8_buffer())
 	
 	if is_in_lobby == true:
 		
