@@ -35,6 +35,7 @@ ServerInfo="*uid://vjg00ss5mfr7"
 GameQuitter="*uid://cpauojimpws2b"
 MathFormulas="*uid://xf0ux6vog54b"
 MouseManager="*uid://gl0ld5qkqn1s"
+PlayerMasterManager="*uid://mnq8jw8w24h0"
 
 [debug]
 
