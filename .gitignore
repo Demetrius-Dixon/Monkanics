@@ -3,4 +3,4 @@
 /android/
 
 # Non-Critcal Plugins/Addons
-quill-ide/
+.vscode/
