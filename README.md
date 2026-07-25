@@ -63,7 +63,6 @@ I plan to fund Monkanics' development via croudfunding, bootstrapping, and other
 - `DOCUMENTATION` details how Monkanics source code works.
 - `CODE_LICENSE` and `ART_LICENSE` I've already gone over.
 - `CREDITS` is a list of everyone who's worked on the project.
-- `SPECIAL_THANKS` is a personal list to show your gratitude to the people/events that've shaped you. You can add to it yourself in your commit.
 - `FUNDING` shows how Monkanics' fund money is used and monthly income goals.
 
 --------------------------------------------------------------
