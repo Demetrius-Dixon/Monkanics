@@ -13,12 +13,6 @@ Contribute today and follow the contribution guidelines in the `CONTRIBUTING` fi
 - Demetrius Dixon - Creator of Monkanics, Project Lead, Founder of Wackshop Games
 - Max (@snailsnaps) - Freelance 2D Concept Artist
 
-## Software/Plugins/Addons Used
-
-- The Godot Engine (Juan Linietsky, Ariel Manzur, their Contributors, and The Godot Foundation)
-- Kenny Prototype Textures (Kenney Vleugels)
-- Quill-IDE (Silver Demon Studios) [Fork of Script-IDE Plugin (Marius Hanl)]
-
 ## Monkanics Contributors
 
 - Pipo - Concept Artist
