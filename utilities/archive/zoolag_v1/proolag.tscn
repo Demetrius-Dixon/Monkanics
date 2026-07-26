@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://dptsee0mghquf"]
 
-[ext_resource type="Script" uid="uid://c1ewupjbcblw2" path="res://maps_and_game_modes/beananza_maps/bnza_zoolag/bnza_zoolag.gd" id="1_x6kn5"]
-[ext_resource type="Texture2D" uid="uid://bnw1cqdcjpa07" path="res://addons/kenney_prototype_textures/dark/texture_08.png" id="2_hknb3"]
-[ext_resource type="Texture2D" uid="uid://rvypiuysnlbj" path="res://addons/kenney_prototype_textures/orange/texture_02.png" id="3_2tycr"]
+[ext_resource type="Script" uid="uid://3ljrap281yeb" path="res://utilities/archive/zoolag_v1/proolag.gd" id="1_im7xu"]
+[ext_resource type="Texture2D" uid="uid://bnw1cqdcjpa07" path="res://addons/kenney_prototype_textures/dark/texture_08.png" id="2_adq7q"]
+[ext_resource type="Texture2D" uid="uid://rvypiuysnlbj" path="res://addons/kenney_prototype_textures/orange/texture_02.png" id="3_5rktr"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_7lvgc"]
 sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
@@ -18,24 +18,24 @@ tonemap_mode = 2
 glow_enabled = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q7k3k"]
-albedo_texture = ExtResource("2_hknb3")
+albedo_texture = ExtResource("2_adq7q")
 uv1_scale = Vector3(30, 30, 30)
 uv2_scale = Vector3(0.5, 0.5, 0.5)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_01eae"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ekvmn"]
-albedo_texture = ExtResource("3_2tycr")
+albedo_texture = ExtResource("3_5rktr")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vdkc6"]
-albedo_texture = ExtResource("2_hknb3")
+albedo_texture = ExtResource("2_adq7q")
 uv1_scale = Vector3(30, 30, 30)
 uv2_scale = Vector3(0.5, 0.5, 0.5)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kqpf5"]
 
-[node name="Zoolag" type="Node3D" unique_id=104967882]
-script = ExtResource("1_x6kn5")
+[node name="Proolag" type="Node3D" unique_id=104967882]
+script = ExtResource("1_im7xu")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1735655987]
 environment = SubResource("Environment_01eae")
