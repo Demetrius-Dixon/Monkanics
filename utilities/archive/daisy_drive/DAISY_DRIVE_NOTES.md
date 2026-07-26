@@ -14,4 +14,4 @@ Since every player can climb most surfaces, everyone can access and fight on the
 
 This sloppy house model is my first attempt at this. I wanted to replicate the slant and height of the roof, then add a twist with an interior and a climbable chimney. 
 
-**It was very fun to work on and I hope to make this a reality in Monkanics one day.**
+**It was very fun to work on and I hope to make this a reality in Monkanics one day.** (When I'm WAY better at mapping and have the budget for my full vision of the map)
