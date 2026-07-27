@@ -72,6 +72,9 @@ func trigger_server_command(command:StringName, peer:Variant, packet_ip:String) 
 		create_lobby(peer)
 		return
 	
+	if command == "request_active_lobbies":
+		pass
+
 
 func register_client(peer:Variant, packet_ip:String) -> void:
 	

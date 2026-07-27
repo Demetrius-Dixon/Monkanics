@@ -96,3 +96,13 @@ func load_game() -> void:
 	MapManager.load_map("bnza_zoolag")
 	
 	MouseManager.hide_mouse()
+
+func request_active_lobbies() -> void:
+
+	var active_lobbies : Array = []
+
+	ClientManager.put_packet("request_active_lobbies".to_utf8_buffer())
+
+	
+
+
