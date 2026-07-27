@@ -26,6 +26,10 @@ Side Features:
 
 --------------------------------------------------------------
 
+## Who are the Monkanics?
+
+The Monkanics are cyborg lab apes whose human creators went on lunch break and never came back. Left without a purpose, if they ever had one to begin with, their greed and ingenuity now knew no bounds in a world turned downside-up.
+
 ## Monkanics is Dual Licensed
 
 - It's code is licensed under the copyleft AGPLv3 (See `CODE_LICENSE`)
