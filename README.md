@@ -1,3 +1,6 @@
+<img width="538" height="161" alt="monkanics_logo_blue_4k" src="https://github.com/user-attachments/assets/5b358d4e-f2e8-4692-84c5-88938e4bea40" />
+
+
 # Monkanics (Monkey + Mechanics)
 **The D-I-Why, Combat Collect-a-Thon that's serious monkey business!**
 
