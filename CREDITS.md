@@ -18,6 +18,7 @@ Contribute today and follow the contribution guidelines in the `CONTRIBUTING` fi
 - Pipo - Concept Artist
 - Luova Kuvilus - Concept Artist
 - Frozen_Fried - Concept Artist
+- Alexandre Marcati - Logo Artist
 
 ## Financial Backers (All-Time)
 
