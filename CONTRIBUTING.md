@@ -1,4 +1,4 @@
-# Contributing to Monkanics (Doc is a WIP)
+# Contributing to Monkanics
 
 Monkanics is developed in **Godot version 4.7+ in GDscript only** (so, no C#/GDextention)
 
