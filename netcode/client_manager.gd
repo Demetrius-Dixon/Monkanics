@@ -8,6 +8,8 @@ var confirm_registration_delay : float = 5.0
 var is_in_lobby : bool = false
 var is_host : bool = false
 
+var received_active_lobbies : Array[Dictionary] = []
+
 func _ready() -> void:
 	create_client()
 
@@ -39,7 +41,7 @@ func poll_client() -> void:
 		
 		var packet_string : Variant = packet.get_string_from_utf8()
 		
-		#print("Client Recieved packet: ", packet_string)
+		print("Client Recieved packet: ", packet_string)
 		
 		trigger_client_command(packet_string)
 
@@ -53,6 +55,8 @@ func trigger_client_command(command:String) -> void:
 	
 	if command == "confirm_is_in_lobby":
 		is_in_lobby = true
+	
+
 
 func register_to_ingest_server() -> void:
 	
@@ -103,6 +107,11 @@ func request_active_lobbies() -> void:
 
 	ClientManager.put_packet("request_active_lobbies".to_utf8_buffer())
 
-	
+func receive_active_lobbies() -> void:
+	pass
+
+
+
+
 
 

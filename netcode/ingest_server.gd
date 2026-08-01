@@ -73,7 +73,7 @@ func trigger_server_command(command:StringName, peer:Variant, packet_ip:String) 
 		return
 	
 	if command == "request_active_lobbies":
-		pass
+		send_lobbies_to_client(peer)
 
 
 func register_client(peer:Variant, packet_ip:String) -> void:
@@ -164,3 +164,14 @@ func tick_client_timeout_timers(time_passed:float) -> void:
 		if client[&"TimeoutTimer"] <= END_TIMEOUT_TIMER:
 			
 			trigger_server_command("unregister", client[&"peer"], client[&"PeerIP"])
+
+func send_lobbies_to_client(peer:Variant) -> void:
+
+	
+
+
+	for lobby in active_lobbies:
+
+		pass
+
+
