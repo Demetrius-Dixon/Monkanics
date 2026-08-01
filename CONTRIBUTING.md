@@ -4,24 +4,39 @@ Monkanics is developed in **Godot version 4.7+ in GDscript only** (so, no C#/GDe
 
 Monkanics' project file can be downloaded on any operating system Godot 4 natively supports. However, the game was built for Windows and Linux first. Meaning Mac development is quite rocky and Web + Mobile development was not built to be supported.
 
-Contributions of any kind are welcome: bug reports, code, art, playtesting feedback, localization, etc. However, development is too early for frequent non-development commits until further notice.
+## Pull Request Disclaimer:
+
+By submitting a pull request to the Monkanics repo, you agree that your submitted code will be licensed under the copyleft AGPLv3 (See `CODE_LICENSE`) and submitted art will be licensed under the CC BY-NC-SA 4.0 (See `ART_LICENSE`).
+
+Once merged, the code/assets are officially licensed. Meaning the public will have access to the code and art under their respective licenses.
+
+We also reserve the right to modify and remove content at our discretion. License restrictions do not apply to copyright holders. (Demetrius Dixon and Wackshop Games)
+
+## Where to Do a Pull Request:
+
+Always send your pull request to the in-development branch. NEVER the main branch, as that’s the stable version of the game everyone plays.
 
 ## Pull Request Rules:
 
-*These are very strict rules that, if broken, will have your pull request rejected. All rules are subject to change:*
+*Please note that every commit is case-by-case. So a pull request could be accepted or rejected outside of these rules/guidelines. We'll always provide an explanation if this is the case.*
 
-1. *Absolutely positively **DO NOT** edit any licesese/copyright files under any circumstances!!!* I'm not a lawyer, but we NEED those files.
-2. *Do not edit or remove a listing in the `CREDITS` file that isn't yours*. That's pretty messed up.
-3. *Do not edit the `README` file unless it's for grammar errors*.
-4. *Do not submit joke pull requests with no actual changes/additions*.
-5. *Do not submit AI generated code or art of any kind*. Direct AI output is insanely sloppy and disjointed. Please use your human touch when making commits. We are strictly anti-AI.
-6. *English only*. I cannot read other languages.
-7. *GDscript only*. I cannot maintain that code.
-8. *Exclude any addons/plugins you use in your commit*. For example, I use the script-IDE plugin for a better GDscript editor, but I exclude it from the codebase to keep the build as vanilla as possible. Please do the same.
-9. *Do not add code or art that you do not own nor do not have a license to use*. We cannot afford a lawyer.
-10. *Please keep pull requests to 1 features/change at a time*. This makes pull requests a LOT easier to merge and keep track of.
+* All rules and guidelines only apply to the original Monkanics repo run by Demetrius Dixon and Wackshop Games. Not your own/other’s forks/mods. Contact them for their own rules/Make your own rules.
+* Please keep your pull request focused on ONE CHANGE/ADDITION ONLY. If you have multiple proposed changes/additions, separate them into separate commits. This is so we can limit technical debt and have a cleaner integration with the rest of the repo.
+* English only. Use a translator if you must.
+* GDscript only. We cannot maintain non-GDscript code.
+* No AI-generated content. We know the topic of AI is a hot topic these days and that there’s a lot of nuance. But we cannot allow Monkanics to be filled with AI-slop. Content must be primarily made by a human.
+* Do not make a pull request to change core root files like `README`, `CONTRIBUTING`, `FUNDING`, `CODE_LICENSE`, `ART_LICENSE`, etc.
+* Do not submit joke pull requests with no purpose.
+* Do not hide content in your pull request. All content added/changed must be disclosed.
+* Do not submit offensive, political, religious, or generally divisive content in your pull request.
+* Please exclude any addons/plugins you’ve used in your project files. We do not want any external dependencies unless they are absolutely necessary.
+* Do not add code or art that you do not own, even if properly licensed. We cannot afford lawyers.
+* Do not submit malicious code, viruses, or hacks.
+* For code, please follow the official GDscript style guide. (Seen in later sections)
 
-*Also, every commit is a case-by-case basis. So a pull request could be rejected outside of these rules. We'll always provide an explanation if this is the case.*
+## What we Can and Cannot Merge
+
+*Section to be filled out later*
 
 ## Code Style Guide
 
@@ -37,57 +52,14 @@ Contributors are added to the `CREDITS` file. You can add yourself to the txt fi
 
 Or, you'd rather use an alias or outright not be listed, just let us know.
 
-# Monkanics Codebase Documentation (WIP)
+## Monkanics Codebase Documentation
 
-**Please note that I (Demetrius Dixon) specialize in game development (programming & design), rather than pure software development. They're 2 separate things. So if this documentation seems less technical with very little command line usage, that's why.**
-
-*Also, please view the official documentation of Godot 4.7+. Either via within the engine or via the website (https://docs.godotengine.org/en/stable/). It is an invaluble tool for Godot developers*
+Documentation for Monkanics' codebase, game design, trivia, and more can be found in the `utilities > mk_documentation` folder.
 
 This section details how Monkanics' codebase operates. While most folders, files, and functions are self-explanatory via their name, the way they connect aren't.
 
 Feel free to reference this offline copy whenever you're working with the files.
 
-## Cloning Monkanics' Source Code
+**Please note that I (Demetrius Dixon) specialize in game development (programming & design), rather than pure software development. They're 2 separate things. So if this documentation seems less technical with very little command line usage, that's why.**
 
-*Will be filled out later*
-
-## Exporting Monkanics On Your Machine:
-
-**EXPORT TEMPLATES AND EXPORT PRESETS ARE 2 DIFFERENT THINGS!!!**
-
-- Export Templates are Godot's pre-compiled binaries of the engine *saved on your computer globally, and NOT in the Monkanics project files*. You'll need to download or import them the first time you export Monkanics on a new machine.
-- Export Presets are Monkanics' pre-set settings for exporting and *are saved in the project files*.
-
-**It is highly recommended to only export Monkanics using the following export templates. As Monkanics was built for Windows and Linux PCs by default:**
-
-- Windows x86_64
-- Linux x86_64
-
-Exporting for 32-bit systems or ARM is theoretically possible, but is not supported by default.
-
-Exporting for Mac, Web, and especially Mobile will result in **SERIOUS compatibility issues**. 
-
-*However, the project files are free to modify. So if you'd like to give yourself a challenge, you can attempt to port Monkanics there yourself. Just let us know how you did it.*
-
-**Monkanics' Export Presets:**
-
-There are currently 3 export presets found in the `export_presets` file:
-
-- Main Game (Windows) [x86_64] (Runnable)
-- Main Game (Linux) [x86_64] (Runnable)
-- Ingest Server (Linux only) [x86_64]
-- Relay Server (Linux only) [x86_64]
-
-The 2 main game files for Windows and Linux are playable versions set to x86_64 by default. The archetecture can easily be changed to x86_32 or arm in the export menu, but keep in mind that support for 32-bit and ARM platforms aren't supported by default.
-
-The ingest and relay exports are instances of Monkanics' multiplayer archetecture.
-
-The PCK for the servers is also embedded by default, **this IS NOT a DRM measure**, but instead a way to make file porting a lot easier when going to cloud servers for deployment.
-
-## Export Feature Tags:
-
-*Will fill in later*
-
-## Deploying a Relay Server For Monkanics:
-
-*This section will be filled out later. As I have to rewrite the gameplay netcode for Monkanics version 0.2*
+*Also, please view the official documentation of Godot 4.7+. Either via within the engine or via the website (https://docs.godotengine.org/en/4.7/). It is an invaluble tool for Godot developers*
