@@ -54,7 +54,7 @@ Or, you'd rather use an alias or outright not be listed, just let us know.
 
 ## Monkanics Codebase Documentation
 
-Documentation for Monkanics' codebase, game design, trivia, and more can be found in the `utilities > mk_documentation` folder.
+Documentation for Monkanics' codebase, game design, trivia, and more can be found in the `documentation` folder.
 
 This section details how Monkanics' codebase operates. While most folders, files, and functions are self-explanatory via their name, the way they connect aren't.
 
