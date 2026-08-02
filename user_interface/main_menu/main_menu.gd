@@ -19,5 +19,7 @@ func _on_play_pressed() -> void:
 	
 	server_browser_scene.show()
 
+	ClientManager.request_active_lobbies()
+
 func _on_quit_game_pressed() -> void:
 	GameQuitterManager.quit_monkanics()

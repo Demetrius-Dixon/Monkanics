@@ -51,6 +51,10 @@ window/size/mode=2
 
 project/assembly_name="Monkanics"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/quill-ide/plugin.cfg")
+
 [gui]
 
 theme/default_font_multichannel_signed_distance_field=true

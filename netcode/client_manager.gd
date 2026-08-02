@@ -14,7 +14,7 @@ func _ready() -> void:
 	create_client()
 
 func _process(_delta: float) -> void:
-	
+
 	poll_client()
 	
 	if Input.is_action_just_pressed("ui_cancel"):
@@ -42,6 +42,10 @@ func poll_client() -> void:
 		var packet_string : Variant = packet.get_string_from_utf8()
 		
 		print("Client Recieved packet: ", packet_string)
+		
+		if packet_string is Dictionary:
+			pass
+			print("IS DICTIONARY")
 		
 		trigger_client_command(packet_string)
 
@@ -102,16 +106,10 @@ func load_game() -> void:
 	MouseManager.hide_mouse()
 
 func request_active_lobbies() -> void:
-
-	var active_lobbies : Array = []
-
+	
 	ClientManager.put_packet("request_active_lobbies".to_utf8_buffer())
+	
+	
 
-func receive_active_lobbies() -> void:
+func receive_lobbies_from_server() -> void:
 	pass
-
-
-
-
-
-
