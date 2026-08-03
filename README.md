@@ -78,3 +78,4 @@ I plan to fund Monkanics' development via croudfunding, bootstrapping, and other
 - Support Monkanics financially on it's Ko-Fi page: https://ko-fi.com/monkanics
 
 --------------------------------------------------------------
+<img width="500" height="500" alt="Monkanics_Icon_2" src="https://github.com/user-attachments/assets/12ea6d07-5bfe-43e7-b08d-2f7a94b6ae0a" />
