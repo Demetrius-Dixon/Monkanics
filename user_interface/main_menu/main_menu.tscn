@@ -1,6 +1,8 @@
 [gd_scene format=3 uid="uid://cuetqgx13tv6s"]
 
 [ext_resource type="Script" uid="uid://mkg3caem1j3b" path="res://user_interface/main_menu/main_menu.gd" id="1_p78xx"]
+[ext_resource type="Texture2D" uid="uid://5pdcos2bgam6" path="res://utilities/monkanics_banner/Monkanics_Banner_No_Logo.png" id="2_p78xx"]
+[ext_resource type="Texture2D" uid="uid://tktcm0tskdlp" path="res://utilities/monkanics_logo/logo_renders/monkanics_logo_blue_4k.webp" id="3_hb773"]
 
 [node name="MainMenu" type="Control" unique_id=99476665]
 layout_mode = 3
@@ -13,6 +15,11 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_p78xx")
 
+[node name="MonkanicsBannerNoLogo" type="Sprite2D" parent="." unique_id=275572921]
+position = Vector2(662.50006, 400)
+scale = Vector2(0.5175781, 0.52119523)
+texture = ExtResource("2_p78xx")
+
 [node name="CenterReference" type="ReferenceRect" parent="." unique_id=483049059]
 layout_mode = 0
 offset_left = 637.0
@@ -20,19 +27,6 @@ offset_top = 357.0
 offset_right = 643.0
 offset_bottom = 363.0
 border_width = 5.0
-
-[node name="Background" type="ColorRect" parent="." unique_id=298233201]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -175.0
-offset_top = -75.0
-offset_right = 95.0
-offset_bottom = 230.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0, 0.36078432, 0.6745098, 1)
 
 [node name="MainScreen" type="Control" parent="." unique_id=2128371209]
 layout_mode = 1
@@ -71,25 +65,9 @@ text = "Play!"
 layout_mode = 2
 text = "Quit Game"
 
-[node name="Title" type="Label" parent="MainScreen" unique_id=1471539165]
-layout_mode = 0
-offset_left = -90.0
-offset_top = -147.0
-offset_right = 119.0
-offset_bottom = -91.16666
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 40
-text = "Monkanics"
-
-[node name="Version" type="Label" parent="MainScreen" unique_id=1448905408]
-layout_mode = 0
-offset_left = -11.0
-offset_top = -98.0
-offset_right = 41.0
-offset_bottom = -70.083336
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 20
-text = "(v0.2)"
+[node name="MonkanicsLogoBlue4k" type="Sprite2D" parent="MainScreen" unique_id=2056210140]
+position = Vector2(25, -125)
+texture = ExtResource("3_hb773")
 
 [connection signal="pressed" from="MainScreen/MainMenuContainer/VBoxContainer/Play" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="MainScreen/MainMenuContainer/VBoxContainer/QuitGame" to="." method="_on_quit_game_pressed"]
