@@ -38,16 +38,22 @@ func poll_client() -> void:
 	if ClientManager.get_available_packet_count() > 0:
 		
 		var packet : Variant = ClientManager.get_packet()
-		
 		var packet_string : Variant = packet.get_string_from_utf8()
-		
 		print("Client Recieved packet: ", packet_string)
 		
-		if packet_string is Dictionary:
-			pass
-			print("IS DICTIONARY")
-		
-		trigger_client_command(packet_string)
+		if packet_string.begins_with("{"):
+			
+			print("IS JSON")
+			
+			var json_translation : Variant = JSON.new()
+			
+			json_translation = JSON.parse_string(packet_string)
+			
+			print(json_translation)
+			
+		else:
+			
+			trigger_client_command(packet_string)
 
 func trigger_client_command(command:String) -> void:
 	
