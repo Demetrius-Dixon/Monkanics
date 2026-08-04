@@ -41,10 +41,8 @@ func poll_ingest_server() -> void:
 	if ingest_server.is_connection_available():
 		
 		var peer : Variant = ingest_server.take_connection()
-		
 		var packet : Variant = peer.get_packet()
-		
-		print("Server received data: ", packet.get_string_from_utf8())
+		#print("Server received data: ", packet.get_string_from_utf8())
 		
 		trigger_server_command(packet.get_string_from_utf8(), peer, peer.get_packet_ip())
 	
@@ -53,8 +51,7 @@ func poll_ingest_server() -> void:
 		if registered_client[&"peer"].get_available_packet_count() > 0:
 			
 			var packet : Variant = registered_client[&"peer"].get_packet()
-			
-			print("Server received data: ", packet.get_string_from_utf8())
+			#print("Server received data: ", packet.get_string_from_utf8())
 			
 			trigger_server_command(packet.get_string_from_utf8(), registered_client[&"peer"], registered_client[&"peer"].get_packet_ip())
 

@@ -39,23 +39,21 @@ func poll_client() -> void:
 		
 		var packet : Variant = ClientManager.get_packet()
 		var packet_string : Variant = packet.get_string_from_utf8()
-		print("Client Recieved packet: ", packet_string)
+		#print("Client Recieved packet: ", packet_string)
 		
 		if packet_string.begins_with("{"):
 			
-			print("IS JSON")
-			
 			var json_translation : Variant = JSON.new()
-			
 			json_translation = JSON.parse_string(packet_string)
+			packet_string = json_translation
 			
-			print(json_translation)
+			trigger_client_dictionary_command(packet_string[&"command"], packet_string)
 			
 		else:
 			
-			trigger_client_command(packet_string)
+			trigger_client_string_command(packet_string)
 
-func trigger_client_command(command:String) -> void:
+func trigger_client_string_command(command:String) -> void:
 	
 	if command == "confirm_registration":
 		is_registered_with_ingest_server = true
@@ -65,8 +63,11 @@ func trigger_client_command(command:String) -> void:
 	
 	if command == "confirm_is_in_lobby":
 		is_in_lobby = true
-	
 
+func trigger_client_dictionary_command(command:String, dictionary:Dictionary) -> void:
+	
+	if command == "add_lobby_to_dictionary":
+		received_active_lobbies.append(dictionary)
 
 func register_to_ingest_server() -> void:
 	
@@ -83,7 +84,7 @@ func confirm_registration_to_ingest_server() -> void:
 	
 	register_to_ingest_server()
 	
-	print("Confirmed")
+	#print("Confirmed")
 
 func unregister_from_ingest_server() -> void:
 	ClientManager.put_packet("unregister".to_utf8_buffer())
@@ -109,7 +110,7 @@ func load_game() -> void:
 	
 	MapManager.load_map("bnza_zoolag")
 	
-	MouseManager.hide_mouse()
+	#MouseManager.hide_mouse()
 
 func request_active_lobbies() -> void:
 	
@@ -119,3 +120,6 @@ func request_active_lobbies() -> void:
 
 func receive_lobbies_from_server() -> void:
 	pass
+
+func clear_lobby_list() -> void:
+	received_active_lobbies.clear()
