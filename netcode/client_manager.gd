@@ -68,6 +68,8 @@ func trigger_client_dictionary_command(command:String, dictionary:Dictionary) ->
 	
 	if command == "add_lobby_to_dictionary":
 		received_active_lobbies.append(dictionary)
+		
+		
 
 func register_to_ingest_server() -> void:
 	
