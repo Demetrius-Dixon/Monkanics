@@ -38,6 +38,7 @@ MouseManager="*uid://gl0ld5qkqn1s"
 PlayerMasterManager="*uid://mnq8jw8w24h0"
 ProjectPruneManager="*uid://6fcmtxxxlogt"
 ClientManager="*uid://bvx2a8r8bv2bt"
+ServerBrowser="*uid://cltyu1oqpw1v4"
 
 [debug]
 

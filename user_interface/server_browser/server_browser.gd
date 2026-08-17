@@ -1,8 +1,7 @@
 extends Control
 
 func _ready() -> void:
-	
-	add_lobby_to_server_list("TestString")
+	hide()
 
 func _on_create_lobby_pressed() -> void:
 	ClientManager.create_lobby()
@@ -10,3 +9,7 @@ func _on_create_lobby_pressed() -> void:
 func add_lobby_to_server_list(lobby:String) -> void:
 	
 	$"TabContainer/Join Lobby".add_item("lobby")
+
+func clear_server_browser_cache() -> void:
+	
+	pass

@@ -30,8 +30,6 @@ layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = 20.0
-offset_bottom = 30.0
 
 [node name="TabContainer" type="TabContainer" parent="." unique_id=1471392528]
 layout_mode = 1
@@ -59,9 +57,9 @@ metadata/_tab_index = 1
 
 [node name="CreateLobbyButton" type="Button" parent="TabContainer/Create Lobby" unique_id=1821736404]
 layout_mode = 0
-offset_left = 75.0
+offset_left = 47.0
 offset_top = 244.0
-offset_right = 1150.0
+offset_right = 1823.0
 offset_bottom = 288.0
 text = "Create Lobby"
 

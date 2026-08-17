@@ -34,6 +34,15 @@ offset_bottom = -325.52002
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="MonkanicsLogo" type="TextureRect" parent="MainScreen" unique_id=1439620847]
+layout_mode = 0
+offset_left = 15.0
+offset_top = -175.0
+offset_right = 655.0
+offset_bottom = 185.0
+mouse_filter = 2
+texture = ExtResource("3_hb773")
+
 [node name="MainMenuContainer" type="PanelContainer" parent="MainScreen" unique_id=2142633882]
 layout_mode = 1
 anchors_preset = -1
@@ -59,16 +68,8 @@ text = "Play!"
 layout_mode = 2
 text = "Quit Game"
 
-[node name="MonkanicsLogo" type="TextureRect" parent="." unique_id=1439620847]
-layout_mode = 0
-offset_left = 640.0
-offset_top = 200.0
-offset_right = 1280.0
-offset_bottom = 560.0
-mouse_filter = 2
-texture = ExtResource("3_hb773")
-
 [node name="CenterOfScreenReference" parent="." unique_id=206782658 instance=ExtResource("4_hnapd")]
+visible = false
 layout_mode = 0
 anchors_preset = 0
 
