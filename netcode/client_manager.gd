@@ -8,8 +8,6 @@ var confirm_registration_delay : float = 5.0
 var is_in_lobby : bool = false
 var is_host : bool = false
 
-var received_active_lobbies : Array[Dictionary] = []
-
 func _ready() -> void:
 	create_client()
 
@@ -67,9 +65,9 @@ func trigger_client_string_command(command:String) -> void:
 func trigger_client_dictionary_command(command:String, dictionary:Dictionary) -> void:
 	
 	if command == "add_lobby_to_dictionary":
-		received_active_lobbies.append(dictionary)
+		ServerBrowser.add_lobby_to_dictionary(dictionary)
 		
-		
+	
 
 func register_to_ingest_server() -> void:
 	
@@ -112,16 +110,9 @@ func load_game() -> void:
 	
 	MapManager.load_map("bnza_zoolag")
 	
+	ServerBrowser.hide()
+	
 	#MouseManager.hide_mouse()
 
 func request_active_lobbies() -> void:
-	
 	ClientManager.put_packet("request_active_lobbies".to_utf8_buffer())
-	
-	
-
-func receive_lobbies_from_server() -> void:
-	pass
-
-func clear_lobby_list() -> void:
-	received_active_lobbies.clear()

@@ -131,16 +131,17 @@ func create_lobby(peer:Variant) -> void:
 			return
 	
 	for lobby in active_lobbies:
-		if lobby[&"Players"].has(peer):
+		if lobby[&"players"].has(peer):
 			return
 	
 	active_lobbies.append({
 		
-		&"Host": peer,
-		&"GameMode": "Bean-anza",
-		&"Map": "Zoolag",
-		&"MaxPlayers": 6,
-		&"Players": [peer]
+		#&"lobby_name": str(peer) + " 's Game!",
+		&"host": peer,
+		&"game_mode": "Bean-anza",
+		&"map": "Zoolag",
+		&"max_players": 6,
+		&"players": [peer]
 		
 	})
 	
