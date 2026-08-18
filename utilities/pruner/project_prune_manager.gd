@@ -13,6 +13,7 @@ func prune_project() -> void:
 		GameQuitterManager.queue_free()
 		MathManager.queue_free()
 		MouseManager.queue_free()
+		ServerBrowser.queue_free()
 	
 	elif OS.has_feature("ingest"):
 		RelayServer.queue_free()
