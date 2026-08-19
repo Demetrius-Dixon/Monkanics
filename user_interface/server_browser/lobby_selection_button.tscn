@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://ibl4vlin44xa"]
+
+[ext_resource type="Script" uid="uid://bkwfpaehukxti" path="res://user_interface/server_browser/lobby_selection_button.gd" id="1_koeii"]
+
+[node name="LobbySelectionButton" type="Control" unique_id=1710134341]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_koeii")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1787435560]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label5" type="Label" parent="HBoxContainer" unique_id=528159537]
+layout_mode = 2
+text = "Ping"
+
+[node name="Label" type="Label" parent="HBoxContainer" unique_id=750245215]
+layout_mode = 2
+text = "LobbyName"
+
+[node name="Label2" type="Label" parent="HBoxContainer" unique_id=1663677796]
+layout_mode = 2
+text = "GameMode"
+
+[node name="Label3" type="Label" parent="HBoxContainer" unique_id=410500644]
+layout_mode = 2
+text = "Map"
+
+[node name="Label4" type="Label" parent="HBoxContainer" unique_id=2041850019]
+layout_mode = 2
+text = "PlayerCount/MaxPlayers"
+
+[node name="Button" type="Button" parent="HBoxContainer" unique_id=1163906711]
+layout_mode = 2
+text = "Join"

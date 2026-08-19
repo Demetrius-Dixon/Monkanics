@@ -14,9 +14,9 @@ func add_lobby_to_dictionary(lobby:Dictionary) -> void:
 	
 	received_active_lobbies.append(lobby)
 	
-	var lobby_name_string : String = lobby[&"host"]
+	#var lobby_name_string : String = lobby[&"host"]
 	
-	print("LOBBY_NAME_STRING ", lobby_name_string)
+	print("LOBBY_NAME_STRING ", lobby[&"host"])
 	
 	#add_lobbies_to_server_list(lobby[&"host"])
 	

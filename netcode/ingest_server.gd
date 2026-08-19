@@ -140,6 +140,7 @@ func create_lobby(peer:Variant) -> void:
 		&"host": peer,
 		&"game_mode": "Bean-anza",
 		&"map": "Zoolag",
+		&"current_player_count": 1,
 		&"max_players": 6,
 		&"players": [peer]
 		
