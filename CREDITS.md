@@ -10,8 +10,9 @@ Contribute today and follow the contribution guidelines in the `CONTRIBUTING` fi
 
 ## Monkanics' Core Team (Current)
 
-- Demetrius Dixon - Creator of Monkanics, Project Lead, Founder of Wackshop Games
+- Demetrius Dixon (@Monkanics_Dev) - Creator of Monkanics, Project Lead, Founder of Wackshop Games
 - Max (@snailsnaps) - Freelance 2D Concept Artist
+- Birru Madani (@birrumadani on Fiverr) - Freelance 3D Modeler and Rigger
 
 ## Monkanics Contributors (All-Time)
 
