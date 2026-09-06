@@ -122,6 +122,18 @@ func unregister_client(peer:Variant) -> void:
 	
 	print(registered_clients)
 
+func tick_client_timeout_timers(time_passed:float) -> void:
+	
+	if registered_clients.size() <= 0: return
+	
+	for client in registered_clients:
+		
+		client[&"TimeoutTimer"] = client[&"TimeoutTimer"] - time_passed
+		
+		if client[&"TimeoutTimer"] <= END_TIMEOUT_TIMER:
+			
+			trigger_server_command("unregister", client[&"peer"], client[&"PeerIP"])
+
 func create_lobby(peer:Variant) -> void:
 	
 	for registered_client in registered_clients:
@@ -151,24 +163,12 @@ func create_lobby(peer:Variant) -> void:
 	print(active_lobbies)
 	print("Lobby Created")
 
-func tick_client_timeout_timers(time_passed:float) -> void:
-	
-	if registered_clients.size() <= 0: return
-	
-	for client in registered_clients:
-		
-		client[&"TimeoutTimer"] = client[&"TimeoutTimer"] - time_passed
-		
-		if client[&"TimeoutTimer"] <= END_TIMEOUT_TIMER:
-			
-			trigger_server_command("unregister", client[&"peer"], client[&"PeerIP"])
-
 func send_lobbies_to_client(peer:Variant) -> void:
 	
 	for lobby in active_lobbies:
 	
 		var client_command_dict : Dictionary = {
-		
+				
 				&"command": "add_lobby_to_dictionary",
 				&"lobby_info": lobby
 		}
@@ -176,3 +176,8 @@ func send_lobbies_to_client(peer:Variant) -> void:
 		var lobby_to_send : Variant = JSON.stringify(client_command_dict)
 		
 		peer.put_packet(lobby_to_send.to_utf8_buffer())
+
+
+func send_client_to_dedicated_lobby() -> void:
+	
+	pass

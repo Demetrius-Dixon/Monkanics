@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://rbfi8i6lw3xj"]
+
+[ext_resource type="Script" uid="uid://c3i38xmxxrxx3" path="res://main_scene/monkanics.gd" id="1_m7a35"]
+[ext_resource type="Script" uid="uid://cpauojimpws2b" path="res://utilities/quitter/game_quitter.gd" id="3_6jy8f"]
+[ext_resource type="Script" uid="uid://xf0ux6vog54b" path="res://utilities/math/math_formulas.gd" id="4_d4ac0"]
+[ext_resource type="Script" uid="uid://gl0ld5qkqn1s" path="res://utilities/mouse_manager/mouse_manager.gd" id="5_nvk4j"]
+[ext_resource type="Script" uid="uid://crrcqmy2l1p2t" path="res://netcode/relay_server.gd" id="6_r2nd2"]
+[ext_resource type="Script" uid="uid://bvx2a8r8bv2bt" path="res://netcode/relay_client.gd" id="7_f4iiw"]
+[ext_resource type="Script" uid="uid://vjg00ss5mfr7" path="res://netcode/network_info.gd" id="8_xpkc1"]
+
+[node name="Monkanics" type="Node" unique_id=142835716]
+script = ExtResource("1_m7a35")
+
+[node name="Utilities" type="Node" parent="." unique_id=1665177836]
+
+[node name="Quitter" type="Node" parent="Utilities" unique_id=583756023]
+script = ExtResource("3_6jy8f")
+
+[node name="Math" type="Node" parent="Utilities" unique_id=1710439477]
+script = ExtResource("4_d4ac0")
+
+[node name="Mouse" type="Node" parent="Utilities" unique_id=854036948]
+script = ExtResource("5_nvk4j")
+
+[node name="Multiplayer" type="Node" parent="." unique_id=1300843330]
+
+[node name="NetworkInfo" type="Node" parent="Multiplayer" unique_id=258527743]
+script = ExtResource("8_xpkc1")
+
+[node name="RelayServer" type="Node" parent="Multiplayer" unique_id=1468302040]
+script = ExtResource("6_r2nd2")
+
+[node name="RelayClient" type="Node" parent="Multiplayer" unique_id=1213356473]
+script = ExtResource("7_f4iiw")
+
+[node name="Game" type="Node" parent="." unique_id=591965592]
+
+[node name="Players" type="Node" parent="Game" unique_id=1039052520]
+
+[node name="Map" type="Node" parent="Game" unique_id=1532878496]
+
+[node name="Projectiles" type="Node" parent="Game" unique_id=740738698]
+
+[node name="UI" type="Node" parent="." unique_id=695529078]

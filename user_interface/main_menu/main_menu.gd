@@ -17,5 +17,8 @@ func _on_play_pressed() -> void:
 
 	ClientManager.request_active_lobbies()
 
+func _on_play_2_pressed() -> void:
+	pass # Replace with function body.
+
 func _on_quit_game_pressed() -> void:
 	GameQuitterManager.quit_monkanics()

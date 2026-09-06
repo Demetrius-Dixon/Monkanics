@@ -16,23 +16,23 @@ layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="Label5" type="Label" parent="HBoxContainer" unique_id=528159537]
+[node name="Ping" type="Label" parent="HBoxContainer" unique_id=528159537]
 layout_mode = 2
 text = "Ping"
 
-[node name="Label" type="Label" parent="HBoxContainer" unique_id=750245215]
+[node name="LobbyName" type="Label" parent="HBoxContainer" unique_id=750245215]
 layout_mode = 2
 text = "LobbyName"
 
-[node name="Label2" type="Label" parent="HBoxContainer" unique_id=1663677796]
+[node name="GameMode" type="Label" parent="HBoxContainer" unique_id=1663677796]
 layout_mode = 2
 text = "GameMode"
 
-[node name="Label3" type="Label" parent="HBoxContainer" unique_id=410500644]
+[node name="Map" type="Label" parent="HBoxContainer" unique_id=410500644]
 layout_mode = 2
 text = "Map"
 
-[node name="Label4" type="Label" parent="HBoxContainer" unique_id=2041850019]
+[node name="PlayerCount" type="Label" parent="HBoxContainer" unique_id=2041850019]
 layout_mode = 2
 text = "PlayerCount/MaxPlayers"
 

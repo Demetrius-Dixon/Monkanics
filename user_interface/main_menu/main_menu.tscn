@@ -62,7 +62,11 @@ layout_mode = 2
 
 [node name="Play" type="Button" parent="MainScreen/MainMenuContainer/VBoxContainer" unique_id=501006811]
 layout_mode = 2
-text = "Play!"
+text = "Play Online!"
+
+[node name="Play2" type="Button" parent="MainScreen/MainMenuContainer/VBoxContainer" unique_id=1019882805]
+layout_mode = 2
+text = "Play Offline!"
 
 [node name="QuitGame" type="Button" parent="MainScreen/MainMenuContainer/VBoxContainer" unique_id=1435891460]
 layout_mode = 2
@@ -72,6 +76,13 @@ text = "Quit Game"
 visible = false
 layout_mode = 0
 anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
 
 [connection signal="pressed" from="MainScreen/MainMenuContainer/VBoxContainer/Play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="MainScreen/MainMenuContainer/VBoxContainer/Play2" to="." method="_on_play_2_pressed"]
 [connection signal="pressed" from="MainScreen/MainMenuContainer/VBoxContainer/QuitGame" to="." method="_on_quit_game_pressed"]

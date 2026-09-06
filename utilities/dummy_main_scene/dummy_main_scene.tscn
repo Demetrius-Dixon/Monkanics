@@ -1,6 +1,0 @@
-[gd_scene format=3 uid="uid://ddp0b4mlaollc"]
-
-[ext_resource type="Script" uid="uid://c3cormscu1btu" path="res://utilities/dummy_main_scene/dummy_main_scene.gd" id="1_dob5i"]
-
-[node name="DummyMainScene" type="Node" unique_id=1816139609]
-script = ExtResource("1_dob5i")
