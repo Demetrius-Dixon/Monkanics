@@ -49,7 +49,7 @@ func _process(delta: float) -> void:
 	
 	if Input.is_action_just_pressed("ui_cancel"):
 		#pass
-		send_packet_to_relay("test", {&"Example:": "Nose"})
+		send_packet_to_relay("forward_all", {&"Example:": "Nose"})
 
 func create_client() -> void:
 	
@@ -95,11 +95,12 @@ func poll_client() -> void:
 		
 		var json_translation : Variant = JSON.new()
 		json_translation = JSON.parse_string(packet_string)
+		packet = json_translation
 		
 		var command : String = json_translation[&"command"]
 		var info : Variant = json_translation[&"info"]
 		
-		#print("Client Recieved Packet: ", json_translation)
+		print("Client Recieved Packet: ", packet)
 		
 		#if command == "ack":
 			#

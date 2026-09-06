@@ -44,6 +44,7 @@ func poll_relay_server() -> void:
 		
 		var json_translation : Variant = JSON.new()
 		json_translation = JSON.parse_string(packet)
+		packet = json_translation
 		
 		var command : String = json_translation[&"command"]
 		var info : Variant = json_translation[&"info"]
@@ -65,7 +66,7 @@ func poll_relay_server() -> void:
 			#
 			#reliable_packets_received.append(json_translation)
 		
-		trigger_server_command(command, info, peer, peer.get_packet_ip())
+		trigger_server_command(command, info, peer, peer.get_packet_ip(), packet)
 	
 	for client in connected_clients:
 		
@@ -78,11 +79,12 @@ func poll_relay_server() -> void:
 			
 			var json_translation : Variant = JSON.new()
 			json_translation = JSON.parse_string(packet)
+			packet = json_translation
 			
 			var command : String = json_translation[&"command"]
 			var info : Variant = json_translation[&"info"]
 			
-			print("Server Received Packet: ", json_translation)
+			#print("Server Received Packet: ", packet)
 			
 			#if json_translation.has(&"reliable"):
 				#
@@ -99,22 +101,21 @@ func poll_relay_server() -> void:
 				#
 				#reliable_packets_received.append(json_translation)
 			
-			trigger_server_command(command, info, peer, peer.get_packet_ip())
+			trigger_server_command(command, info, peer, peer.get_packet_ip(), packet)
 			
 			#send_command_to_client("SERVER COMMAND", {&"Example:": "Beans"}, peer)
 
 func trigger_server_command(command:String, info:Variant, 
-peer:PacketPeerUDP, packet_ip:String)-> void:
+peer:PacketPeerUDP, packet_ip:String, whole_packet:Variant)-> void:
 	
 	if command == "register":
 		connect_client(peer, packet_ip, assign_client_id())
 	
+	if command == "forward_to":
+		forward_packet_to_specific_client(whole_packet, info)
 	
-	#if command == "forward":
-		#
-		#for client in connected_clients:
-			#
-			#send_command_to_client("print_text", dictionary, client[&"peer"])
+	if command == "forward_all":
+		forward_packet_to_all_clients(whole_packet, peer)
 
 func connect_client(peer:PacketPeerUDP, ip:Variant, id:int) -> void:
 	
@@ -123,13 +124,6 @@ func connect_client(peer:PacketPeerUDP, ip:Variant, id:int) -> void:
 		if peer == registered_client[&"peer"]:
 			
 			send_packet_to_client("confirm_registration", null, registered_client[&"peer"])
-			
-			var registration_post_confirmation_packet : Dictionary = \
-			{&"command": "confirm_registration", &"info": null}
-			
-			var pre_packet_to_send : Variant = JSON.stringify(registration_post_confirmation_packet)
-			
-			registered_client[&"peer"].put_packet(pre_packet_to_send.to_utf8_buffer())
 			
 			return
 	
@@ -143,12 +137,7 @@ func connect_client(peer:PacketPeerUDP, ip:Variant, id:int) -> void:
 	
 	#print(connected_clients)
 	
-	var registration_confirmation_packet : Dictionary = \
-	{&"command": "confirm_registration", &"info": null}
-	
-	var packet_to_send : Variant = JSON.stringify(registration_confirmation_packet)
-	
-	peer.put_packet(packet_to_send.to_utf8_buffer())
+	send_packet_to_client("confirm_registration", null, peer)
 
 func assign_client_id() -> int:
 	
@@ -171,6 +160,24 @@ func send_packet_to_client(command:String, info:Variant, recipient:PacketPeerUDP
 	var packet_to_send : Variant = JSON.stringify(packet)
 	
 	recipient.put_packet(packet_to_send.to_utf8_buffer())
+
+func forward_packet_to_specific_client(packet:Dictionary, recipient:PacketPeerUDP) -> void:
+	
+	var packet_to_forward : Variant = JSON.stringify(packet)
+	
+	recipient.put_packet(packet_to_forward.to_utf8_buffer())
+
+func forward_packet_to_all_clients(packet:Dictionary, sender:PacketPeerUDP) -> void:
+	
+	var packet_to_forward : Variant = JSON.stringify(packet)
+	
+	for client in connected_clients:
+		
+		if sender == client[&"peer"]: 
+			pass
+			continue
+		
+		client[&"peer"].put_packet(packet_to_forward.to_utf8_buffer())
 
 #func acknowledge_reliable_client_packet(packet:Dictionary, recipient:PacketPeerUDP) -> void:
 	#
@@ -203,8 +210,8 @@ func send_packet_to_client(command:String, info:Variant, recipient:PacketPeerUDP
 			#reliable_packets_received.erase(reliable_packet)
 
 
-
-func forward_client_packet() -> void:
-	
-	pass
-	
+#
+#func forward_client_packet() -> void:
+	#
+	#pass
+	#
