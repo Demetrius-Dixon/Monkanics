@@ -7,9 +7,6 @@ var relay_server : UDPServer
 var connected_clients : Array[Dictionary] = []
 var next_client_id_to_assign : int = 0
 
-#var reliable_packets_received : Array = []
-#const RELIABLE_PACKET_RETENTION_TIME : float = 30.0
-
 func _ready() -> void:
 	
 	if not OS.has_feature("dedicated_server"): 
@@ -20,8 +17,6 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	
 	poll_relay_server()
-	
-	#tick_reliable_packet_retention_timers(delta)
 
 func create_relay_server() -> void:
 	
@@ -49,23 +44,6 @@ func poll_relay_server() -> void:
 		var command : String = json_translation[&"command"]
 		var info : Variant = json_translation[&"info"]
 		
-		#print("Server Received Packet: ", packet)
-		
-		#if json_translation.has(&"reliable"):
-			#
-			#acknowledge_reliable_client_packet(json_translation, peer)
-			#
-			#for reliable_packet:Variant in reliable_packets_received:
-				#
-				#if json_translation[&"packet_id"] == reliable_packet[&"packet_id"]:
-					#return
-				#else:
-					#continue
-			#
-			#json_translation.get_or_add(&"packet_retention_time", RELIABLE_PACKET_RETENTION_TIME)
-			#
-			#reliable_packets_received.append(json_translation)
-		
 		trigger_server_command(command, info, peer, peer.get_packet_ip(), packet)
 	
 	for client in connected_clients:
@@ -86,70 +64,7 @@ func poll_relay_server() -> void:
 			
 			#print("Server Received Packet: ", packet)
 			
-			#if json_translation.has(&"reliable"):
-				#
-				#acknowledge_reliable_client_packet(json_translation, peer)
-				#
-				#for reliable_packet:Variant in reliable_packets_received:
-					#
-					#if json_translation[&"packet_id"] == reliable_packet[&"packet_id"]:
-						#return
-					#else:
-						#continue
-				#
-				#json_translation.get_or_add(&"packet_retention_time", RELIABLE_PACKET_RETENTION_TIME)
-				#
-				#reliable_packets_received.append(json_translation)
-			
 			trigger_server_command(command, info, peer, peer.get_packet_ip(), packet)
-			
-			#send_command_to_client("SERVER COMMAND", {&"Example:": "Beans"}, peer)
-
-func trigger_server_command(command:String, info:Variant, 
-peer:PacketPeerUDP, packet_ip:String, whole_packet:Variant)-> void:
-	
-	if command == "register":
-		connect_client(peer, packet_ip, assign_client_id())
-	
-	if command == "forward_to":
-		forward_packet_to_specific_client(whole_packet, info)
-	
-	if command == "forward_all":
-		forward_packet_to_all_clients(whole_packet, peer)
-
-func connect_client(peer:PacketPeerUDP, ip:Variant, id:int) -> void:
-	
-	for registered_client in connected_clients:
-		
-		if peer == registered_client[&"peer"]:
-			
-			send_packet_to_client("confirm_registration", null, registered_client[&"peer"])
-			
-			return
-	
-	var client_to_save : Dictionary = {
-			&"peer": peer,
-			&"ip": ip,
-			&"id": id
-		}
-	
-	connected_clients.append(client_to_save)
-	
-	#print(connected_clients)
-	
-	send_packet_to_client("confirm_registration", null, peer)
-
-func assign_client_id() -> int:
-	
-	next_client_id_to_assign = next_client_id_to_assign + 1
-	
-	return next_client_id_to_assign
-
-func disconnect_client(client_to_disconnect:Variant) -> void:
-	
-	client_to_disconnect[&"peer"].close()
-	
-	connected_clients.erase(client_to_disconnect)
 
 func send_packet_to_client(command:String, info:Variant, recipient:PacketPeerUDP) -> void:
 	
@@ -179,39 +94,48 @@ func forward_packet_to_all_clients(packet:Dictionary, sender:PacketPeerUDP) -> v
 		
 		client[&"peer"].put_packet(packet_to_forward.to_utf8_buffer())
 
-#func acknowledge_reliable_client_packet(packet:Dictionary, recipient:PacketPeerUDP) -> void:
-	#
-	#var ack_packet : Dictionary = {}
-	#
-	#ack_packet = {
-		#
-		#&"command": "ack",
-		#&"info": packet
-		#
-	#}
-	#
-	#var ack_packet_to_send : Variant = JSON.stringify(ack_packet)
-	#
-	#print(ack_packet)
-	#
-	#recipient.put_packet(ack_packet_to_send.to_utf8_buffer())
-#
-#func tick_reliable_packet_retention_timers(delta:float) -> void:
-	#
-	#if reliable_packets_received.is_empty(): return
-	#
-	#for reliable_packet:Variant in reliable_packets_received:
-		#
-		#reliable_packet[&"packet_retention_time"] = \
-		#reliable_packet[&"packet_retention_time"] - delta
-		#
-		#if reliable_packet[&"packet_retention_time"] <= 0.0:
-			#
-			#reliable_packets_received.erase(reliable_packet)
+func trigger_server_command(command:String, info:Variant, 
+peer:PacketPeerUDP, packet_ip:String, whole_packet:Variant)-> void:
+	
+	if command == "register":
+		register_client(peer, packet_ip, assign_client_id())
+	
+	if command == "forward_to":
+		forward_packet_to_specific_client(whole_packet, info)
+	
+	if command == "forward_all":
+		forward_packet_to_all_clients(whole_packet, peer)
 
+func register_client(peer:PacketPeerUDP, ip:Variant, id:int) -> void:
+	
+	for registered_client in connected_clients:
+		
+		if peer == registered_client[&"peer"]:
+			
+			send_packet_to_client("confirm_registration", null, registered_client[&"peer"])
+			
+			return
+	
+	var client_to_save : Dictionary = {
+			&"peer": peer,
+			&"ip": ip,
+			&"id": id
+		}
+	
+	connected_clients.append(client_to_save)
+	
+	#print(connected_clients)
+	
+	send_packet_to_client("confirm_registration", null, peer)
 
-#
-#func forward_client_packet() -> void:
+func assign_client_id() -> int:
+	
+	next_client_id_to_assign = next_client_id_to_assign + 1
+	
+	return next_client_id_to_assign
+
+#func unregister_client(client_to_disconnect:Variant) -> void:
 	#
-	#pass
+	#client_to_disconnect[&"peer"].close()
 	#
+	#connected_clients.erase(client_to_disconnect)
