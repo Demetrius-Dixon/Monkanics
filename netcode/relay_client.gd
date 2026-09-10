@@ -2,10 +2,18 @@ extends Node
 
 var relay_client : PacketPeerUDP
 
-@onready var network_info : Node = $"../NetworkInfo"
+@onready var monkanics : Node = $".."
+@onready var spawned_object_container : Node = $"../SpawnedObjects"
 
 var is_connected_to_relay : bool = false
 var is_registered_with_relay : bool = false
+
+var spawned_objects : Array = []
+
+var current_map : Node = null
+var next_map_to_load : PackedScene = null
+@onready var map_list : Dictionary = $"../MapList".map_list
+
 
 func _ready() -> void:
 	
@@ -30,7 +38,7 @@ func create_client() -> void:
 	
 	relay_client = PacketPeerUDP.new()
 	
-	relay_client.connect_to_host(network_info.RELAY_SERVER_NA_IPV4, network_info.RELAY_SERVER_PORT)
+	relay_client.connect_to_host(monkanics.RELAY_SERVER_NA_IPV4, monkanics.RELAY_SERVER_PORT)
 	
 	is_connected_to_relay = true
 	
@@ -74,7 +82,7 @@ func poll_client() -> void:
 		var command : String = json_translation[&"command"]
 		var info : Variant = json_translation[&"info"]
 		
-		#print("Client Recieved Packet: ", packet)
+		print("Client Recieved Packet: ", packet)
 		
 		trigger_client_command(command, info)
 
@@ -86,9 +94,68 @@ func send_packet_to_relay(command:String, info:Variant) -> void:
 	
 	relay_client.put_packet(packet_to_send.to_utf8_buffer())
 
-func trigger_client_command(command:String, _info:Variant) -> void:
+func trigger_client_command(command:String, info:Variant) -> void:
 	
 	if command == "confirm_registration":
 		is_registered_with_relay = true
 		
 		print("CLIENT IS REGISTERED")
+	
+	if command == "load_map":
+		load_map(info)
+	
+
+func spawn(spawnable:String, spawn_position:Vector3) -> void:
+	
+	
+	
+	
+	var command : String = "spawn"
+	
+	var info : Dictionary = {
+		
+		&"spawnable": spawnable,
+		&"spawn_position": spawn_position
+		
+	}
+	
+	var packet : Dictionary = {&"command": command, &"info": info}
+	
+	#forward_packet_to_all_clients(packet, dummy_relay_client)
+
+func confirm_spawn() -> void:
+	pass
+
+func despawn() -> void:
+	pass
+
+func confirm_despawn() -> void:
+	pass
+
+func load_map(map_to_load:String) -> void:
+	
+	if current_map != null:
+		unload_map()
+	
+	if map_list[map_to_load] == current_map:
+		return
+	
+	map_to_load = map_list[map_to_load]
+	
+	next_map_to_load = load(map_to_load)
+	
+	var map_instantiation := next_map_to_load.instantiate()
+	
+	current_map = map_instantiation
+	
+	spawned_object_container.add_child(map_instantiation)
+	
+	next_map_to_load = null
+
+func unload_map() -> void:
+	
+	if current_map == null:
+		return
+	
+	current_map.queue_free()
+	current_map = null

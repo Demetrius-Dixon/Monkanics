@@ -1,8 +1,9 @@
 extends Node
 
 var relay_server : UDPServer
+var dummy_relay_client : PacketPeerUDP
 
-@onready var network_info : Node = $"../NetworkInfo"
+@onready var monkanics : Node = $".."
 
 var connected_clients : Array[Dictionary] = []
 var next_client_id_to_assign : int = 0
@@ -17,12 +18,14 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	
 	poll_relay_server()
+	
+	spawn("Spawn", Vector3(0,0,0))
 
 func create_relay_server() -> void:
 	
 	relay_server = UDPServer.new()
 	
-	relay_server.listen(network_info.RELAY_SERVER_PORT, network_info.RELAY_SERVER_NA_IPV4)
+	relay_server.listen(monkanics.RELAY_SERVER_PORT, monkanics.RELAY_SERVER_NA_IPV4)
 	
 	print("Relay Server Created")
 
@@ -127,6 +130,8 @@ func register_client(peer:PacketPeerUDP, ip:Variant, id:int) -> void:
 	#print(connected_clients)
 	
 	send_packet_to_client("confirm_registration", null, peer)
+	send_packet_to_client("load_map", &"bnza_zoolag", peer)
+	send_packet_to_client("spawn", &"", peer)
 
 func assign_client_id() -> int:
 	
@@ -139,3 +144,27 @@ func assign_client_id() -> int:
 	#client_to_disconnect[&"peer"].close()
 	#
 	#connected_clients.erase(client_to_disconnect)
+
+func spawn(spawnable:String, spawn_position:Vector3) -> void:
+	
+	var command : String = "spawn"
+	
+	var info : Dictionary = {
+		
+		&"spawnable": spawnable,
+		&"spawn_position": spawn_position
+		
+	}
+	
+	var packet : Dictionary = {&"command": command, &"info": info}
+	
+	forward_packet_to_all_clients(packet, dummy_relay_client)
+
+func confirm_spawn() -> void:
+	pass
+
+func despawn() -> void:
+	pass
+
+func confirm_despawn() -> void:
+	pass

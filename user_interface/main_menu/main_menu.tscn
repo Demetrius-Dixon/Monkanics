@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://cuetqgx13tv6s"]
 
 [ext_resource type="Script" uid="uid://mkg3caem1j3b" path="res://user_interface/main_menu/main_menu.gd" id="1_p78xx"]
-[ext_resource type="Texture2D" uid="uid://5pdcos2bgam6" path="res://utilities/monkanics_banner/Monkanics_Banner_No_Logo.png" id="2_p78xx"]
-[ext_resource type="Texture2D" uid="uid://tktcm0tskdlp" path="res://utilities/monkanics_logo/logo_renders/monkanics_logo_blue_4k.webp" id="3_hb773"]
-[ext_resource type="PackedScene" uid="uid://d1xld8umo8m53" path="res://utilities/center_of_screen_reference/center_of_screen_reference.tscn" id="4_hnapd"]
+[ext_resource type="Texture2D" uid="uid://5pdcos2bgam6" path="res://utilities/deprecated/monkanics_banner/Monkanics_Banner_No_Logo.png" id="2_p78xx"]
+[ext_resource type="Texture2D" uid="uid://tktcm0tskdlp" path="res://utilities/deprecated/monkanics_logo/logo_renders/monkanics_logo_blue_4k.webp" id="3_hb773"]
+[ext_resource type="PackedScene" uid="uid://d1xld8umo8m53" path="res://user_interface/center_of_screen_reference/center_of_screen_reference.tscn" id="4_hnapd"]
 
 [node name="MainMenu" type="Control" unique_id=99476665]
 layout_mode = 3

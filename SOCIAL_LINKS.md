@@ -1,9 +1,17 @@
 ### Monkanics' Socials & Links
 
-- Join the Monkanics Discord community: https://discord.gg/kRkvwdnaVz
-- Watch video updates on the Monkanics YouTube: https://www.youtube.com/@MonkanicsDev
+# Community Hubs:
 
-- Support Monkanics financially on it's Ko-Fi page: https://ko-fi.com/monkanics
+- Monkanics Discord: https://discord.gg/kRkvwdnaVz
+- r/Monkanics: [Coming soon]
 
+# Contribute to Monkanics Development:
+
+- Wackshop Games Developer and Contributor Discord (Approval Only): [Coming Soon]
+- Monkanics Ko-Fi: https://ko-fi.com/monkanics
+
+# Developer Socials:
+
+- Monkanics_Dev YouTube: https://www.youtube.com/@MonkanicsDev
 - Monkanics_Dev X/Twitter: https://x.com/MonkanicsDev
 - Monkanics_Dev TikTok: https://www.tiktok.com/@monkanicsdev
