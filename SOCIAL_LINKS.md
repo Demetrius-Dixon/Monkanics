@@ -1,5 +1,7 @@
 ### Monkanics' Socials & Links
 
+- Report bugs, contribute, and mod Monkanics' on Github: https://github.com/Demetrius-Dixon/Monkanics
+
 # Community Hubs:
 
 - Monkanics Discord: https://discord.gg/kRkvwdnaVz
@@ -14,4 +16,6 @@
 
 - Monkanics_Dev YouTube: https://www.youtube.com/@MonkanicsDev
 - Monkanics_Dev X/Twitter: https://x.com/MonkanicsDev
+
 - Monkanics_Dev TikTok: https://www.tiktok.com/@monkanicsdev
+
