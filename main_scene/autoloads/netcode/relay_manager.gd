@@ -19,15 +19,21 @@ func _process(_delta: float) -> void:
 	
 	poll_relay_server()
 	
-	spawn("Spawn", Vector3(0,0,0))
+	#spawn_synced("Spawn", Vector3(0,0,0))
 
 func create_relay_server() -> void:
 	
 	relay_server = UDPServer.new()
 	
-	relay_server.listen(monkanics.RELAY_SERVER_PORT, monkanics.RELAY_SERVER_NA_IPV4)
+	relay_server.listen(EndpointManager.RELAY_SERVER_PORT, EndpointManager.RELAY_SERVER_NA_IPV4)
 	
 	print("Relay Server Created")
+	
+	# Start game on server side:
+	
+	await get_tree().create_timer(2).timeout
+	
+	MapManager.load_map(&"bnza_zoolag")
 
 func poll_relay_server() -> void:
 	
@@ -145,7 +151,7 @@ func assign_client_id() -> int:
 	#
 	#connected_clients.erase(client_to_disconnect)
 
-func spawn(spawnable:String, spawn_position:Vector3) -> void:
+func spawn_synced(spawnable:String, spawn_position:Vector3) -> void:
 	
 	var command : String = "spawn"
 	
@@ -160,11 +166,9 @@ func spawn(spawnable:String, spawn_position:Vector3) -> void:
 	
 	forward_packet_to_all_clients(packet, dummy_relay_client)
 
-func confirm_spawn() -> void:
+func despawn_synced() -> void:
 	pass
 
-func despawn() -> void:
-	pass
-
-func confirm_despawn() -> void:
+func get_new_gamestate() -> void:
+	
 	pass

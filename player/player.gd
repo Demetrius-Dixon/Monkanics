@@ -1,7 +1,5 @@
 extends CharacterBody3D
 
-var mouse_sensitivity : float = 0.003
-
 var is_airborne : bool = false
 var is_moving : bool = false
 
@@ -78,7 +76,7 @@ const COYOTE_TIMER_AWAIT_DURATION : float = 0.001
 
 var is_newly_grounded : bool = false
 
-var can_spply_gravity : bool = true
+var can_apply_gravity : bool = true
 var current_gravity_force : float = 115.0
 const DEFUALT_GRAVITY_FORCE : float = 115.0
 const MIN_GRAVITY_FORCE : float = 0.0
@@ -113,7 +111,7 @@ const END_PROJECTILE_SHOOT_DISTANCE : float = 3.0
 
 @onready var global_projectile_origin : Node = $CameraHorizonalRotation/CameraVerticalRotation/GlobalProjectileOrigin
 
-@onready var health_bar : Node = $PlayerHUD/PlayerHealthBar
+#@onready var health_bar : Node = $PlayerHUD/PlayerHealthBar
 
 func _physics_process(delta: float) -> void:
 	
@@ -126,28 +124,10 @@ func _physics_process(delta: float) -> void:
 	# Tracks current velocity to trigger events when the player stops moving
 	check_velocity() #INFO Add an "upon_stoping" function later
 	
-	# Update alt crosshair status every tick
-	#check_raycast_alignment_for_alt_crosshair()
-	
-	# Check if the player is operating or not every frame
-	check_and_change_player_model_rotation_direction()
-	
 	move_and_slide()
 
 func update_current_cam() -> void:
 	camera.current = true
-
-func delete_unnecessary_player_nodes_for_self() -> void:
-	
-	$PlayerDamageTaker.queue_free()
-
-func delete_unnecessary_player_nodes_for_others() -> void:
-	
-	$PlayerWorldCollision.queue_free()
-	$LOSReference.queue_free()
-	$GlobalMuzzleRaycast.queue_free()
-	$CameraHorizonalRotation.queue_free()
-	$PlayerHUD.queue_free()
 
 func start_moving(input:Vector2, delta:float) -> void:
 	
@@ -177,19 +157,6 @@ func start_moving(input:Vector2, delta:float) -> void:
 	# Movement force
 	velocity.x = global_movement_direction.x * current_movement_speed
 	velocity.z = global_movement_direction.z * current_movement_speed
-	
-	# ---------------------------
-	
-	# Rotate the model with player movement if not operating
-	if current_player_body_rotation_direction == PlayerBodyRotatonDirection.FOLLOW_MOVEMENT:
-		
-		# Rotate the body
-		body_parts.rotation.y = lerp(body_parts.rotation.y, global_body_and_head_movement_rotation, \
-		BODY_AND_HEAD_ROTATION_INTERPOLATION_WEIGHT)
-		
-		# Rotate the head
-		head_parts.rotation.y = lerp(head_parts.rotation.y, global_body_and_head_movement_rotation, \
-		BODY_AND_HEAD_ROTATION_INTERPOLATION_WEIGHT)
 	
 	# ---------------------------
 	
@@ -291,15 +258,12 @@ func stop_jumping() -> void:
 	stop_coyote_timer()
 
 func trigger_move_and_slide() -> void:
-	
-	# Used to trigger move_and_slide on-
-	# -the client and server independently (This is required)
 	move_and_slide()
 
 func apply_gravity(delta: float) -> void:
 	
 	# Applies gravity when all conditions are met.
-	if can_spply_gravity == true \
+	if can_apply_gravity == true \
 	and is_airborne == true \
 	and is_jumping == false:
 		
@@ -432,48 +396,22 @@ func check_velocity() -> void:
 	# Print velocity X,Y,Z (Testing only)
 	#print("X: ", current_velocity_x, " Y: ", current_velocity_y, " Z: ", current_velocity_z)
 
-func _unhandled_input(event:InputEvent) -> void: #INFO camera Controls
+func _unhandled_input(event:InputEvent) -> void: ## Camera Controls
 	
-	# Checks if the mouse is invisible/captured
 	if MouseManager.is_mouse_visible == true: return
 	
-	# ---------------------------
-	
-	# Mouse movement variables
 	var camera_horizontal_input : float = 0.0
 	var camera_vertical_input : float = -0.0
-	const nil_camera_input : float = 0.0
+	const NULL_CAMERA_INPUT : float = 0.0
 	
-	# ---------------------------
-	
-	# Tracks mouse movement and calculates sensitivity
 	if event is InputEventMouseMotion and Input.MOUSE_MODE_CAPTURED:
-		camera_horizontal_input = - event.relative.x * mouse_sensitivity
-		camera_vertical_input = event.relative.y * mouse_sensitivity
-	
-	# ---------------------------
+		camera_horizontal_input = - event.relative.x * SettingsManager.mouse_sensitivity
+		camera_vertical_input = event.relative.y * SettingsManager.mouse_sensitivity
 	
 	# Rotates the camera on the Y axis based on tracked mouse movement
 	camera_horizonal_rotation.rotate_y(camera_horizontal_input)
 	
-	# ---------------------------
-	
-	# Make the player's body rotate with side-to-side movement if the player is operating
-	if current_player_body_rotation_direction == PlayerBodyRotatonDirection.FOLLOW_CAMERA:
-		
-		# Reset the body side-to-side rotation
-		body_parts.rotation.y = lerp(body_parts.rotation.y, camera_horizonal_rotation.rotation.y, \
-		CAMERA_ALIGNMENT_ROTATION_INTERPOLATION_WEIGHT)
-		
-		# Move the body with the camera
-		body_parts.rotate_y(camera_horizontal_input)
-	
-	# ---------------------------
-	
-	# Rotates the camera on the X axis based on tracked mouse movement
 	camera_vertical_rotation.rotate_x(camera_vertical_input)
-	
-	# Clamps upward/downward (X axis) mouse movement
 	camera_vertical_rotation.rotation.x = clamp \
 	(
 		camera_vertical_rotation.rotation.x, 
@@ -481,28 +419,12 @@ func _unhandled_input(event:InputEvent) -> void: #INFO camera Controls
 		deg_to_rad(MAX_LOOK_DEGREES)
 	)
 	
-	# ---------------------------
+	body_parts.rotate_y(camera_horizontal_input)
+	head_parts.rotation.x = camera_vertical_rotation.rotation.x
+	head_parts.rotate_y(camera_horizontal_input)
 	
-	# Make the player's head rotate with pitch movement
-	#head_parts.rotation.x = camera_vertical_rotation.rotation.x
-	#TODO Rework head movement to have a clamp for side-to-side movement-
-	# -and only have the head tilt up/down when at the right angle
-	
-	# Rotate head parts with the body when operating
-	if current_player_head_y_rotation_direction == CurrentPlayerHeadRotationDirectionY.FOLLOW_CAMERA:
-		
-		# Reset the head side-to-side rotation
-		head_parts.rotation.y = lerp(head_parts.rotation.y, camera_horizonal_rotation.rotation.y, \
-		CAMERA_ALIGNMENT_ROTATION_INTERPOLATION_WEIGHT)
-		
-		# Move the head with the camera
-		head_parts.rotate_y(camera_horizontal_input)
-	
-	# ---------------------------
-	
-	# Prevents the mouse from moving when the mouse stops moving
-	camera_horizontal_input = nil_camera_input
-	camera_vertical_input = nil_camera_input
+	camera_horizontal_input = NULL_CAMERA_INPUT
+	camera_vertical_input = NULL_CAMERA_INPUT
 
 func change_player_rotation_for_server(new_player_body_rotation:Vector3, new_player_head_rotation:Vector3,
 new_camera_horizontal_rotation:float, new_camera_vertical_rotation:float) -> void:
@@ -524,10 +446,8 @@ new_camera_horizontal_rotation:float, new_camera_vertical_rotation:float) -> voi
 
 func player_take_damage(damage:int) -> void:
 	
-	# Checks if health is greater than 0
 	if current_health >= MIN_HEALTH:
 		
-		# Deals damage to the player
 		current_health = clampi(current_health - damage, \
 		MIN_HEALTH, DEFAULT_MAX_HEALTH)
 	
@@ -546,57 +466,3 @@ func respawn_player(new_spawn_point:Vector3) -> void:
 	current_health = current_max_health
 	
 	visible = true
-
-func check_and_change_player_model_rotation_direction() -> void:
-	
-	# Checks if the player rotates with player movement or camera movement
-	if is_operating == true \
-	and is_body_rotation_overwritten == false:
-		
-		current_player_body_rotation_direction = PlayerBodyRotatonDirection.FOLLOW_CAMERA
-		current_player_head_y_rotation_direction = CurrentPlayerHeadRotationDirectionY.FOLLOW_CAMERA
-		
-		# Reset the body side-to-side rotation
-		body_parts.rotation.y = lerp(body_parts.rotation.y, camera_horizonal_rotation.rotation.y, \
-		CAMERA_ALIGNMENT_ROTATION_INTERPOLATION_WEIGHT)
-		
-		# Reset the head side-to-side rotation
-		head_parts.rotation.y = lerp(head_parts.rotation.y, camera_horizonal_rotation.rotation.y, \
-		CAMERA_ALIGNMENT_ROTATION_INTERPOLATION_WEIGHT)
-		
-	else:
-		
-		current_player_body_rotation_direction = PlayerBodyRotatonDirection.FOLLOW_MOVEMENT
-		current_player_head_y_rotation_direction = CurrentPlayerHeadRotationDirectionY.FOLLOW_MOVEMENT
-
-#func check_raycast_alignment_for_alt_crosshair() -> void:
-	#
-	## Update the camera raycast
-	#camera_raycast.force_raycast_update()
-	#
-	## Create collision variables
-	#var camera_raycast_collision_point : Vector3 = camera_raycast.get_collision_point()
-	#var New_Muzzle_Raycast_Target_Location : Vector3 = global_muzzle_raycast.to_local(camera_raycast_collision_point)
-	#
-	## Update muzzle raycast to go toward camera raycast hit location
-	#global_muzzle_raycast.target_position = New_Muzzle_Raycast_Target_Location
-	#global_muzzle_raycast.force_raycast_update()
-	#
-	## Create hit distance variable
-	#var muzzle_raycast_hit_distance : Variant
-	#
-	## Get the distance between the start/end of the muzzle raycast
-	#muzzle_raycast_hit_distance = global_muzzle_raycast.global_position.distance_to(camera_raycast.get_collision_point())
-	#
-	## Check if the player is too close to a wall via the muzzle raycast
-	#if muzzle_raycast_hit_distance <= MIN_PROJECTILE_SHOOT_DISTANCE:
-		#
-		#Alt_Crosshair.show()
-		#
-		##TODO Doesn't project to the correct position
-		#Alt_Crosshair.position = get_viewport().get_camera_3d().\
-		#unproject_position(global_muzzle_raycast.get_collision_point())
-		#
-	#else:
-		#
-		#Alt_Crosshair.hide()

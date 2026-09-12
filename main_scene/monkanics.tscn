@@ -1,20 +1,3 @@
 [gd_scene format=3 uid="uid://rbfi8i6lw3xj"]
 
-[ext_resource type="Script" uid="uid://c3i38xmxxrxx3" path="res://main_scene/monkanics.gd" id="1_m7a35"]
-[ext_resource type="Script" uid="uid://bgclsu8qv7211" path="res://modes_maps/map_list/map_list.gd" id="4_5qur6"]
-[ext_resource type="Script" uid="uid://crrcqmy2l1p2t" path="res://netcode/relay_server.gd" id="6_r2nd2"]
-[ext_resource type="Script" uid="uid://bvx2a8r8bv2bt" path="res://netcode/relay_client.gd" id="7_f4iiw"]
-
 [node name="Monkanics" type="Node" unique_id=142835716]
-script = ExtResource("1_m7a35")
-
-[node name="RelayServer" type="Node" parent="." unique_id=1468302040]
-script = ExtResource("6_r2nd2")
-
-[node name="RelayClient" type="Node" parent="." unique_id=1213356473]
-script = ExtResource("7_f4iiw")
-
-[node name="MapList" type="Node" parent="." unique_id=1749692986]
-script = ExtResource("4_5qur6")
-
-[node name="SpawnedObjects" type="Node" parent="." unique_id=231099580]
