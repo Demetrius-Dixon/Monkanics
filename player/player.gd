@@ -1,28 +1,6 @@
 extends CharacterBody3D
 
-var is_airborne : bool = false
-var is_moving : bool = false
-
-enum PlayerBodyRotatonDirection{
-	FOLLOW_MOVEMENT, 
-	FOLLOW_CAMERA
-}
-var current_player_body_rotation_direction : \
-PlayerBodyRotatonDirection = PlayerBodyRotatonDirection.FOLLOW_MOVEMENT
-var is_body_rotation_overwritten : bool = false
-
-enum CurrentPlayerHeadRotationDirectionY{
-	FOLLOW_MOVEMENT, 
-	FOLLOW_CAMERA
-}
-var current_player_head_y_rotation_direction : \
-CurrentPlayerHeadRotationDirectionY = CurrentPlayerHeadRotationDirectionY.FOLLOW_MOVEMENT
-var is_head_y_rotation_overwritten : bool = false
-
-var global_body_and_head_movement_rotation : float
-const BODY_AND_HEAD_ROTATION_INTERPOLATION_WEIGHT : float = 0.95
-const CAMERA_ALIGNMENT_ROTATION_INTERPOLATION_WEIGHT : float = 0.6
-
+var is_walking : bool = false
 var is_movement_input_held : bool = false
 
 var current_movement_speed : float = 0.0
@@ -48,6 +26,8 @@ var global_movement_direction : Vector3
 var movement_direction_x : float
 var movement_direction_z : float
 
+var is_airborne : bool = false
+var is_jump_input_new : bool = true
 var can_jump : bool = true 
 var is_jumping : bool = false 
 
@@ -113,40 +93,56 @@ const END_PROJECTILE_SHOOT_DISTANCE : float = 3.0
 
 #@onready var health_bar : Node = $PlayerHUD/PlayerHealthBar
 
+func _ready() -> void:
+	
+	camera.current = true
+
 func _physics_process(delta: float) -> void:
 	
-	# Apply gravity
 	apply_gravity(delta)
 	
-	# Checks if the player is airboune
 	check_if_player_is_airborne()
 	
-	# Tracks current velocity to trigger events when the player stops moving
 	check_velocity() #INFO Add an "upon_stoping" function later
+	
+	apply_movement_input(delta)
 	
 	move_and_slide()
 
-func update_current_cam() -> void:
-	camera.current = true
+func _process(_delta: float) -> void:
+	
+	apply_jump_input()
 
-func start_moving(input:Vector2, delta:float) -> void:
+func apply_movement_input(delta:float) -> void:
 	
-	# Set moving to true
-	is_moving = true
+	if InputManager.is_holding_walk_forward_input == true \
+	or InputManager.is_holding_walk_backward_input == true \
+	or InputManager.is_holding_walk_left_input == true \
+	or InputManager.is_holding_walk_right_input == true:
+		
+		is_movement_input_held = true
+		
+		var input:Vector2 = Input.get_vector(
+		"walk_right", "walk_left", "walk_backward", "walk_forward")
+		
+		start_walking(input, delta)
 	
-	# Set the current movement direction
+	if InputManager.is_holding_walk_forward_input == false \
+	and InputManager.is_holding_walk_backward_input == false \
+	and InputManager.is_holding_walk_left_input == false \
+	and InputManager.is_holding_walk_right_input == false:
+		
+		is_movement_input_held = false
+		
+		stop_walking(delta)
+
+func start_walking(input:Vector2, delta:float) -> void:
+	
+	is_walking = true
+	
 	global_movement_direction = camera_horizonal_rotation.basis \
 	* Vector3(input.x, 0, input.y)
 	
-	# Set the player model's rotation direction to movement direction
-	if global_movement_direction != Vector3(0.0, 0.0, 0.0):
-		
-		global_body_and_head_movement_rotation = \
-		atan2(global_movement_direction.x, global_movement_direction.z)
-	
-	# ---------------------------
-	
-	# Walking movement acceleration (Advances every physics tick in the client script)
 	if current_movement_speed < MAX_MOVEMENT_SPEED * current_movement_speed_multiplier:
 		
 		current_movement_speed = \
@@ -154,32 +150,22 @@ func start_moving(input:Vector2, delta:float) -> void:
 		(delta * MOVEMENT_ACCELERATION_RATE), \
 		MIN_MOVEMENT_SPEED, MAX_MOVEMENT_SPEED * current_movement_speed_multiplier)
 	
-	# Movement force
 	velocity.x = global_movement_direction.x * current_movement_speed
 	velocity.z = global_movement_direction.z * current_movement_speed
 	
-	# ---------------------------
-	
-	# Prevents saving a 0.0 input and killing the player's momentum
 	if input != Vector2(0,0):
 		movement_direction_x = global_movement_direction.x
 		movement_direction_z = global_movement_direction.z
 
-func stop_moving(delta:float) -> void:
+func stop_walking(delta:float) -> void:
 	
-	# This triggers when the player stops moving.
+	is_walking = false
 	
-	# Set is_moving to false
-	is_moving = false
-	
-	# Add remaining velocity to movement
 	velocity.x = movement_direction_x * current_movement_speed
 	velocity.z = movement_direction_z * current_movement_speed
 	
-	# Movement Deceleration
 	if current_movement_speed > MIN_MOVEMENT_SPEED:
 		
-		# If grounded
 		if is_airborne == false:
 			
 			current_movement_speed = \
@@ -187,7 +173,6 @@ func stop_moving(delta:float) -> void:
 			(delta * MOVEMENT_DECELERATION_RATE_GROUNDED), \
 			MIN_MOVEMENT_SPEED, MAX_MOVEMENT_SPEED * current_movement_speed_multiplier)
 			
-		# If airborne
 		elif is_airborne == true:
 			
 			current_movement_speed = \
@@ -195,25 +180,38 @@ func stop_moving(delta:float) -> void:
 			(delta * MOVEMENT_DECELERATION_RATE_AIRBORNE), \
 			MIN_MOVEMENT_SPEED, MAX_MOVEMENT_SPEED * current_movement_speed_multiplier)
 
+func trigger_move_and_slide() -> void:
+	move_and_slide()
+
+func apply_jump_input() -> void:
+	
+	if InputManager.is_pressing_jump_input == true \
+	and is_jump_input_new == true:
+		
+		start_jumping()
+		
+		is_jump_input_new = false
+	
+	if InputManager.is_pressing_jump_input == false \
+	and is_jump_input_new == false:
+		
+		stop_jumping()
+		
+		is_jump_input_new = true
+
 func start_jumping() -> void:
 	
-	# Checks if the player can jump
 	if can_jump == false: return
 	
-	# Checks if the player is already jumping
 	if is_jumping == true: return
 	
-	# Checks if the player is in the air
 	if is_airborne == true \
 	and can_coyote_jump == false: return
 	
-	# Sets is_jumping to true
 	is_jumping = true
 	
-	# Ininitial jump velocity
 	velocity.y = velocity.y + INITIAL_JUMP_FORCE
 	
-	# Jump function via a while loop
 	while current_jump_time < MAX_JUMP_TIME \
 	and is_jumping == true:
 		
@@ -231,170 +229,126 @@ func start_jumping() -> void:
 		if current_jump_time == MAX_JUMP_TIME:
 			stop_jumping()
 	
-	# End the jump buffer after the jump
 	is_jump_input_buffered = false
 	
-	# Reset the current buffer timer after the jump
 	current_jump_buffer_duration = MIN_JUMP_BUFFER_DURATION
 
 func stop_jumping() -> void:
 	
-	# Checks if the player is actually jumping
 	if is_jumping == false: 
 		
-		# End coyote time even if `stop_jumping` doesn't go through
 		stop_coyote_timer()
 		
 		return
 	
-	# Sets Is_jumping to false
 	is_jumping = false
 	
-	# Sets the current jump time to 0
 	if current_jump_time != MIN_JUMP_TIME:
 		current_jump_time = MIN_JUMP_TIME
 	
-	# End coyote time upon the jump ending regardless
 	stop_coyote_timer()
-
-func trigger_move_and_slide() -> void:
-	move_and_slide()
 
 func apply_gravity(delta: float) -> void:
 	
-	# Applies gravity when all conditions are met.
 	if can_apply_gravity == true \
 	and is_airborne == true \
 	and is_jumping == false:
 		
-		# Apply current gravity force every frame
 		velocity.y -= current_gravity_force * delta
 
 func check_if_player_is_airborne() -> void:
 	
-	# Checks if the player is NOT on the floor
 	if not is_on_floor():
 		
-		# Update airborne status to true
 		is_airborne = true
 		
 		if is_jumping == false \
 		and is_newly_grounded == false:
 			start_coyote_timer()
 		
-		# Reset grounded status
 		is_newly_grounded = true
 	
-	# Checks if the player IS on the floor
 	if is_on_floor():
 		
-		# Update airborne status to false
 		is_airborne = false
 		
-		# Trigger ground touching functions
 		upon_touching_ground()
 
 func upon_touching_ground() -> void:
 	
-	# Trigger buffered jump
 	if is_jump_input_buffered == true:
 		start_jumping()
 	
-	# End coyote time after touching the ground
 	stop_coyote_timer()
 	
-	# Set grounded status
 	is_newly_grounded = false
 
 func start_jump_buffer_timer() -> void:
 	
-	# Reset the current jump buffer duration to 0.0
 	current_jump_buffer_duration = MIN_JUMP_BUFFER_DURATION
 	
-	# Jump buffer time via `while` loop
 	while current_jump_buffer_duration < MAX_JUMP_BUFFER_DURATION \
 	and is_jump_input_buffered == true:
 		
-		# Sets the current jump time
 		current_jump_buffer_duration = clampf(current_jump_buffer_duration + JUMP_BUFFER_PROGRESSION, \
 		MIN_JUMP_BUFFER_DURATION, MAX_JUMP_BUFFER_DURATION)
 		
-		# Small deley before next loop
 		await get_tree().create_timer(JUMP_BUFFER_AWAIT_DURATION).timeout
 		
-		# Automatically stop jumping when max jump time is reached
 		if current_jump_buffer_duration == MAX_JUMP_BUFFER_DURATION:
 			
-			# Set the buffer to false after timer elapesed
 			is_jump_input_buffered = false
 			
-			# Reset the current buffer timer once fully elapesed
 			current_jump_buffer_duration = MIN_JUMP_BUFFER_DURATION
 
 func start_coyote_timer() -> void:
 	
-	# Prevents repeat start triggers
 	if can_coyote_jump == true: return
 	
-	# Prevents coyote time from triggering while jumping
 	if is_jumping == true: 
 		stop_coyote_timer()
 		return
 	
-	# Allow the player to coyote jump
 	can_coyote_jump = true
 	
-	# Set gravity force to 0.0
 	if current_gravity_force != MIN_GRAVITY_FORCE:
 		current_gravity_force = MIN_GRAVITY_FORCE
 	
-	# Reset the current coyote timer duration to 0.0
 	current_coyote_time = MIN_COYOTE_TIME
 	
-	# Coyote timer via `while` loop
 	while current_coyote_time < MAX_COYOTE_TIME \
 	and can_coyote_jump == true:
 		
-		# Sets the current coyote time
 		current_coyote_time = clampf(current_coyote_time + COYOTE_TIMER_PROGRESSION, \
 		MIN_COYOTE_TIME, MAX_COYOTE_TIME)
 		
-		# Small deley before next loop
 		await get_tree().create_timer(COYOTE_TIMER_AWAIT_DURATION).timeout
 		
-		# Automatically stop coyote time when max jump time is reached
 		if current_coyote_time == MAX_COYOTE_TIME:
 			
-			# Set the coyote jump to false after timer elapesed
 			can_coyote_jump = false
 			
-			# End coyote time
 			stop_coyote_timer()
 			
-			# Reset the current coyote timer once fully elapesed
 			current_coyote_time = MIN_COYOTE_TIME
 
 func stop_coyote_timer() -> void:
 	
-	# End coyote time
 	can_coyote_jump = false
 	
-	# Set gravity force back to normal
 	current_gravity_force = DEFUALT_GRAVITY_FORCE
 
 func check_velocity() -> void:
 	
-	# Track velocity X
 	current_velocity_x = velocity.x
 	
-	# Track velocity Y
 	current_velocity_y = velocity.y
 	
-	# Track velocity Z
 	current_velocity_z = velocity.z
 	
-	# Print velocity X,Y,Z (Testing only)
-	#print("X: ", current_velocity_x, " Y: ", current_velocity_y, " Z: ", current_velocity_z)
+	#print("X: ", current_velocity_x, \
+	#" Y: ", current_velocity_y, \
+	#" Z: ", current_velocity_z)
 
 func _unhandled_input(event:InputEvent) -> void: ## Camera Controls
 	
@@ -426,23 +380,23 @@ func _unhandled_input(event:InputEvent) -> void: ## Camera Controls
 	camera_horizontal_input = NULL_CAMERA_INPUT
 	camera_vertical_input = NULL_CAMERA_INPUT
 
-func change_player_rotation_for_server(new_player_body_rotation:Vector3, new_player_head_rotation:Vector3,
-new_camera_horizontal_rotation:float, new_camera_vertical_rotation:float) -> void:
-	
-	# Update server's player body rotation
-	body_parts.rotation = new_player_body_rotation
-	
-	# Update server's head up/down rotation
-	head_parts.rotation.x = new_player_head_rotation.x
-	
-	# Update server's head side-to-side rotation with the body
-	head_parts.rotation.y = new_player_body_rotation.y
-	
-	# Update the server's camera horizontal rotation
-	camera_horizonal_rotation.rotation.y = new_camera_horizontal_rotation
-	
-	# Update the server's camera horizontal rotation
-	camera_vertical_rotation.rotation.x = new_camera_vertical_rotation
+#func change_player_rotation_for_server(new_player_body_rotation:Vector3, new_player_head_rotation:Vector3,
+#new_camera_horizontal_rotation:float, new_camera_vertical_rotation:float) -> void:
+	#
+	## Update server's player body rotation
+	#body_parts.rotation = new_player_body_rotation
+	#
+	## Update server's head up/down rotation
+	#head_parts.rotation.x = new_player_head_rotation.x
+	#
+	## Update server's head side-to-side rotation with the body
+	#head_parts.rotation.y = new_player_body_rotation.y
+	#
+	## Update the server's camera horizontal rotation
+	#camera_horizonal_rotation.rotation.y = new_camera_horizontal_rotation
+	#
+	## Update the server's camera horizontal rotation
+	#camera_vertical_rotation.rotation.x = new_camera_vertical_rotation
 
 func player_take_damage(damage:int) -> void:
 	
