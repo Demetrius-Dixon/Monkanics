@@ -18,8 +18,6 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	
 	poll_relay_server()
-	
-	#spawn_synced("Spawn", Vector3(0,0,0))
 
 func create_relay_server() -> void:
 	
