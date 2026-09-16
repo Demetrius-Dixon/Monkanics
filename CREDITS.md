@@ -12,7 +12,6 @@ Contribute today and follow the contribution guidelines in the `CONTRIBUTING` fi
 
 - Demetrius Dixon (@Monkanics_Dev) - Creator of Monkanics, Project Lead, Founder of Wackshop Games
 - Max (@snailsnaps) - Freelance 2D Concept Artist
-- Birru Madani (@birrumadani on Fiverr) - Freelance 3D Modeler and Rigger
 
 ## Monkanics Contributors (All-Time)
 
@@ -20,6 +19,7 @@ Contribute today and follow the contribution guidelines in the `CONTRIBUTING` fi
 - Luova Kuvilus - Concept Artist
 - Frozen_Fried - Concept Artist
 - Alexandre Marcati - Logo Artist
+- Birru Madani (@birrumadani on Fiverr) - 3D Modeler, 3D rigger
 
 ## Financial Backers (All-Time)
 
