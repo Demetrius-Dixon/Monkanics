@@ -20,6 +20,7 @@ Contribute today and follow the contribution guidelines in the `CONTRIBUTING` fi
 - Frozen_Fried - Concept Artist
 - Alexandre Marcati - Logo Artist
 - Birru Madani (@birrumadani on Fiverr) - 3D Modeler, 3D rigger
+- Hyperjragon - Programming
 
 ## Financial Backers (All-Time)
 
