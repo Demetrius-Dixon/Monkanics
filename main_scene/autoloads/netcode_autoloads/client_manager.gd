@@ -1,8 +1,8 @@
 extends Node
 
 var relay_client : PacketPeerUDP
+var relay_client_tcp : StreamPeerTCP
 
-var is_connected_to_relay : bool = false
 var is_registered_with_relay : bool = false
 
 func _ready() -> void:
@@ -16,29 +16,40 @@ func _process(_delta: float) -> void:
 	
 	poll_client()
 	
+	poll_client_tcp()
+	
 	if Input.is_action_just_pressed("ui_cancel"):
 		
-		pass
+		#pass
+		
+		#print(relay_client_tcp.get_status())
+		
+		#relay_client_tcp.poll()
+		#
+		#print("TCP Status: ", relay_client_tcp.get_status())
 		
 		#send_packet_to_relay("forward_all", {&"Example:": "Nose"})
+		
+		send_tcp_data_to_relay()
 
 func create_client() -> void:
 	
 	if OS.has_feature("dedicated_server"): return
 	
 	relay_client = PacketPeerUDP.new()
-	
 	relay_client.connect_to_host(EndpointManager.RELAY_SERVER_NA_IPV4, EndpointManager.RELAY_SERVER_PORT)
 	
-	is_connected_to_relay = true
+	relay_client_tcp = StreamPeerTCP.new()
+	relay_client_tcp.connect_to_host(EndpointManager.RELAY_SERVER_NA_IPV4, EndpointManager.RELAY_TCP_PORT)
 	
 	register_to_relay_server()
 	
 	print("Client Created")
 	
-	await get_tree().create_timer(1).timeout
 	
-	SpawnManager.spawn_local("player", 0,0,0)
+	#await get_tree().create_timer(1).timeout
+	#
+	#SpawnManager.spawn_local("player", 0,0,0)
 
 func register_to_relay_server() -> void:
 	
@@ -76,9 +87,35 @@ func poll_client() -> void:
 		var command : String = json_translation[&"command"]
 		var info : Variant = json_translation[&"info"]
 		
-		print("Client Recieved Packet: ", packet)
+		#print("Client Recieved Packet: ", packet)
 		
 		trigger_client_command(command, info)
+
+func poll_client_tcp() -> void:
+	
+	relay_client_tcp.poll()
+	
+	
+
+func send_tcp_data_to_relay() -> void:
+	
+	var packet : Dictionary = {
+	&"command": "test",
+	&"info": "Hello from client!"
+	}
+	
+	var data := JSON.stringify(packet).to_utf8_buffer()
+	
+	relay_client_tcp.put_u32(data.size())
+	relay_client_tcp.put_data(data)
+	
+	
+	#relay_client_tcp.put_var("Hello from the client!")
+	
+	#if relay_client_tcp.get_status() == StreamPeerTCP.STATUS_CONNECTED:
+		#relay_client_tcp.put_var("Hello from the client!")
+	#else:
+		#print("Cannot send; not connected.")
 
 func send_packet_to_relay(command:String, info:Variant) -> void:
 	
@@ -93,7 +130,7 @@ func trigger_client_command(command:String, info:Variant) -> void:
 	if command == "confirm_registration":
 		is_registered_with_relay = true
 		
-		print("CLIENT IS REGISTERED")
+		#print("CLIENT IS REGISTERED")
 	
 	if command == "load_map":
 		MapManager.load_map(info)

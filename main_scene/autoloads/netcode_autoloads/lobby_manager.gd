@@ -1,6 +1,41 @@
 extends Node
 
-var is_host : bool = false
+var current_host : PacketPeerUDP
 var current_map : String = ""
-var max_players : int = 100
-var current_player_count : int = 0
+var players_in_lobby : Dictionary = {}
+
+func _ready() -> void:
+	
+	#INFO Temp dev code. Clients will be able to host later
+	if OS.has_feature("dedicated_server"): 
+		queue_free()
+
+func create_lobby(host:PacketPeerUDP) -> void:
+	
+	current_host = host
+	
+	MapManager.load_map("bnza_zoolag")
+	current_map = "bnza_zoolag"
+
+func player_join(player:PacketPeerUDP) -> void:
+	
+	pass
+	
+	
+
+func catchup_new_player(player:PacketPeerUDP) -> void:
+	
+	var command : String = "catchup"
+	
+	var state_to_sync : Dictionary = {
+		
+		&"current_map": current_map,
+		&"players_in_lobby": players_in_lobby
+		
+	}
+	
+	RelayManager.send_packet_to_client(command, state_to_sync, player)
+
+func get_new_gamestate() -> void:
+	
+	pass

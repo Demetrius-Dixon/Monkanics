@@ -1,11 +1,16 @@
 extends Node
 
 var relay_server : UDPServer
-var dummy_relay_client : PacketPeerUDP
+var relay_server_tcp : TCPServer
 
-@onready var monkanics : Node = $".."
+var dedicated_server : PacketPeerUDP
 
 var connected_clients : Array[Dictionary] = []
+var connected_tcp_clients : Array = []
+
+#var tcp_data_buffer : PackedByteArray = PackedByteArray()
+var tcp_data_buffers : Array[PackedByteArray] = []
+
 var next_client_id_to_assign : int = 0
 
 func _ready() -> void:
@@ -14,10 +19,14 @@ func _ready() -> void:
 		queue_free()
 	else: 
 		create_relay_server()
+		create_relay_server_tcp()
+		#LobbyManager.create_lobby(dedicated_server)
 
 func _process(_delta: float) -> void:
 	
 	poll_relay_server()
+	
+	poll_relay_server_tcp()
 
 func create_relay_server() -> void:
 	
@@ -25,13 +34,15 @@ func create_relay_server() -> void:
 	
 	relay_server.listen(EndpointManager.RELAY_SERVER_PORT, EndpointManager.RELAY_SERVER_NA_IPV4)
 	
-	print("Relay Server Created")
+	print("Relay UDP Created")
+
+func create_relay_server_tcp() -> void:
 	
-	# Start game on server side:
+	relay_server_tcp = TCPServer.new()
 	
-	await get_tree().create_timer(2).timeout
+	relay_server_tcp.listen(EndpointManager.RELAY_TCP_PORT, EndpointManager.RELAY_SERVER_NA_IPV4)
 	
-	MapManager.load_map(&"bnza_zoolag")
+	print("Relay TCP Created")
 
 func poll_relay_server() -> void:
 	
@@ -72,6 +83,71 @@ func poll_relay_server() -> void:
 			#print("Server Received Packet: ", packet)
 			
 			trigger_server_command(command, info, peer, peer.get_packet_ip(), packet)
+
+func poll_relay_server_tcp() -> void:
+	
+	if relay_server_tcp.is_connection_available():
+		
+		var tcp_client : StreamPeerTCP = relay_server_tcp.take_connection()
+		
+		connected_tcp_clients.append(tcp_client)
+		
+		tcp_data_buffers.append(PackedByteArray())
+		
+		print("TCP Client Connected: ", tcp_client)
+	
+	if connected_tcp_clients.is_empty():return
+	
+	for tcp_client:StreamPeerTCP in connected_tcp_clients:
+		
+		tcp_client.poll()
+		
+		var bytes := tcp_client.get_available_bytes()
+		
+		if bytes > 0:
+			
+			var data := tcp_client.get_data(bytes)
+			
+			tcp_data_buffers[tcp_client].append_array(data)
+			
+			print(tcp_data_buffers)
+		
+		
+		#print(tcp_client.get_available_bytes())
+	
+	
+	#for i:Variant in range(connected_tcp_clients):
+		#
+		#var tcp_client : Variant = connected_tcp_clients[i]
+		#
+		#tcp_client.poll()
+		#
+		#var available_bytes : Variant = tcp_client.get_available_bytes()
+		#
+		#if available_bytes > 0:
+			#
+			#var data : Variant = tcp_client.get_var() 
+			#
+			#print("TCP Received From Client: ", data)
+		
+		#var tcp_client_state : Variant = tcp_client.get_status()
+		#
+		#if tcp_client_state == StreamPeerTCP.STATUS_CONNECTED:
+			#
+			#var available_bytes : Variant = tcp_client.get_available_bytes()
+			#
+			#if available_bytes > 0:
+				#
+				#var data : Variant = tcp_client.get_var() 
+				#
+				#print("TCP Received From Client: ", data)
+		
+		#elif tcp_client_state == StreamPeerTCP.STATUS_ERROR \
+		#or tcp_client_state == StreamPeerTCP.STATUS_NONE:
+			#
+			#print("TCP Client Disconnected.")
+			#
+			#connected_clients.remove_at(i)
 
 func send_packet_to_client(command:String, info:Variant, recipient:PacketPeerUDP) -> void:
 	
@@ -162,7 +238,7 @@ func spawn_synced(spawnable:String, spawn_position:Vector3) -> void:
 	
 	var packet : Dictionary = {&"command": command, &"info": info}
 	
-	forward_packet_to_all_clients(packet, dummy_relay_client)
+	forward_packet_to_all_clients(packet, dedicated_server)
 
 func despawn_synced() -> void:
 	pass
