@@ -6,10 +6,7 @@ var relay_server_tcp : TCPServer
 var dedicated_server : PacketPeerUDP
 
 var connected_clients : Array[Dictionary] = []
-var connected_tcp_clients : Array = []
-
-#var tcp_data_buffer : PackedByteArray = PackedByteArray()
-var tcp_data_buffers : Array[PackedByteArray] = []
+var connected_tcp_clients : Array[Dictionary] = []
 
 var next_client_id_to_assign : int = 0
 
@@ -27,6 +24,7 @@ func _process(_delta: float) -> void:
 	poll_relay_server()
 	
 	poll_relay_server_tcp()
+	decode_tcp_stream()
 
 func create_relay_server() -> void:
 	
@@ -62,7 +60,7 @@ func poll_relay_server() -> void:
 		var command : String = json_translation[&"command"]
 		var info : Variant = json_translation[&"info"]
 		
-		trigger_server_command(command, info, peer, peer.get_packet_ip(), packet)
+		trigger_server_command(command, info, peer, packet)
 	
 	for client in connected_clients:
 		
@@ -82,35 +80,41 @@ func poll_relay_server() -> void:
 			
 			#print("Server Received Packet: ", packet)
 			
-			trigger_server_command(command, info, peer, peer.get_packet_ip(), packet)
+			trigger_server_command(command, info, peer, packet)
 
 func poll_relay_server_tcp() -> void:
 	
 	if relay_server_tcp.is_connection_available():
 		
-		var tcp_client : StreamPeerTCP = relay_server_tcp.take_connection()
+		var tcp_client : Dictionary = {
+			
+			&"tcp_client": relay_server_tcp.take_connection(),
+			&"tcp_data_buffer": PackedByteArray()
+			
+		}
 		
 		connected_tcp_clients.append(tcp_client)
 		
-		tcp_data_buffers.append(PackedByteArray())
-		
 		print("TCP Client Connected: ", tcp_client)
 	
-	if connected_tcp_clients.is_empty():return
+	if connected_tcp_clients.is_empty(): return
 	
-	for tcp_client:StreamPeerTCP in connected_tcp_clients:
+	for tcp_client in connected_tcp_clients:
 		
-		tcp_client.poll()
+		var client : Variant = tcp_client[&"tcp_client"]
+		var data_buffer : Variant = tcp_client[&"tcp_data_buffer"]
 		
-		var bytes := tcp_client.get_available_bytes()
+		client.poll()
+		
+		var bytes : Variant = client.get_available_bytes()
 		
 		if bytes > 0:
 			
-			var data := tcp_client.get_data(bytes)
+			var data : Variant = client.get_data(bytes)[1]
 			
-			tcp_data_buffers[tcp_client].append_array(data)
+			data_buffer.append_array(data)
 			
-			print(tcp_data_buffers)
+			#print(data_buffer)
 		
 		
 		#print(tcp_client.get_available_bytes())
@@ -149,6 +153,38 @@ func poll_relay_server_tcp() -> void:
 			#
 			#connected_clients.remove_at(i)
 
+func decode_tcp_stream() -> void:
+	
+	if connected_tcp_clients.is_empty(): return
+	
+	for tcp_client in connected_tcp_clients:
+		
+		var client : Variant = tcp_client[&"tcp_client"]
+		var data_buffer : Variant = tcp_client[&"tcp_data_buffer"]
+		
+		#client.poll()
+		
+		while data_buffer.size() >= 4:
+			
+			var data_size : int = data_buffer.decode_u32(0)
+			
+			if data_buffer.size() < 4 + data_size:
+				break
+			
+			var data : PackedByteArray = data_buffer.slice(4, 4 + data_size)
+			
+			data_buffer = data_buffer.slice(4 + data_size)
+			
+			var packet : Dictionary = JSON.parse_string(data.get_string_from_utf8())
+			
+			trigger_server_command(packet[&"command"], packet[&"info"], client, packet)
+			
+			data_buffer = data_buffer.slice(4 + data_size)
+			
+			tcp_client[&"tcp_data_buffer"] = data_buffer
+			
+			print(packet)
+
 func send_packet_to_client(command:String, info:Variant, recipient:PacketPeerUDP) -> void:
 	
 	var packet : Dictionary = {}
@@ -178,10 +214,13 @@ func forward_packet_to_all_clients(packet:Dictionary, sender:PacketPeerUDP) -> v
 		client[&"peer"].put_packet(packet_to_forward.to_utf8_buffer())
 
 func trigger_server_command(command:String, info:Variant, 
-peer:PacketPeerUDP, packet_ip:String, whole_packet:Variant)-> void:
+peer:Variant, whole_packet:Variant)-> void:
+	
+	if command == "test":
+		print("TESTED!!!!!!!!!!!!!!!")
 	
 	if command == "register":
-		register_client(peer, packet_ip, assign_client_id())
+		register_client(peer, assign_client_id())
 	
 	if command == "forward_to":
 		forward_packet_to_specific_client(whole_packet, info)
@@ -189,19 +228,18 @@ peer:PacketPeerUDP, packet_ip:String, whole_packet:Variant)-> void:
 	if command == "forward_all":
 		forward_packet_to_all_clients(whole_packet, peer)
 
-func register_client(peer:PacketPeerUDP, ip:Variant, id:int) -> void:
+func register_client(peer:StreamPeerTCP, id:int) -> void:
 	
 	for registered_client in connected_clients:
 		
 		if peer == registered_client[&"peer"]:
 			
-			send_packet_to_client("confirm_registration", null, registered_client[&"peer"])
+			#send_packet_to_client("confirm_registration", null, registered_client[&"peer"])
 			
 			return
 	
 	var client_to_save : Dictionary = {
 			&"peer": peer,
-			&"ip": ip,
 			&"id": id
 		}
 	
@@ -209,9 +247,9 @@ func register_client(peer:PacketPeerUDP, ip:Variant, id:int) -> void:
 	
 	#print(connected_clients)
 	
-	send_packet_to_client("confirm_registration", null, peer)
-	send_packet_to_client("load_map", &"bnza_zoolag", peer)
-	send_packet_to_client("spawn", &"", peer)
+	#send_packet_to_client("confirm_registration", null, peer)
+	#send_packet_to_client("load_map", &"bnza_zoolag", peer)
+	#send_packet_to_client("spawn", &"", peer)
 
 func assign_client_id() -> int:
 	

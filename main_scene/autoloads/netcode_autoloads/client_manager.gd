@@ -42,7 +42,7 @@ func create_client() -> void:
 	relay_client_tcp = StreamPeerTCP.new()
 	relay_client_tcp.connect_to_host(EndpointManager.RELAY_SERVER_NA_IPV4, EndpointManager.RELAY_TCP_PORT)
 	
-	register_to_relay_server()
+	#register_to_relay_server()
 	
 	print("Client Created")
 	
