@@ -1,7 +1,11 @@
 extends Node
 
-var relay_client : PacketPeerUDP
+var relay_client_udp : PacketPeerUDP
+
+
+
 var relay_client_tcp : StreamPeerTCP
+var tcp_data_buffer : PackedByteArray = PackedByteArray()
 
 var is_registered_with_relay : bool = false
 
@@ -14,30 +18,25 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	
-	poll_client()
+	poll_client_udp()
+	
+	
 	
 	poll_client_tcp()
+	decode_tcp_stream()
 	
-	if Input.is_action_just_pressed("ui_cancel"):
+	#if Input.is_action_just_pressed("ui_cancel"):
 		
 		#pass
-		
-		#print(relay_client_tcp.get_status())
-		
-		#relay_client_tcp.poll()
-		#
-		#print("TCP Status: ", relay_client_tcp.get_status())
-		
-		#send_packet_to_relay("forward_all", {&"Example:": "Nose"})
-		
-		send_tcp_data_to_relay()
 
 func create_client() -> void:
 	
 	if OS.has_feature("dedicated_server"): return
 	
-	relay_client = PacketPeerUDP.new()
-	relay_client.connect_to_host(EndpointManager.RELAY_SERVER_NA_IPV4, EndpointManager.RELAY_SERVER_PORT)
+	relay_client_udp = PacketPeerUDP.new()
+	relay_client_udp.connect_to_host(EndpointManager.RELAY_SERVER_NA_IPV4, EndpointManager.RELAY_SERVER_PORT)
+	
+	
 	
 	relay_client_tcp = StreamPeerTCP.new()
 	relay_client_tcp.connect_to_host(EndpointManager.RELAY_SERVER_NA_IPV4, EndpointManager.RELAY_TCP_PORT)
@@ -53,7 +52,7 @@ func create_client() -> void:
 
 func register_to_relay_server() -> void:
 	
-	send_packet_to_relay("register", null)
+	send_udp_packet_to_relay("register", null)
 	
 	confirm_registration_to_relay_server()
 
@@ -71,11 +70,13 @@ func confirm_registration_to_relay_server() -> void:
 #func unregister_from_relay_server() -> void:
 	#ClientManager.put_packet("unregister".to_utf8_buffer())
 
-func poll_client() -> void:
+
+
+func poll_client_udp() -> void:
 	
-	if relay_client.get_available_packet_count() > 0:
+	if relay_client_udp.get_available_packet_count() > 0:
 		
-		var packet : Variant = relay_client.get_packet()
+		var packet : Variant = relay_client_udp.get_packet()
 		var packet_string : Variant = packet.get_string_from_utf8()
 		
 		#print("Client Recieved Packet: ", packet)
@@ -89,43 +90,17 @@ func poll_client() -> void:
 		
 		#print("Client Recieved Packet: ", packet)
 		
-		trigger_client_command(command, info)
+		trigger_udp_client_command(command, info)
 
-func poll_client_tcp() -> void:
-	
-	relay_client_tcp.poll()
-	
-	
-
-func send_tcp_data_to_relay() -> void:
-	
-	var packet : Dictionary = {
-	&"command": "test",
-	&"info": "Hello from client!"
-	}
-	
-	var data := JSON.stringify(packet).to_utf8_buffer()
-	
-	relay_client_tcp.put_u32(data.size())
-	relay_client_tcp.put_data(data)
-	
-	
-	#relay_client_tcp.put_var("Hello from the client!")
-	
-	#if relay_client_tcp.get_status() == StreamPeerTCP.STATUS_CONNECTED:
-		#relay_client_tcp.put_var("Hello from the client!")
-	#else:
-		#print("Cannot send; not connected.")
-
-func send_packet_to_relay(command:String, info:Variant) -> void:
+func send_udp_packet_to_relay(command:String, info:Variant) -> void:
 	
 	var packet : Dictionary = {&"command": command, &"info": info}
 	
 	var packet_to_send : Variant = JSON.stringify(packet)
 	
-	relay_client.put_packet(packet_to_send.to_utf8_buffer())
+	relay_client_udp.put_packet(packet_to_send.to_utf8_buffer())
 
-func trigger_client_command(command:String, info:Variant) -> void:
+func trigger_udp_client_command(command:String, info:Variant) -> void:
 	
 	if command == "confirm_registration":
 		is_registered_with_relay = true
@@ -137,8 +112,56 @@ func trigger_client_command(command:String, info:Variant) -> void:
 
 
 
-func confirm_spawn() -> void:
-	pass
 
-func confirm_despawn() -> void:
+func trigger_udp_ordered_client_command(command:String, info:Variant) -> void:
 	pass
+	
+	
+
+
+func poll_client_tcp() -> void:
+	
+	relay_client_tcp.poll()
+	
+	var bytes : Variant = relay_client_tcp.get_available_bytes()
+	
+	if bytes > 0:
+		
+		var data : Variant = relay_client_tcp.get_data(bytes)[1]
+		
+		tcp_data_buffer.append_array(data)
+
+func decode_tcp_stream() -> void:
+	
+	if tcp_data_buffer.is_empty(): return
+	
+	while tcp_data_buffer.size() >= 4:
+		
+		var data_size : int = tcp_data_buffer.decode_u32(0)
+		
+		if tcp_data_buffer.size() < 4 + data_size:
+			break
+		
+		var data : PackedByteArray = tcp_data_buffer.slice(4, 4 + data_size)
+		var packet : Dictionary = JSON.parse_string(data.get_string_from_utf8())
+		
+		tcp_data_buffer = tcp_data_buffer.slice(4 + data_size)
+		
+		trigger_tpc_client_command(packet[&"command"], packet[&"info"])
+
+func send_tcp_data_to_relay(command:String, info:Variant) -> void:
+	
+	var packet : Dictionary = {
+	&"command": command,
+	&"info": info
+	}
+	
+	var data := JSON.stringify(packet).to_utf8_buffer()
+	
+	relay_client_tcp.put_u32(data.size())
+	relay_client_tcp.put_data(data)
+
+func trigger_tpc_client_command(command:String, info:Variant) -> void:
+	pass
+	
+	
