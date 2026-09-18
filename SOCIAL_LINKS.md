@@ -7,6 +7,7 @@
 - Monkanics Raw Source File Repo: [Coming Later]
 - Monkanics Documentation: [Coming Later]
 - Monkanics Ko-Fi: https://ko-fi.com/monkanics
+- Wackshop Games Financial Reports: [Coming Later]
 
 # Community Hubs:
 
@@ -16,4 +17,7 @@
 # Developer Socials:
 
 - Monkanics_Dev YouTube: https://www.youtube.com/@MonkanicsDev
+- Monkanics-Dev Bluesky: https://bsky.app/profile/monkanics-dev.bsky.social
+- Monkanics-Dev Tumblr: https://www.tumblr.com/blog/monkanics-dev
 - Monkanics_Dev TikTok: https://www.tiktok.com/@monkanicsdev
+- u/Monkanics-Dev: https://www.reddit.com/user/Monkanics-Dev
