@@ -31,9 +31,11 @@ func _process(_delta: float) -> void:
 	poll_client_tcp()
 	decode_tcp_stream()
 	
-	#if Input.is_action_just_pressed("ui_cancel"):
+	if Input.is_action_just_pressed("ui_cancel"):
 		
 		#pass
+		
+		send_tcp_data_to_relay("forward_tcp_to_all", {"Data":"Dictionary"})
 
 func create_client() -> void:
 	

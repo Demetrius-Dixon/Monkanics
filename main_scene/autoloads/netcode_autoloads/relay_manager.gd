@@ -236,7 +236,23 @@ func send_ordered_udp_packet_to_client(command:String, info:Variant, recipient:P
 	
 	recipient.put_packet(packet_to_send.to_utf8_buffer())
 
-#TODO Forwarding functions for ordered UDP
+func forward_ordered_udp_packet_to_specific_client(packet:Dictionary, recipient:PacketPeerUDP) -> void:
+	
+	var packet_to_forward : Variant = JSON.stringify(packet)
+	
+	recipient.put_packet(packet_to_forward.to_utf8_buffer())
+
+func forward_ordered_udp_packet_to_all_clients(packet:Dictionary, sender:PacketPeerUDP) -> void:
+	
+	var packet_to_forward : Variant = JSON.stringify(packet)
+	
+	for client in connected_ordered_udp_clients:
+		
+		if sender == client[&"peer"]: 
+			pass
+			continue
+		
+		client[&"peer"].put_packet(packet_to_forward.to_utf8_buffer())
 
 func register_ordered_udp_client(peer:PacketPeerUDP) -> void:
 	
@@ -263,6 +279,12 @@ peer:Variant, whole_packet:Variant)-> void:
 	
 	if command == "register_to_ordered_udp":
 		register_ordered_udp_client(peer)
+	
+	if command == "forward_ordered_udp_to":
+		forward_ordered_udp_packet_to_specific_client(whole_packet, info)
+	
+	if command == "forward_ordered_udp_to_all":
+		forward_ordered_udp_packet_to_all_clients(whole_packet, peer)
 
 
 
@@ -276,7 +298,7 @@ func poll_relay_server_tcp() -> void:
 		
 		var tcp_client : Dictionary = {
 			
-			&"tcp_client": relay_server_tcp.take_connection(),
+			&"peer": relay_server_tcp.take_connection(),
 			&"tcp_data_buffer": PackedByteArray()
 			
 		}
@@ -289,7 +311,7 @@ func poll_relay_server_tcp() -> void:
 	
 	for tcp_client in connected_tcp_clients:
 		
-		var client : Variant = tcp_client[&"tcp_client"]
+		var client : Variant = tcp_client[&"peer"]
 		var data_buffer : Variant = tcp_client[&"tcp_data_buffer"]
 		
 		client.poll()
@@ -308,7 +330,7 @@ func decode_tcp_stream() -> void:
 	
 	for tcp_client in connected_tcp_clients:
 		
-		var client : Variant = tcp_client[&"tcp_client"]
+		var client : Variant = tcp_client[&"peer"]
 		var data_buffer : Variant = tcp_client[&"tcp_data_buffer"]
 		
 		while data_buffer.size() >= 4:
@@ -338,12 +360,34 @@ func send_tcp_data_to_client(command:String, info:Variant, recipient:StreamPeerT
 	recipient.put_u32(data.size())
 	recipient.put_data(data)
 
-#TODO Forwarding functions for TCP
+func forward_tcp_data_to_specific_client(data:Variant, recipient:StreamPeerTCP) -> void:
+	
+	var command : String = data[&"command"]
+	var info : Dictionary = data[&"info"]
+	
+	send_tcp_data_to_client(command, info, recipient)
+
+func forward_tcp_data_to_all_clients(data:Variant, sender:StreamPeerTCP) -> void:
+	
+	var command : String = data[&"command"]
+	var info : Dictionary = data[&"info"]
+	
+	for client in connected_tcp_clients:
+		
+		if sender == client[&"peer"]: 
+			pass
+			continue
+		
+		send_tcp_data_to_client(command, info, client[&"peer"])
 
 func trigger_tcp_server_command(command:String, info:Variant, 
-peer:Variant, whole_packet:Variant)-> void:
+peer:Variant, all_data:Variant)-> void:
 	
-	pass
+	if command == "forward_tcp_to":
+		forward_tcp_data_to_specific_client(all_data, info)
+	
+	if command == "forward_tcp_to_all":
+		forward_tcp_data_to_all_clients(all_data, peer)
 
 
 
