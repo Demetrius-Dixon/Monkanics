@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b82wq1pdi1va5"
-path="res://.godot/imported/Monkanics_Icon_2.png-21924c2270108d361de34daf55017741.ctex"
+path="res://.godot/imported/Monkanics_Icon_2.png-838b9d24864b54ffdedb7fa87923067e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://utilities/project_icons/Monkanics_Icon_2.png"
-dest_files=["res://.godot/imported/Monkanics_Icon_2.png-21924c2270108d361de34daf55017741.ctex"]
+source_file="res://user_interface/project_icons/Monkanics_Icon_2.png"
+dest_files=["res://.godot/imported/Monkanics_Icon_2.png-838b9d24864b54ffdedb7fa87923067e.ctex"]
 
 [params]
 
