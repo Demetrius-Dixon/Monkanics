@@ -1,6 +1,6 @@
 extends Node
 
-var current_host : PacketPeerUDP
+var current_authority : StreamPeerTCP
 var current_map : String = ""
 var players_in_lobby : Dictionary = {}
 
@@ -10,9 +10,7 @@ func _ready() -> void:
 	if OS.has_feature("dedicated_server"): 
 		queue_free()
 
-func create_lobby(host:PacketPeerUDP) -> void:
-	
-	current_host = host
+func create_lobby() -> void:
 	
 	MapManager.load_map("bnza_zoolag")
 	current_map = "bnza_zoolag"

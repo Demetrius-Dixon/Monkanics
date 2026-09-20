@@ -11,6 +11,7 @@ var connected_tcp_clients : Array[Dictionary] = []
 
 var dedicated_server : PacketPeerUDP
 
+var active_lobbies : Array[Dictionary] = []
 
 
 func _ready() -> void:
@@ -19,7 +20,8 @@ func _ready() -> void:
 		queue_free()
 	else: 
 		create_relay_servers()
-		#LobbyManager.create_lobby(dedicated_server)
+		create_lobby_instance()
+		LobbyManager.create_lobby()
 
 func _process(_delta: float) -> void:
 	
@@ -164,7 +166,7 @@ func poll_relay_server_ordered_udp() -> void:
 			if peer == registered_client[&"peer"]:
 				return
 		
-		#print("Server Received Packet: ", packet)
+		#print("Server Received Ordered Packet: ", packet)
 		
 		var json_translation : Variant = JSON.new()
 		json_translation = JSON.parse_string(packet)
@@ -173,7 +175,7 @@ func poll_relay_server_ordered_udp() -> void:
 		var command : String = json_translation[&"command"]
 		var info : Variant = json_translation[&"info"]
 		
-		print("Server Received Packet: ", packet)
+		#print("Server Received Ordered Packet: ", packet)
 		
 		trigger_ordered_udp_server_command(command, info, peer, packet)
 	
@@ -184,7 +186,7 @@ func poll_relay_server_ordered_udp() -> void:
 			var peer : PacketPeerUDP = client[&"peer"]
 			var packet : Variant = client[&"peer"].get_packet().get_string_from_utf8()
 			
-			#print("Server Received Packet: ", packet)
+			#print("Server Received Ordered Packet: ", packet)
 			
 			var json_translation : Variant = JSON.new()
 			json_translation = JSON.parse_string(packet)
@@ -195,7 +197,7 @@ func poll_relay_server_ordered_udp() -> void:
 			var packet_sequence_number : int = json_translation[&"sequence_number"]
 			var expected_sequence_number : int = client[&"last_sequence_number"]
 			
-			print("Server Received Packet: ", packet)
+			#print("Server Received Ordered Packet: ", packet)
 			
 			var sequence_difference : int = \
 			packet_sequence_number - expected_sequence_number
@@ -209,8 +211,6 @@ func poll_relay_server_ordered_udp() -> void:
 				trigger_ordered_udp_server_command(command, info, peer, packet)
 				
 				client[&"last_sequence_number"] = packet_sequence_number
-				
-				send_ordered_udp_packet_to_client("Test_Client", null, peer)
 
 func send_ordered_udp_packet_to_client(command:String, info:Variant, recipient:PacketPeerUDP) -> void:
 	
@@ -272,7 +272,7 @@ func register_ordered_udp_client(peer:PacketPeerUDP) -> void:
 	
 	connected_ordered_udp_clients.append(client_to_save)
 	
-	print(connected_ordered_udp_clients)
+	#print(connected_ordered_udp_clients)
 
 func trigger_ordered_udp_server_command(command:String, info:Variant, 
 peer:Variant, whole_packet:Variant)-> void:
@@ -392,29 +392,22 @@ peer:Variant, all_data:Variant)-> void:
 
 
 
-
-
-
-
-
-func spawn_synced(spawnable:String, spawn_position:Vector3) -> void:
+func create_lobby_instance() -> void:
 	
-	var command : String = "spawn"
-	
-	var info : Dictionary = {
+	active_lobbies.append({
 		
-		&"spawnable": spawnable,
-		&"spawn_position": spawn_position
+		&"lobby_name": "Dedicated Test Lobby",
+		&"host": dedicated_server,
+		&"game_mode": "Bean-anza",
+		&"map": "Zoolag",
+		#&"current_player_count": 0,
+		#&"max_players": 6,
+		&"players": []
 		
-	}
+	})
 	
-	var packet : Dictionary = {&"command": command, &"info": info}
-	
-	forward_udp_packet_to_all_clients(packet, dedicated_server)
+	print("Lobby Created")
 
-func despawn_synced() -> void:
+func assign_authority_in_lobby() -> void:
 	pass
-
-func get_new_gamestate() -> void:
 	
-	pass

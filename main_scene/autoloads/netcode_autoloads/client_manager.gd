@@ -2,11 +2,13 @@ extends Node
 
 var relay_client_udp : PacketPeerUDP
 var is_registered_with_relay_udp : bool = false
+const UDP_REGISTRATION_RETRY_DELAY : float = 0.25
 
 var relay_client_ordered_udp : PacketPeerUDP
 var is_registered_with_relay_ordered_udp : bool = false
 var current_ordered_packet_sequence_number : int = 0
 var last_server_packet_sequence_number : int = 0
+const ORDERED_UDP_REGISTRATION_RETRY_DELAY : float = 0.25
 
 var relay_client_tcp : StreamPeerTCP
 var tcp_data_buffer : PackedByteArray = PackedByteArray()
@@ -31,11 +33,9 @@ func _process(_delta: float) -> void:
 	poll_client_tcp()
 	decode_tcp_stream()
 	
-	if Input.is_action_just_pressed("ui_cancel"):
+	#if Input.is_action_just_pressed("ui_cancel"):
 		
 		#pass
-		
-		send_tcp_data_to_relay("forward_tcp_to_all", {"Data":"Dictionary"})
 
 func create_client() -> void:
 	
@@ -89,9 +89,6 @@ func trigger_udp_client_command(command:String, info:Variant) -> void:
 	
 	if command == "confirm_udp_registration":
 		is_registered_with_relay_udp = true
-	
-	if command == "load_map":
-		MapManager.load_map(info)
 
 func register_to_relay_udp_server() -> void:
 	
@@ -101,7 +98,7 @@ func register_to_relay_udp_server() -> void:
 
 func confirm_registration_to_relay_udp_server() -> void:
 	
-	await get_tree().create_timer(0.25).timeout
+	await get_tree().create_timer(UDP_REGISTRATION_RETRY_DELAY).timeout
 	
 	if is_registered_with_relay_udp == true: return
 	
@@ -118,7 +115,7 @@ func poll_client_ordered_udp() -> void:
 		var packet : Variant = relay_client_ordered_udp.get_packet()
 		var packet_string : Variant = packet.get_string_from_utf8()
 		
-		#print("Client Recieved Packet: ", packet)
+		#print("Client Recieved Ordered Packet: ", packet)
 		
 		var json_translation : Variant = JSON.new()
 		json_translation = JSON.parse_string(packet_string)
@@ -128,7 +125,7 @@ func poll_client_ordered_udp() -> void:
 		var info : Variant = json_translation[&"info"]
 		var packet_sequence_number : int = json_translation[&"sequence_number"]
 		
-		print("Client Received Packet: ", packet)
+		#print("Client Received Ordered Packet: ", packet)
 		
 		var sequence_difference : int = \
 		packet_sequence_number - last_server_packet_sequence_number
@@ -175,7 +172,7 @@ func register_to_relay_ordered_udp_server() -> void:
 
 func confirm_registration_to_relay_ordered_udp_server() -> void:
 	
-	await get_tree().create_timer(0.25).timeout
+	await get_tree().create_timer(ORDERED_UDP_REGISTRATION_RETRY_DELAY).timeout
 	
 	if is_registered_with_relay_ordered_udp == true: return
 	
@@ -230,4 +227,6 @@ func send_tcp_data_to_relay(command:String, info:Variant) -> void:
 	relay_client_tcp.put_data(data)
 
 func trigger_tpc_client_command(command:String, info:Variant) -> void:
-	pass
+	
+	if command == "load_map":
+		MapManager.load_map(info)
