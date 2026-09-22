@@ -1,7 +1,6 @@
 extends Control
 
 @onready var server_list : Node = $"TabContainer/Join Lobby"
-var received_active_lobbies : Array[Dictionary] = []
 var lobby_selection_button : PackedScene = preload("uid://ibl4vlin44xa")
 
 var new_lobby_name : String = ""
@@ -16,7 +15,7 @@ func _on_create_lobby_pressed() -> void:
 	
 	UiManager.unload_ui_element("server_browser")
 	
-	MouseManager.hide_mouse()
+	#MouseManager.hide_mouse()
 
 func _on_text_edit_text_changed() -> void:
 	new_lobby_name = $"TabContainer/Create Lobby/TextEdit".text

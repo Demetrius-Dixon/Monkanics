@@ -15,7 +15,7 @@ func _on_play_pressed() -> void:
 	
 	UiManager.load_ui_element("server_browser")
 	
-	#ClientManager.request_active_lobbies()
+	ClientManager.request_active_lobbies_from_server()
 
 func _on_play_2_pressed() -> void:
 	pass # Replace with function body.

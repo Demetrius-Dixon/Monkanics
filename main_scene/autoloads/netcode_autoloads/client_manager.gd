@@ -17,7 +17,7 @@ var last_server_packet_sequence_number : int = 0
 const ORDERED_UDP_REGISTRATION_RETRY_DELAY : float = 0.25
 var can_poll_ordered_udp : bool = false
 
-
+var received_active_lobbies : Array = []
 
 
 
@@ -165,6 +165,14 @@ func trigger_tpc_client_command(command:String, info:Variant) -> void:
 		
 		print("Client Ordered UDP Registered")
 	
+	if command == "receive_active_lobbies":
+		
+		received_active_lobbies.clear()
+		
+		received_active_lobbies = info
+		
+		print(received_active_lobbies)
+	
 	if command == "load_map":
 		MapManager.load_map(info)
 	
@@ -282,8 +290,11 @@ func trigger_ordered_udp_client_command(command:String, info:Variant) -> void:
 	pass
 
 
-
+func request_active_lobbies_from_server() -> void:
+	
+	await get_tree().create_timer(1).timeout
+	
+	send_tcp_data_to_relay("request_active_lobbies", null)
 
 func create_lobby(lobby_name:String) -> void:
-	
 	send_tcp_data_to_relay("create_lobby", lobby_name)

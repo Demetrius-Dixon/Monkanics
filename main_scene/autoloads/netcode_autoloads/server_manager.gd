@@ -186,7 +186,16 @@ peer:Variant, all_data:Variant)-> void:
 		create_lobby_instance(peer, info)
 	
 	if command == "join_lobby":
-		client_join_lobby(peer)
+		
+		pass
+		
+		#client_join_lobby(peer)
+	
+	if command == "request_active_lobbies":
+		
+		if active_lobbies.is_empty(): return
+		
+		send_tcp_data_to_client("receive_active_lobbies", active_lobbies, peer)
 
 
 
@@ -432,7 +441,7 @@ func create_lobby_instance(host:StreamPeerTCP, lobby_name:String) -> void:
 		&"map": "Zoolag",
 		#&"current_player_count": 0,
 		#&"max_players": 6,
-		&"players": []
+		&"players": [host]
 		
 	})
 	
