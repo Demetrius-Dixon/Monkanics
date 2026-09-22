@@ -2,21 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bhmkqsissc4tg"
-path.s3tc="res://.godot/imported/Letters_exp_Color.png-af922b65d4dd1ce91d9d329afd7e3839.s3tc.ctex"
+uid="uid://kouo58631yee"
+path="res://.godot/imported/Monkanics_Banner.png-07e5eee73a1d45c2acf92d854680364e.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
-source_file="res://utilities/deprecated/monkanics_logo/blend_file/textures/Letters_exp_Color.png"
-dest_files=["res://.godot/imported/Letters_exp_Color.png-af922b65d4dd1ce91d9d329afd7e3839.s3tc.ctex"]
+source_file="res://user_interface/main_menu/main_menu_background/Monkanics_Banner.png"
+dest_files=["res://.godot/imported/Monkanics_Banner.png-07e5eee73a1d45c2acf92d854680364e.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
@@ -24,7 +23,7 @@ compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=true
+mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""
@@ -38,4 +37,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=0
+detect_3d/compress_to=1

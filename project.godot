@@ -60,7 +60,9 @@ enabled=PackedStringArray("res://addons/quill-ide/plugin.cfg")
 [file_customization]
 
 folder_colors={
-"res://main_scene/": "blue"
+"res://main_scene/": "blue",
+"res://utilities/deprecated/": "red",
+"res://utilities/godot_legal/": "gray"
 }
 
 [gui]
