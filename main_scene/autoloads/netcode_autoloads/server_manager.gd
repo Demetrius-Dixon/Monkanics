@@ -5,10 +5,8 @@ var connected_clients : Array[Dictionary] = []
 var next_client_game_id_to_assign : int = 0
 
 var relay_server_udp : UDPServer
-var connected_udp_clients : Array[Dictionary] = []
 
 var relay_server_ordered_udp : UDPServer
-var connected_ordered_udp_clients : Array[Dictionary] = []
 
 var active_lobbies : Array[Dictionary] = []
 
@@ -82,17 +80,17 @@ func poll_main_server() -> void:
 		
 		if client[&"tcp_peer"] == null: return
 		
+		var tcp_client : Variant = client[&"tcp_peer"]
+		var data_buffer : Variant = client[&"tcp_data_buffer"]
+		
+		tcp_client.poll()
+		
 		if client[&"tcp_peer"].get_status() != \
 		StreamPeerTCP.STATUS_CONNECTED:
 			
 			clients_to_erase.append(client)
 			
 			continue
-		
-		var tcp_client : Variant = client[&"tcp_peer"]
-		var data_buffer : Variant = client[&"tcp_data_buffer"]
-		
-		tcp_client.poll()
 		
 		var bytes : Variant = tcp_client.get_available_bytes()
 		
@@ -274,13 +272,13 @@ func forward_udp_packet_to_all_clients(packet:Dictionary, sender:PacketPeerUDP) 
 	
 	var packet_to_forward : Variant = JSON.stringify(packet)
 	
-	for client in connected_udp_clients:
+	for client in connected_clients:
 		
-		if sender == client[&"peer"]: 
+		if sender == client[&"udp_peer"]: 
 			pass
 			continue
 		
-		client[&"peer"].put_packet(packet_to_forward.to_utf8_buffer())
+		client[&"udp_peer"].put_packet(packet_to_forward.to_utf8_buffer())
 
 func trigger_udp_server_command(command:String, info:Variant, 
 peer:Variant, whole_packet:Variant)-> void:
@@ -330,7 +328,7 @@ func poll_relay_server_ordered_udp() -> void:
 				
 				send_tcp_data_to_client("confirm_ordered_udp_registration", null, client[&"tcp_peer"])
 	
-	for client in connected_ordered_udp_clients:
+	for client in connected_clients:
 		
 		if client[&"udp_ordered_peer"] == null: continue
 		
@@ -369,9 +367,9 @@ func send_ordered_udp_packet_to_client(command:String, info:Variant, recipient:P
 	
 	var sequence_number : int
 	
-	for client in connected_ordered_udp_clients:
+	for client in connected_clients:
 		
-		if client[&"peer"] == recipient:
+		if client[&"udp_ordered_peer"] == recipient:
 			
 			client[&"server_packet_sequence_number"] = \
 			client[&"server_packet_sequence_number"] + 1
@@ -399,13 +397,13 @@ func forward_ordered_udp_packet_to_all_clients(packet:Dictionary, sender:PacketP
 	
 	var packet_to_forward : Variant = JSON.stringify(packet)
 	
-	for client in connected_ordered_udp_clients:
+	for client in connected_clients:
 		
-		if sender == client[&"peer"]: 
+		if sender == client[&"udp_ordered_peer"]: 
 			pass
 			continue
 		
-		client[&"peer"].put_packet(packet_to_forward.to_utf8_buffer())
+		client[&"udp_ordered_peer"].put_packet(packet_to_forward.to_utf8_buffer())
 
 func trigger_ordered_udp_server_command(command:String, info:Variant, 
 peer:Variant, whole_packet:Variant)-> void:
