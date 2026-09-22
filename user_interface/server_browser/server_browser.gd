@@ -1,21 +1,31 @@
 extends Control
 
 @onready var server_list : Node = $"TabContainer/Join Lobby"
-
+var received_active_lobbies : Array[Dictionary] = []
 var lobby_selection_button : PackedScene = preload("uid://ibl4vlin44xa")
 
-var received_active_lobbies : Array[Dictionary] = []
+var new_lobby_name : String = ""
+var lobby_map_selection : String = ""
+var lobby_game_mode_selection : String = ""
 
 func _ready() -> void:
-	hide()
+	pass
 
 func _on_create_lobby_pressed() -> void:
-	ClientManager.create_lobby()
+	ClientManager.create_lobby(new_lobby_name)
+	
+	UiManager.unload_ui_element("server_browser")
+	
+	MouseManager.hide_mouse()
 
-func add_lobby_to_dictionary(lobby_info:Dictionary) -> void:
-	
-	received_active_lobbies.append(lobby_info)
-	
+func _on_text_edit_text_changed() -> void:
+	new_lobby_name = $"TabContainer/Create Lobby/TextEdit".text
+
+
+#func add_lobby_to_dictionary(lobby_info:Dictionary) -> void:
+	#
+	#received_active_lobbies.append(lobby_info)
+	#
 	#add_lobbies_to_server_list(lobby[&"host"])
 
 #func add_lobbies_to_server_list(lobby_info:String) -> void:
@@ -25,5 +35,5 @@ func add_lobby_to_dictionary(lobby_info:Dictionary) -> void:
 	#new_lobby_selection_button.ping_label.text = lobby_info[&"host"]
 	
 
-func clear_server_browser_cache() -> void:
-	received_active_lobbies.clear()
+#func clear_server_browser_cache() -> void:
+	#received_active_lobbies.clear()

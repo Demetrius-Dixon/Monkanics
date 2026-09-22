@@ -5,11 +5,9 @@ var connected_clients : Array[Dictionary] = []
 var next_client_game_id_to_assign : int = 0
 
 var relay_server_udp : UDPServer
-
 var relay_server_ordered_udp : UDPServer
 
 var active_lobbies : Array[Dictionary] = []
-
 
 func _ready() -> void:
 	
@@ -78,7 +76,8 @@ func poll_main_server() -> void:
 	# Poll current clients
 	for client in connected_clients:
 		
-		if client[&"tcp_peer"] == null: return
+		if client[&"tcp_peer"] == null: 
+			continue
 		
 		var tcp_client : Variant = client[&"tcp_peer"]
 		var data_buffer : Variant = client[&"tcp_data_buffer"]
@@ -184,9 +183,7 @@ peer:Variant, all_data:Variant)-> void:
 		forward_tcp_data_to_all_clients(all_data, peer)
 	
 	if command == "create_lobby":
-		pass
-		
-		#create_lobby_instance()
+		create_lobby_instance(peer, info)
 	
 	if command == "join_lobby":
 		client_join_lobby(peer)
@@ -425,12 +422,12 @@ peer:Variant, whole_packet:Variant)-> void:
 
 
 
-func create_lobby_instance() -> void:
+func create_lobby_instance(host:StreamPeerTCP, lobby_name:String) -> void:
 	
 	active_lobbies.append({
 		
-		&"lobby_name": "Dedicated Test Lobby",
-		&"host": main_server,
+		&"lobby_name": lobby_name,
+		&"host": host,
 		&"game_mode": "Bean-anza",
 		&"map": "Zoolag",
 		#&"current_player_count": 0,
@@ -439,7 +436,12 @@ func create_lobby_instance() -> void:
 		
 	})
 	
-	MapManager.load_map("bnza_zoolag")
+	send_tcp_data_to_client("load_map", "bnza_zoolag", host)
+	send_tcp_data_to_client("spawn_own_player", 
+	{&"x": 0, &"y": 0, &"z": 0}, 
+	host)
+	
+	print(active_lobbies)
 	
 	print("Lobby Created")
 

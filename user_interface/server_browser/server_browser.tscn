@@ -47,10 +47,12 @@ current_tab = 1
 [node name="Join Lobby" type="ItemList" parent="TabContainer" unique_id=1337249967]
 visible = false
 layout_mode = 2
+theme_override_font_sizes/font_size = 30
 metadata/_tab_index = 0
 
 [node name="Create Lobby" type="Button" parent="TabContainer" unique_id=1042765280]
 layout_mode = 2
+theme_override_font_sizes/font_size = 30
 disabled = true
 metadata/_tab_index = 1
 
@@ -60,6 +62,69 @@ offset_left = 47.0
 offset_top = 799.0
 offset_right = 1823.0
 offset_bottom = 843.0
+theme_override_font_sizes/font_size = 35
 text = "Create Lobby"
 
+[node name="TextEdit" type="TextEdit" parent="TabContainer/Create Lobby" unique_id=1706488334]
+layout_mode = 0
+offset_left = 175.0
+offset_top = 591.0
+offset_right = 655.0
+offset_bottom = 631.0
+placeholder_text = "Enter your lobby name here..."
+
+[node name="Label" type="Label" parent="TabContainer/Create Lobby" unique_id=1456890684]
+layout_mode = 0
+offset_left = 175.0
+offset_top = 519.0
+offset_right = 360.0
+offset_bottom = 559.4792
+theme_override_font_sizes/font_size = 29
+text = "Lobby Name:"
+
+[node name="Label2" type="Label" parent="TabContainer/Create Lobby" unique_id=1490471984]
+visible = false
+layout_mode = 0
+offset_left = 167.0
+offset_top = 87.0
+offset_right = 352.0
+offset_bottom = 127.47919
+theme_override_font_sizes/font_size = 29
+text = "Game Mode:"
+
+[node name="Label3" type="Label" parent="TabContainer/Create Lobby" unique_id=1346531293]
+visible = false
+layout_mode = 0
+offset_left = 175.0
+offset_top = 311.0
+offset_right = 360.0
+offset_bottom = 351.4792
+theme_override_font_sizes/font_size = 29
+text = "Map:"
+
+[node name="GameModeOptionButton" type="OptionButton" parent="TabContainer/Create Lobby" unique_id=706242263]
+visible = false
+layout_mode = 0
+offset_left = 183.0
+offset_top = 143.0
+offset_right = 454.0
+offset_bottom = 183.0
+selected = 0
+item_count = 1
+popup/item_0/text = "Bean-anza"
+popup/item_0/id = 0
+
+[node name="MapOptionButton2" type="OptionButton" parent="TabContainer/Create Lobby" unique_id=1805291175]
+visible = false
+layout_mode = 0
+offset_left = 175.0
+offset_top = 375.0
+offset_right = 446.0
+offset_bottom = 415.0
+selected = 0
+item_count = 1
+popup/item_0/text = "Zoolag"
+popup/item_0/id = 0
+
 [connection signal="pressed" from="TabContainer/Create Lobby/CreateLobbyButton" to="." method="_on_create_lobby_pressed"]
+[connection signal="text_changed" from="TabContainer/Create Lobby/TextEdit" to="." method="_on_text_edit_text_changed"]

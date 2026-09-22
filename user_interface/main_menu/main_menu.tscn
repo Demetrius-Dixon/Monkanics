@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://mkg3caem1j3b" path="res://user_interface/main_menu/main_menu.gd" id="1_p78xx"]
 [ext_resource type="Texture2D" uid="uid://5pdcos2bgam6" path="res://utilities/deprecated/monkanics_banner/Monkanics_Banner_No_Logo.png" id="2_p78xx"]
-[ext_resource type="Texture2D" uid="uid://tktcm0tskdlp" path="res://utilities/deprecated/monkanics_logo/logo_renders/monkanics_logo_blue_4k.webp" id="3_hb773"]
+[ext_resource type="Texture2D" uid="uid://tktcm0tskdlp" path="res://user_interface/main_menu/monkanics_logo/monkanics_logo_blue_4k.webp" id="3_hnapd"]
 [ext_resource type="PackedScene" uid="uid://d1xld8umo8m53" path="res://user_interface/center_of_screen_reference/center_of_screen_reference.tscn" id="4_hnapd"]
 
 [node name="MainMenu" type="Control" unique_id=99476665]
@@ -41,7 +41,7 @@ offset_top = -175.0
 offset_right = 655.0
 offset_bottom = 185.0
 mouse_filter = 2
-texture = ExtResource("3_hb773")
+texture = ExtResource("3_hnapd")
 
 [node name="MainMenuContainer" type="PanelContainer" parent="MainScreen" unique_id=2142633882]
 layout_mode = 1
@@ -50,10 +50,10 @@ anchor_left = -0.919
 anchor_top = -0.87500006
 anchor_right = 1.9120001
 anchor_bottom = 1.812
-offset_left = 767.92004
-offset_top = 447.00003
-offset_right = -773.1599
-offset_bottom = -527.8
+offset_left = 775.92004
+offset_top = 511.00003
+offset_right = -765.1599
+offset_bottom = -463.8
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -62,6 +62,7 @@ layout_mode = 2
 
 [node name="Play" type="Button" parent="MainScreen/MainMenuContainer/VBoxContainer" unique_id=501006811]
 layout_mode = 2
+theme_override_font_sizes/font_size = 50
 text = "Play Online!"
 
 [node name="Play2" type="Button" parent="MainScreen/MainMenuContainer/VBoxContainer" unique_id=1019882805]
@@ -71,6 +72,7 @@ text = "Play Offline!"
 
 [node name="QuitGame" type="Button" parent="MainScreen/MainMenuContainer/VBoxContainer" unique_id=1435891460]
 layout_mode = 2
+theme_override_font_sizes/font_size = 25
 text = "Quit Game"
 
 [node name="CenterOfScreenReference" parent="." unique_id=206782658 instance=ExtResource("4_hnapd")]

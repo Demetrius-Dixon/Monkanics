@@ -28,9 +28,6 @@ func _ready() -> void:
 	if OS.has_feature("dedicated_server"): 
 		queue_free()
 	else: 
-		
-		await get_tree().create_timer(0.01).timeout
-		
 		UiManager.load_ui_element("main_menu")
 
 func _process(_delta: float) -> void:
@@ -287,6 +284,6 @@ func trigger_ordered_udp_client_command(command:String, info:Variant) -> void:
 
 
 
-func create_lobby() -> void:
+func create_lobby(lobby_name:String) -> void:
 	
-	send_tcp_data_to_relay("create_lobby", null)
+	send_tcp_data_to_relay("create_lobby", lobby_name)
