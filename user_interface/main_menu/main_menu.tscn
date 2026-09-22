@@ -70,7 +70,6 @@ layout_mode = 2
 text = "Play Offline!"
 
 [node name="QuitGame" type="Button" parent="MainScreen/MainMenuContainer/VBoxContainer" unique_id=1435891460]
-visible = false
 layout_mode = 2
 text = "Quit Game"
 

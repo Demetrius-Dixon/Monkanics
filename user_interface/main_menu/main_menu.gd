@@ -9,19 +9,16 @@ func _ready() -> void:
 
 func _on_play_pressed() -> void:
 	
-	#ClientManager.register_to_ingest_server()
+	ClientManager.create_client()
 	
-	main_screen_nodes.hide()
+	UiManager.unload_ui_element("main_menu")
 	
+	UiManager.load_ui_element("server_browser")
 	
-	
-	#ServerBrowser.show()
-
 	#ClientManager.request_active_lobbies()
 
 func _on_play_2_pressed() -> void:
 	pass # Replace with function body.
 
 func _on_quit_game_pressed() -> void:
-	pass
-	#GameQuitterManager.quit_monkanics()
+	QuittingManager.quit_monkanics()

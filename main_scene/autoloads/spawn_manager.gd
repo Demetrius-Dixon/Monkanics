@@ -8,7 +8,7 @@ var spawnable_objects : Dictionary = {
 }
 
 func spawn_local(spawnable:String, 
-spawn_x:float, spawn_y:float, spawn_z:float) -> void:
+spawn_x:float, spawn_y:float, spawn_z:float) -> Variant:
 	
 	var object : String = spawnable_objects[spawnable]
 	
@@ -19,6 +19,8 @@ spawn_x:float, spawn_y:float, spawn_z:float) -> void:
 	add_child(object_instantiation)
 	
 	object_instantiation.position = Vector3(spawn_x, spawn_y, spawn_z)
+	
+	return object_instantiation
 
 func despawn_local() -> void:
 	

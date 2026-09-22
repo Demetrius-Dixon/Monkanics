@@ -32,7 +32,7 @@ func catchup_new_player(player:PacketPeerUDP) -> void:
 		
 	}
 	
-	RelayManager.send_packet_to_client(command, state_to_sync, player)
+	ServerManager.send_packet_to_client(command, state_to_sync, player)
 
 func get_new_gamestate() -> void:
 	

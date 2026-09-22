@@ -36,7 +36,8 @@ InputManager="*uid://cs5nxwo8ctd7q"
 SettingsManager="*uid://cku1ocdjnvsca"
 ClientManager="*uid://bvx2a8r8bv2bt"
 LobbyManager="*uid://x1rec1hnccjs"
-RelayManager="*uid://crrcqmy2l1p2t"
+ServerManager="*uid://crrcqmy2l1p2t"
+UiManager="*uid://bk3y3wtflq61u"
 
 [debug]
 
