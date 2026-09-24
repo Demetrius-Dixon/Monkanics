@@ -1,6 +1,7 @@
 extends Node
 
 var main_client : StreamPeerTCP
+var is_registered_with_tcp : bool = false
 var tcp_data_buffer : PackedByteArray = PackedByteArray()
 var can_poll_tcp : bool = false
 var game_id : int = 0
@@ -17,7 +18,7 @@ var last_server_packet_sequence_number : int = 0
 const ORDERED_UDP_REGISTRATION_RETRY_DELAY : float = 0.25
 var can_poll_ordered_udp : bool = false
 
-var received_active_lobbies : Array = []
+var received_active_lobbies : Array[Dictionary] = []
 
 
 
@@ -46,6 +47,8 @@ func _process(_delta: float) -> void:
 func create_client() -> void:
 	
 	if OS.has_feature("dedicated_server"): return
+	
+	if is_registered_with_tcp == true: return
 	
 	can_poll_tcp = true
 	
@@ -111,6 +114,8 @@ func poll_client_tcp() -> void:
 		
 		var data : Variant = main_client.get_data(bytes)[1]
 		
+		#print(data)
+		
 		tcp_data_buffer.append_array(data)
 
 func decode_tcp_stream() -> void:
@@ -128,6 +133,8 @@ func decode_tcp_stream() -> void:
 		var packet : Variant = JSON.parse_string(data.get_string_from_utf8())
 		
 		tcp_data_buffer = tcp_data_buffer.slice(4 + data_size)
+		
+		#print(packet)
 		
 		trigger_tpc_client_command(packet[&"command"], packet[&"info"])
 
@@ -147,31 +154,31 @@ func trigger_tpc_client_command(command:String, info:Variant) -> void:
 	
 	if command == "confirm_tcp_registration":
 		
+		is_registered_with_tcp = true
+		
 		game_id = info
 		
 		open_client_udp_channels()
 		
-		print("Client TCP Registered")
+		#print("Client TCP Registered")
 	
 	if command == "confirm_udp_registration":
 		
 		is_registered_with_relay_udp = true
 		
-		print("Client UDP Registered")
+		#print("Client UDP Registered")
 	
 	if command == "confirm_ordered_udp_registration":
 		
 		is_registered_with_relay_ordered_udp = true
 		
-		print("Client Ordered UDP Registered")
+		#print("Client Ordered UDP Registered")
 	
-	if command == "receive_active_lobbies":
+	if command == "receive_active_lobby":
 		
-		received_active_lobbies.clear()
+		received_active_lobbies.append(info)
 		
-		received_active_lobbies = info
-		
-		print(received_active_lobbies)
+		#print("Lobbies on Client: ", received_active_lobbies)
 	
 	if command == "load_map":
 		MapManager.load_map(info)
@@ -222,6 +229,7 @@ func send_udp_packet_to_relay(command:String, info:Variant) -> void:
 	
 	relay_client_udp.put_packet(packet_to_send.to_utf8_buffer())
 
+@warning_ignore("unused_parameter")
 func trigger_udp_client_command(command:String, info:Variant) -> void:
 	
 	pass
@@ -285,16 +293,31 @@ func increment_ordered_packet_sequence_number() -> int:
 	
 	return current_ordered_packet_sequence_number
 
+@warning_ignore("unused_parameter")
 func trigger_ordered_udp_client_command(command:String, info:Variant) -> void:
 	
 	pass
 
 
+
+
+
+
+
+
 func request_active_lobbies_from_server() -> void:
 	
-	await get_tree().create_timer(1).timeout
+	reset_active_lobby_data()
 	
-	send_tcp_data_to_relay("request_active_lobbies", null)
+	send_tcp_data_to_relay("request_active_lobby", null)
+
+func reset_active_lobby_data() -> void:
+	received_active_lobbies.clear()
 
 func create_lobby(lobby_name:String) -> void:
 	send_tcp_data_to_relay("create_lobby", lobby_name)
+
+func join_lobby(lobby_id:int) -> void:
+	send_tcp_data_to_relay("join_lobby", lobby_id)
+	
+	#print("CLIENT ATTEMPTED TO JOIN LOBBY")

@@ -8,6 +8,7 @@ var relay_server_udp : UDPServer
 var relay_server_ordered_udp : UDPServer
 
 var active_lobbies : Array[Dictionary] = []
+var next_lobby_id_to_assign : int = 0
 
 func _ready() -> void:
 	
@@ -66,7 +67,7 @@ func poll_main_server() -> void:
 		
 		send_tcp_data_to_client("confirm_tcp_registration", client[&"game_id"], peer)
 		
-		print("TCP Client Connected: ", client)
+		#print("TCP Client Connected: ", client)
 	
 	if connected_clients.is_empty(): return
 	
@@ -186,16 +187,15 @@ peer:Variant, all_data:Variant)-> void:
 		create_lobby_instance(peer, info)
 	
 	if command == "join_lobby":
-		
-		pass
-		
-		#client_join_lobby(peer)
+		client_join_lobby(peer, info)
 	
-	if command == "request_active_lobbies":
+	if command == "request_active_lobby":
 		
 		if active_lobbies.is_empty(): return
 		
-		send_tcp_data_to_client("receive_active_lobbies", active_lobbies, peer)
+		for lobby in active_lobbies:
+			
+			send_tcp_data_to_client("receive_active_lobby", lobby, peer)
 
 
 
@@ -294,6 +294,8 @@ peer:Variant, whole_packet:Variant)-> void:
 	
 	if command == "forward_udp_to_all":
 		forward_udp_packet_to_all_clients(whole_packet, peer)
+
+
 
 
 
@@ -435,6 +437,7 @@ func create_lobby_instance(host:StreamPeerTCP, lobby_name:String) -> void:
 	
 	active_lobbies.append({
 		
+		&"lobby_id": assign_lobby_id(),
 		&"lobby_name": lobby_name,
 		&"host": host,
 		&"game_mode": "Bean-anza",
@@ -445,30 +448,33 @@ func create_lobby_instance(host:StreamPeerTCP, lobby_name:String) -> void:
 		
 	})
 	
-	send_tcp_data_to_client("load_map", "bnza_zoolag", host)
-	send_tcp_data_to_client("spawn_own_player", 
-	{&"x": 0, &"y": 0, &"z": 0}, 
-	host)
+	#send_tcp_data_to_client("load_map", "bnza_zoolag", host)
+	#send_tcp_data_to_client("spawn_own_player", 
+	#{&"x": 0, &"y": 0, &"z": 0}, 
+	#host)
 	
-	print(active_lobbies)
+	#print("Lobbies on Server: ", active_lobbies)
 	
-	print("Lobby Created")
+	#print("Lobby Created")
 
-func client_join_lobby(client:StreamPeerTCP) -> void:
+func assign_lobby_id() -> int:
+	
+	next_lobby_id_to_assign = \
+	next_lobby_id_to_assign + 1
+	
+	return next_lobby_id_to_assign
+
+func client_join_lobby(client:StreamPeerTCP, lobby_id:int) -> void:
+	
+	if active_lobbies.is_empty(): return
 	
 	for lobby in active_lobbies:
 		
-		if lobby[&"lobby_name"] == "Dedicated Test Lobby":
+		if lobby[&"lobby_id"] == lobby_id:
 			
-			lobby[&"players"].append(
-				
-				{
-					&"client": client,
-					#&"player_node": SpawnManager.spawn_local("player", 0,0,0).get_name
-				}
-			)
+			lobby[&"players"].append(client)
 			
-			#print(lobby[&"players"].lobby[&"player_node"])
+			print(lobby[&"players"])
 			
 			
 			
@@ -482,6 +488,6 @@ func client_join_lobby(client:StreamPeerTCP) -> void:
 			
 			print("New Client Joined Lobby: ", client)
 
-func assign_authority_in_lobby() -> void:
+func assign_host_in_lobby() -> void:
 	pass
 	

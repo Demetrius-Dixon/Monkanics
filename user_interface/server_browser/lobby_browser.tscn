@@ -1,15 +1,15 @@
 [gd_scene format=3 uid="uid://cltyu1oqpw1v4"]
 
-[ext_resource type="Script" uid="uid://rakfpkdmnxgt" path="res://user_interface/server_browser/server_browser.gd" id="1_uwu3u"]
+[ext_resource type="Script" uid="uid://rakfpkdmnxgt" path="res://user_interface/server_browser/lobby_browser.gd" id="1_a08ts"]
 
-[node name="ServerBrowser" type="Control" unique_id=1603300139]
+[node name="LobbyBrowser" type="Control" unique_id=1603300139]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_uwu3u")
+script = ExtResource("1_a08ts")
 
 [node name="Background" type="ColorRect" parent="." unique_id=1271542421]
 layout_mode = 1
@@ -44,10 +44,14 @@ grow_vertical = 2
 tab_alignment = 1
 current_tab = 0
 
-[node name="Join Lobby" type="ItemList" parent="TabContainer" unique_id=1337249967]
+[node name="Join Lobby" type="VBoxContainer" parent="TabContainer" unique_id=187914025]
 layout_mode = 2
-theme_override_font_sizes/font_size = 30
 metadata/_tab_index = 0
+
+[node name="RefreshButton" type="Button" parent="TabContainer/Join Lobby" unique_id=1585597729]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "Refresh Lobby List"
 
 [node name="Create Lobby" type="Button" parent="TabContainer" unique_id=1042765280]
 visible = false
@@ -126,5 +130,16 @@ item_count = 1
 popup/item_0/text = "Zoolag"
 popup/item_0/id = 0
 
+[node name="BackButton" type="Button" parent="." unique_id=870514965]
+layout_mode = 0
+offset_left = 64.0
+offset_top = 16.0
+offset_right = 384.0
+offset_bottom = 66.0
+theme_override_font_sizes/font_size = 30
+text = "Back"
+
+[connection signal="pressed" from="TabContainer/Join Lobby/RefreshButton" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="TabContainer/Create Lobby/CreateLobbyButton" to="." method="_on_create_lobby_pressed"]
 [connection signal="text_changed" from="TabContainer/Create Lobby/TextEdit" to="." method="_on_text_edit_text_changed"]
+[connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]

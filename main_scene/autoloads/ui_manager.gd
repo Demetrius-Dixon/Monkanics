@@ -37,3 +37,5 @@ func unload_ui_element(ui_element_to_unload:String) -> void:
 		if ui_element[&"ui_element"] == ui_element_to_unload:
 			
 			ui_element[&"ui_node"].queue_free()
+			
+			loaded_ui_elements.erase(ui_element)

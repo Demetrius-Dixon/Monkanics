@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://ibl4vlin44xa"]
 
-[ext_resource type="Script" uid="uid://bkwfpaehukxti" path="res://user_interface/server_browser/lobby_selection_button.gd" id="1_koeii"]
+[ext_resource type="Script" uid="uid://bkwfpaehukxti" path="res://user_interface/server_browser/lobby_entry.gd" id="1_qjmpb"]
 
 [node name="LobbySelectionButton" type="Control" unique_id=1710134341]
 layout_mode = 3
@@ -9,33 +9,44 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_koeii")
+script = ExtResource("1_qjmpb")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1787435560]
 layout_mode = 0
-offset_right = 40.0
+offset_right = 136.0
 offset_bottom = 40.0
 
 [node name="Ping" type="Label" parent="HBoxContainer" unique_id=528159537]
+visible = false
 layout_mode = 2
+theme_override_font_sizes/font_size = 50
 text = "Ping"
 
 [node name="LobbyName" type="Label" parent="HBoxContainer" unique_id=750245215]
 layout_mode = 2
+theme_override_font_sizes/font_size = 50
 text = "LobbyName"
 
 [node name="GameMode" type="Label" parent="HBoxContainer" unique_id=1663677796]
+visible = false
 layout_mode = 2
+theme_override_font_sizes/font_size = 50
 text = "GameMode"
 
 [node name="Map" type="Label" parent="HBoxContainer" unique_id=410500644]
+visible = false
 layout_mode = 2
+theme_override_font_sizes/font_size = 50
 text = "Map"
 
 [node name="PlayerCount" type="Label" parent="HBoxContainer" unique_id=2041850019]
+visible = false
 layout_mode = 2
+theme_override_font_sizes/font_size = 50
 text = "PlayerCount/MaxPlayers"
 
 [node name="Button" type="Button" parent="HBoxContainer" unique_id=1163906711]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.61590314, 0.9999998, 0.0027007128, 1)
+theme_override_font_sizes/font_size = 50
 text = "Join"
