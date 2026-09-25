@@ -139,7 +139,7 @@ offset_bottom = 66.0
 theme_override_font_sizes/font_size = 30
 text = "Back"
 
-[connection signal="pressed" from="TabContainer/Join Lobby/RefreshButton" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="TabContainer/Join Lobby/RefreshButton" to="." method="_on_refresh_button_pressed"]
 [connection signal="pressed" from="TabContainer/Create Lobby/CreateLobbyButton" to="." method="_on_create_lobby_pressed"]
 [connection signal="text_changed" from="TabContainer/Create Lobby/TextEdit" to="." method="_on_text_edit_text_changed"]
 [connection signal="pressed" from="BackButton" to="." method="_on_back_button_pressed"]

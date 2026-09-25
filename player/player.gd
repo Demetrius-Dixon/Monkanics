@@ -95,7 +95,7 @@ const END_PROJECTILE_SHOOT_DISTANCE : float = 3.0
 
 func _ready() -> void:
 	
-	camera.current = true
+	pass
 
 func _physics_process(delta: float) -> void:
 	
@@ -105,13 +105,19 @@ func _physics_process(delta: float) -> void:
 	
 	check_velocity() #INFO Add an "upon_stoping" function later
 	
-	apply_movement_input(delta)
-	
 	move_and_slide()
+	
+	if name != "own_player": 
+		return
+	else:
+		apply_movement_input(delta)
 
 func _process(_delta: float) -> void:
 	
-	apply_jump_input()
+	if name != "own_player": 
+		return
+	else:
+		apply_jump_input()
 
 func apply_movement_input(delta:float) -> void:
 	

@@ -215,7 +215,6 @@ margin = 1.0
 
 [node name="Camera" type="Camera3D" parent="CameraHorizonalRotation/CameraVerticalRotation/CameraSpringArm" unique_id=1884407364]
 transform = Transform3D(0.99958, 0.0230555, -0.017559, -0.0244362, 0.996253, -0.0829678, 0.0155803, 0.0833621, 0.996397, -0.138757, 0.0314531, 5.01021)
-current = true
 
 [node name="CameraRaycast" type="RayCast3D" parent="CameraHorizonalRotation/CameraVerticalRotation/CameraSpringArm/Camera" unique_id=2019117839]
 transform = Transform3D(-3589.56, 90.709, -20.1897, -117.827, -149.042, 615.165, 6.16094, 49999.7, 1.87036, 0.0434627, -0.0244007, 0.493888)

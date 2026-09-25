@@ -10,7 +10,6 @@ var lobby_game_mode_selection : String = ""
 var lobby_entries : Array[Node] = []
 
 func _ready() -> void:
-	
 	add_entry_to_lobby_list()
 
 func _on_create_lobby_pressed() -> void:
@@ -57,10 +56,11 @@ func remove_entries_from_lobby_list() -> void:
 	for lobby_entry in lobby_entries:
 		
 		lobby_entry.queue_free()
+		
+		lobby_entries.erase(lobby_entry)
 
-func _on_button_pressed() -> void:
+func _on_refresh_button_pressed() -> void:
 	add_entry_to_lobby_list()
-
 
 func _on_back_button_pressed() -> void:
 	

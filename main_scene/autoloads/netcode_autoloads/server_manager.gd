@@ -186,8 +186,17 @@ peer:Variant, all_data:Variant)-> void:
 	if command == "create_lobby":
 		create_lobby_instance(peer, info)
 	
-	if command == "join_lobby":
-		client_join_lobby(peer, info)
+	if command == "request_to_join_lobby":
+		
+		var id_to_get : int
+		
+		for client in connected_clients:
+			
+			if peer == client[&"tcp_peer"]:
+				
+				id_to_get = client[&"game_id"]
+		
+		client_join_lobby(peer, id_to_get, info)
 	
 	if command == "request_active_lobby":
 		
@@ -431,7 +440,10 @@ peer:Variant, whole_packet:Variant)-> void:
 
 
 
-
+func send_game_data_to_all_players() -> void:
+	pass
+	
+	
 
 func create_lobby_instance(host:StreamPeerTCP, lobby_name:String) -> void:
 	
@@ -441,20 +453,19 @@ func create_lobby_instance(host:StreamPeerTCP, lobby_name:String) -> void:
 		&"lobby_name": lobby_name,
 		&"host": host,
 		&"game_mode": "Bean-anza",
-		&"map": "Zoolag",
+		&"map": "bnza_zoolag",
 		#&"current_player_count": 0,
 		#&"max_players": 6,
 		&"players": [host]
 		
 	})
 	
-	#send_tcp_data_to_client("load_map", "bnza_zoolag", host)
-	#send_tcp_data_to_client("spawn_own_player", 
-	#{&"x": 0, &"y": 0, &"z": 0}, 
-	#host)
+	send_tcp_data_to_client("load_map", "bnza_zoolag", host)
+	send_tcp_data_to_client("spawn_own_player", 
+	{&"x": 0, &"y": 0, &"z": 0}, 
+	host)
 	
 	#print("Lobbies on Server: ", active_lobbies)
-	
 	#print("Lobby Created")
 
 func assign_lobby_id() -> int:
@@ -464,7 +475,7 @@ func assign_lobby_id() -> int:
 	
 	return next_lobby_id_to_assign
 
-func client_join_lobby(client:StreamPeerTCP, lobby_id:int) -> void:
+func client_join_lobby(client:StreamPeerTCP, client_id:int, lobby_id:int) -> void:
 	
 	if active_lobbies.is_empty(): return
 	
@@ -474,19 +485,42 @@ func client_join_lobby(client:StreamPeerTCP, lobby_id:int) -> void:
 			
 			lobby[&"players"].append(client)
 			
-			print(lobby[&"players"])
+			#print(lobby[&"players"])
+			#print("New Client Joined Lobby: ", client)
 			
+			var lobby_data : Dictionary = {
+				
+				&"host": lobby[&"host"],
+				&"game_mode": lobby[&"game_mode"],
+				&"map": lobby[&"map"],
+				&"players": lobby[&"players"]
+				
+			}
 			
+			# Info to send to joining client
+			send_tcp_data_to_client("join_lobby", lobby_data, client)
 			
-			#TODO Send new client sync info here
+			send_tcp_data_to_client("spawn_own_player", 
+			{&"x": 0, &"y": 0, &"z": 0} , 
+			client)
 			
-			#send_tcp_data_to_client("load_map", "bnza_zoolag", client)
-			#
-			#send_tcp_data_to_client("spawn_own_player", 
-			#{&"x": 0, &"y": 0, &"z": 0} , 
-			#client)
+			for client_in_lobby:Variant in lobby[&"players"]:
+				
+				if client_in_lobby == client: continue
+				
+				send_tcp_data_to_client("new_player_joined", client_id, client)
 			
-			print("New Client Joined Lobby: ", client)
+			# info to send to current host
+			send_tcp_data_to_client("new_player_joined", client_id, lobby[&"host"])
+			
+			# Send info to all other clients
+			for client_in_lobby:Variant in lobby[&"players"]:
+				
+				if client_in_lobby == client: continue
+				
+				if client_in_lobby == lobby[&"host"]: continue
+				
+				send_tcp_data_to_client("new_player_joined", client_id, client_in_lobby)
 
 func assign_host_in_lobby() -> void:
 	pass

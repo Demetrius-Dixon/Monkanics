@@ -39,3 +39,13 @@ func unload_ui_element(ui_element_to_unload:String) -> void:
 			ui_element[&"ui_node"].queue_free()
 			
 			loaded_ui_elements.erase(ui_element)
+
+func unload_all_ui_elements() -> void:
+	
+	if loaded_ui_elements.is_empty(): return
+	
+	for ui_element in loaded_ui_elements:
+		
+		ui_element[&"ui_node"].queue_free()
+		
+		loaded_ui_elements.erase(ui_element)

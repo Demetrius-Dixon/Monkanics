@@ -19,8 +19,9 @@ const ORDERED_UDP_REGISTRATION_RETRY_DELAY : float = 0.25
 var can_poll_ordered_udp : bool = false
 
 var received_active_lobbies : Array[Dictionary] = []
-
-
+var is_in_lobby : bool = false
+var is_host : bool = false
+var players_in_lobby : Array
 
 
 
@@ -180,19 +181,27 @@ func trigger_tpc_client_command(command:String, info:Variant) -> void:
 		
 		#print("Lobbies on Client: ", received_active_lobbies)
 	
+	if command == "join_lobby":
+		
+		is_in_lobby = true
+		
+		players_in_lobby.append(main_client)
+		
+		UiManager.unload_all_ui_elements()
+		
+		MapManager.load_map(info[&"map"])
+	
+	if command == "new_player_joined":
+		
+		players_in_lobby.append(info)
+		
+		spawn_other_player(str(info))
+	
 	if command == "load_map":
 		MapManager.load_map(info)
 	
 	if command == "spawn_own_player":
-		
-		var spawn_x : float = info[&"x"]
-		var spawn_y : float = info[&"y"]
-		var spawn_z : float = info[&"z"]
-		
-		SpawnManager.spawn_local("player", spawn_x, spawn_y, spawn_z)
-	
-	if command == "spawn_other_player":
-		pass
+		spawn_own_player()
 
 
 
@@ -314,10 +323,38 @@ func request_active_lobbies_from_server() -> void:
 func reset_active_lobby_data() -> void:
 	received_active_lobbies.clear()
 
-func create_lobby(lobby_name:String) -> void:
-	send_tcp_data_to_relay("create_lobby", lobby_name)
-
-func join_lobby(lobby_id:int) -> void:
-	send_tcp_data_to_relay("join_lobby", lobby_id)
+func request_to_join_lobby(lobby_id:int) -> void:
+	send_tcp_data_to_relay("request_to_join_lobby", lobby_id)
 	
 	#print("CLIENT ATTEMPTED TO JOIN LOBBY")
+
+
+
+
+
+
+func create_lobby(lobby_name:String) -> void:
+	
+	send_tcp_data_to_relay("create_lobby", lobby_name)
+	
+	is_host = true
+
+func spawn_own_player() -> void:
+	
+	var own_player : Node = SpawnManager.spawn_local("player", 0,0,0)
+	
+	own_player.name = "own_player"
+	
+	own_player.camera.current = true
+
+func spawn_other_player(node_name:String) -> void:
+	
+	var new_player : Node = SpawnManager.spawn_local("player", 0,0,0)
+	
+	new_player.name = node_name
+
+func host_get_new_gamestate() -> void:
+	
+	if not is_host: return
+	
+	

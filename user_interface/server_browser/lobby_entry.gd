@@ -13,4 +13,4 @@ func _ready() -> void:
 	join_button.pressed.connect(_on_join_pressed)
 
 func _on_join_pressed() -> void:
-	ClientManager.join_lobby(lobby_id)
+	ClientManager.request_to_join_lobby(lobby_id)
