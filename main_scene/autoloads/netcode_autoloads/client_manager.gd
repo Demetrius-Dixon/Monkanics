@@ -1,7 +1,7 @@
 extends Node
 
-var main_client : StreamPeerTCP
-var is_registered_with_tcp : bool = false
+var client_manager_to_lobby_manager_tcp : StreamPeerTCP
+var is_registered_with_lobby_manager : bool = false
 var tcp_data_buffer : PackedByteArray = PackedByteArray()
 var can_poll_tcp : bool = false
 var game_id : int = 0
@@ -23,7 +23,7 @@ var is_in_lobby : bool = false
 var is_host : bool = false
 var players_in_lobby : Array
 
-
+var client_player_node : Node = null
 
 func _ready() -> void:
 	
@@ -45,16 +45,26 @@ func _process(_delta: float) -> void:
 		
 		pass
 
+func _physics_process(_delta: float) -> void:
+	pass
+	#if is_host == false:
+		#send_player_position_to_host()
+
+
+
+
+
+
 func create_client() -> void:
 	
 	if OS.has_feature("dedicated_server"): return
 	
-	if is_registered_with_tcp == true: return
+	if is_registered_with_lobby_manager == true: return
 	
 	can_poll_tcp = true
 	
-	main_client = StreamPeerTCP.new()
-	main_client.connect_to_host(EndpointManager.RELAY_NORTH_AMERICA_IPV4, EndpointManager.RELAY_TCP_PORT)
+	client_manager_to_lobby_manager_tcp = StreamPeerTCP.new()
+	client_manager_to_lobby_manager_tcp.connect_to_host(EndpointManager.LOBBY_MANAGER_NORTH_AMERICA_IPV4, EndpointManager.LOBBY_MANAGER_TCP_PORT)
 	
 	print("Client Created")
 
@@ -64,11 +74,11 @@ func open_client_udp_channels() -> void:
 	can_poll_ordered_udp = true
 	
 	relay_client_udp = PacketPeerUDP.new()
-	relay_client_udp.connect_to_host(EndpointManager.RELAY_NORTH_AMERICA_IPV4, EndpointManager.RELAY_UDP_PORT)
+	relay_client_udp.connect_to_host(EndpointManager.LOBBY_MANAGER_NORTH_AMERICA_IPV4, EndpointManager.LOBBY_MANAGER_UDP_PORT)
 	register_to_relay_udp_server()
 	
 	relay_client_ordered_udp = PacketPeerUDP.new()
-	relay_client_ordered_udp.connect_to_host(EndpointManager.RELAY_NORTH_AMERICA_IPV4, EndpointManager.RELAY_ORDERED_UDP_PORT)
+	relay_client_ordered_udp.connect_to_host(EndpointManager.LOBBY_MANAGER_NORTH_AMERICA_IPV4, EndpointManager.LOBBY_MANAGER_ORDERED_UDP_PORT )
 	register_to_relay_ordered_udp_server()
 
 func register_to_relay_udp_server() -> void:
@@ -107,13 +117,13 @@ func poll_client_tcp() -> void:
 	
 	if can_poll_tcp == false: return
 	
-	main_client.poll()
+	client_manager_to_lobby_manager_tcp.poll()
 	
-	var bytes : Variant = main_client.get_available_bytes()
+	var bytes : Variant = client_manager_to_lobby_manager_tcp.get_available_bytes()
 	
 	if bytes > 0:
 		
-		var data : Variant = main_client.get_data(bytes)[1]
+		var data : Variant = client_manager_to_lobby_manager_tcp.get_data(bytes)[1]
 		
 		#print(data)
 		
@@ -148,18 +158,18 @@ func send_tcp_data_to_relay(command:String, info:Variant) -> void:
 	
 	var data := JSON.stringify(packet).to_utf8_buffer()
 	
-	main_client.put_u32(data.size())
-	main_client.put_data(data)
+	client_manager_to_lobby_manager_tcp.put_u32(data.size())
+	client_manager_to_lobby_manager_tcp.put_data(data)
 
 func trigger_tpc_client_command(command:String, info:Variant) -> void:
 	
 	if command == "confirm_tcp_registration":
 		
-		is_registered_with_tcp = true
+		is_registered_with_lobby_manager = true
 		
 		game_id = info
 		
-		open_client_udp_channels()
+		#open_client_udp_channels()
 		
 		#print("Client TCP Registered")
 	
@@ -185,7 +195,7 @@ func trigger_tpc_client_command(command:String, info:Variant) -> void:
 		
 		is_in_lobby = true
 		
-		players_in_lobby.append(main_client)
+		players_in_lobby.append(client_manager_to_lobby_manager_tcp)
 		
 		UiManager.unload_all_ui_elements()
 		
@@ -305,7 +315,12 @@ func increment_ordered_packet_sequence_number() -> int:
 @warning_ignore("unused_parameter")
 func trigger_ordered_udp_client_command(command:String, info:Variant) -> void:
 	
-	pass
+	if command == "send_untrusted_position_to_host":
+		
+		#print("GOTTEN")
+		pass
+		
+		
 
 
 
@@ -346,12 +361,26 @@ func spawn_own_player() -> void:
 	own_player.name = "own_player"
 	
 	own_player.camera.current = true
+	
+	client_player_node = own_player
 
 func spawn_other_player(node_name:String) -> void:
 	
 	var new_player : Node = SpawnManager.spawn_local("player", 0,0,0)
 	
 	new_player.name = node_name
+
+func send_player_position_to_host() -> void:
+	
+	if client_player_node == null: 
+		
+		return
+		
+	else:
+		
+		var untrusted_player_position : Vector3 = client_player_node.position
+		
+		send_ordred_udp_packet_to_relay("send_untrusted_position_to_server", untrusted_player_position)
 
 func host_get_new_gamestate() -> void:
 	

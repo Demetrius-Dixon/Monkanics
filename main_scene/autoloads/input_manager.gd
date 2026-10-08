@@ -1,5 +1,7 @@
 extends Node
 
+var is_in_menu : bool = false
+
 var is_holding_walk_forward_input : bool = false
 var is_holding_walk_backward_input : bool = false
 var is_holding_walk_left_input : bool = false
@@ -10,9 +12,11 @@ var is_pressing_operate_input : bool = false
 
 func _process(_delta:float) -> void:
 	
-	track_movement_input()
-	track_jump_input()
-	track_operate_input()
+	if is_in_menu == false:
+		
+		track_movement_input()
+		track_jump_input()
+		track_operate_input()
 	
 	if Input.is_action_just_pressed("ui_cancel"):
 		

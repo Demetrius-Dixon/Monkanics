@@ -94,7 +94,6 @@ const END_PROJECTILE_SHOOT_DISTANCE : float = 3.0
 #@onready var health_bar : Node = $PlayerHUD/PlayerHealthBar
 
 func _ready() -> void:
-	
 	pass
 
 func _physics_process(delta: float) -> void:
