@@ -9,10 +9,15 @@ var next_lobby_id_to_assign : int = 0
 
 func _ready() -> void:
 	
-	if not OS.has_feature("dedicated_server"): 
+	if not OS.has_feature("dedicated_server") \
+	or not OS.has_feature("lobby_manager"): 
 		queue_free()
-	else: 
+	
+	if OS.has_feature("lobby_manager"):
 		create_server()
+		
+	else: 
+		queue_free()
 
 func _process(_delta: float) -> void:
 	
@@ -22,7 +27,7 @@ func _process(_delta: float) -> void:
 func create_server() -> void:
 	
 	lobby_manager_tcp_server = TCPServer.new()
-	lobby_manager_tcp_server.listen(EndpointManager.LOBBY_MANAGER_TCP_PORT, EndpointManager.LOBBY_MANAGER_NORTH_AMERICA_IPV4)
+	lobby_manager_tcp_server.listen(EndpointManager.LOBBY_MANAGER_TCP_PORT, EndpointManager.LOBBY_MANAGER_IPV4)
 	print("Lobby Manager TCP Created")
 
 

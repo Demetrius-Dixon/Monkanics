@@ -12,32 +12,39 @@ var next_lobby_id_to_assign : int = 0
 
 func _ready() -> void:
 	
-	if OS.has_feature("dedicated_server"): 
+	if not OS.has_feature("dedicated_server") \
+	or not OS.has_feature("relay_manager"): 
 		queue_free()
-	else: 
-		pass
+	
+	if OS.has_feature("relay_manager"):
+		return
 		#create_server()
+		
+	else: 
+		queue_free()
 
 func _process(_delta: float) -> void:
 	
-	poll_main_server()
-	decode_tcp_stream()
+	pass
 	
-	poll_relay_server_udp()
-	poll_relay_server_ordered_udp()
+	#poll_main_server()
+	#decode_tcp_stream()
+	#
+	#poll_relay_server_udp()
+	#poll_relay_server_ordered_udp()
 
 func create_server() -> void:
 	
 	main_server = TCPServer.new()
-	main_server.listen(EndpointManager.LOBBY_MANAGER_TCP_PORT, EndpointManager.LOBBY_MANAGER_NORTH_AMERICA_IPV4)
+	main_server.listen(EndpointManager.LOBBY_MANAGER_TCP_PORT, EndpointManager.relay_regions[&"NA"])
 	print("Relay TCP Created")
 	
 	relay_server_udp = UDPServer.new()
-	relay_server_udp.listen(EndpointManager.LOBBY_MANAGER_UDP_PORT, EndpointManager.LOBBY_MANAGER_NORTH_AMERICA_IPV4)
+	relay_server_udp.listen(EndpointManager.LOBBY_MANAGER_UDP_PORT, EndpointManager.relay_regions[&"NA"])
 	print("Relay UDP Created")
 	
 	relay_server_ordered_udp = UDPServer.new()
-	relay_server_ordered_udp.listen(EndpointManager.LOBBY_MANAGER_ORDERED_UDP_PORT , EndpointManager.LOBBY_MANAGER_NORTH_AMERICA_IPV4)
+	relay_server_ordered_udp.listen(EndpointManager.LOBBY_MANAGER_ORDERED_UDP_PORT , EndpointManager.relay_regions[&"NA"])
 	print("Relay Ordered UDP Created")
 
 

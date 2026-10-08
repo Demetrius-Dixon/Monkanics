@@ -2,16 +2,19 @@ extends Node
 
 var client_manager_to_lobby_manager_tcp : StreamPeerTCP
 var is_registered_with_lobby_manager : bool = false
+
+var client_manager_to_relay_manager_tcp : StreamPeerTCP
+var is_registered_with_relay_manager : bool = false
+
 var tcp_data_buffer : PackedByteArray = PackedByteArray()
 var can_poll_tcp : bool = false
-var game_id : int = 0
 
-var relay_client_udp : PacketPeerUDP
+var client_manager_to_relay_manager_udp : PacketPeerUDP
 var is_registered_with_relay_udp : bool = false
 const UDP_REGISTRATION_RETRY_DELAY : float = 0.25
 var can_poll_udp : bool = false
 
-var relay_client_ordered_udp : PacketPeerUDP
+var client_manager_to_relay_manager_ordered_udp : PacketPeerUDP
 var is_registered_with_relay_ordered_udp : bool = false
 var current_ordered_packet_sequence_number : int = 0
 var last_server_packet_sequence_number : int = 0
@@ -23,6 +26,7 @@ var is_in_lobby : bool = false
 var is_host : bool = false
 var players_in_lobby : Array
 
+var game_id : int = 0
 var client_player_node : Node = null
 
 func _ready() -> void:
@@ -34,12 +38,12 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	
+	poll_client_tcp()
+	decode_tcp_stream()
+	
 	poll_client_udp()
 	
 	poll_client_ordered_udp()
-	
-	poll_client_tcp()
-	decode_tcp_stream()
 	
 	if Input.is_action_just_pressed("ui_cancel"):
 		
@@ -64,7 +68,10 @@ func create_client() -> void:
 	can_poll_tcp = true
 	
 	client_manager_to_lobby_manager_tcp = StreamPeerTCP.new()
-	client_manager_to_lobby_manager_tcp.connect_to_host(EndpointManager.LOBBY_MANAGER_NORTH_AMERICA_IPV4, EndpointManager.LOBBY_MANAGER_TCP_PORT)
+	client_manager_to_lobby_manager_tcp.connect_to_host(EndpointManager.LOBBY_MANAGER_IPV4, EndpointManager.LOBBY_MANAGER_TCP_PORT)
+	
+	#client_manager_to_relay_manager_tcp = StreamPeerTCP.new()
+	#client_manager_to_relay_manager_tcp.connect_to_host(EndpointManager.relay_regions[&"NA"], EndpointManager.RELAY_MANAGER_TCP_PORT)
 	
 	print("Client Created")
 
@@ -73,12 +80,12 @@ func open_client_udp_channels() -> void:
 	can_poll_udp = true
 	can_poll_ordered_udp = true
 	
-	relay_client_udp = PacketPeerUDP.new()
-	relay_client_udp.connect_to_host(EndpointManager.LOBBY_MANAGER_NORTH_AMERICA_IPV4, EndpointManager.LOBBY_MANAGER_UDP_PORT)
+	client_manager_to_relay_manager_udp = PacketPeerUDP.new()
+	client_manager_to_relay_manager_udp.connect_to_host(EndpointManager.relay_regions[&"NA"], EndpointManager.LOBBY_MANAGER_UDP_PORT)
 	register_to_relay_udp_server()
 	
-	relay_client_ordered_udp = PacketPeerUDP.new()
-	relay_client_ordered_udp.connect_to_host(EndpointManager.LOBBY_MANAGER_NORTH_AMERICA_IPV4, EndpointManager.LOBBY_MANAGER_ORDERED_UDP_PORT )
+	client_manager_to_relay_manager_ordered_udp = PacketPeerUDP.new()
+	client_manager_to_relay_manager_ordered_udp.connect_to_host(EndpointManager.relay_regions[&"NA"], EndpointManager.LOBBY_MANAGER_ORDERED_UDP_PORT )
 	register_to_relay_ordered_udp_server()
 
 func register_to_relay_udp_server() -> void:
@@ -119,15 +126,29 @@ func poll_client_tcp() -> void:
 	
 	client_manager_to_lobby_manager_tcp.poll()
 	
-	var bytes : Variant = client_manager_to_lobby_manager_tcp.get_available_bytes()
+	var lobby_manager_bytes : Variant = client_manager_to_lobby_manager_tcp.get_available_bytes()
 	
-	if bytes > 0:
+	if lobby_manager_bytes > 0:
 		
-		var data : Variant = client_manager_to_lobby_manager_tcp.get_data(bytes)[1]
+		var data : Variant = client_manager_to_lobby_manager_tcp.get_data(
+		lobby_manager_bytes)[1]
 		
 		#print(data)
 		
 		tcp_data_buffer.append_array(data)
+	
+	#client_manager_to_lobby_manager_tcp.poll()
+	#
+	#var relay_manager_bytes : Variant = client_manager_to_relay_manager_tcp.get_available_bytes()
+	#
+	#if relay_manager_bytes > 0:
+		#
+		#var data : Variant = client_manager_to_relay_manager_tcp.get_data(
+		#relay_manager_bytes)[1]
+		#
+		##print(data)
+		#
+		#tcp_data_buffer.append_array(data)
 
 func decode_tcp_stream() -> void:
 	
@@ -149,7 +170,7 @@ func decode_tcp_stream() -> void:
 		
 		trigger_tpc_client_command(packet[&"command"], packet[&"info"])
 
-func send_tcp_data_to_relay(command:String, info:Variant) -> void:
+func send_tcp_data_to_lobby_manager(command:String, info:Variant) -> void:
 	
 	var packet : Dictionary = {
 	&"command": command,
@@ -160,6 +181,18 @@ func send_tcp_data_to_relay(command:String, info:Variant) -> void:
 	
 	client_manager_to_lobby_manager_tcp.put_u32(data.size())
 	client_manager_to_lobby_manager_tcp.put_data(data)
+
+func send_tcp_data_to_relay_manager(command:String, info:Variant) -> void:
+	
+	var packet : Dictionary = {
+	&"command": command,
+	&"info": info
+	}
+	
+	var data := JSON.stringify(packet).to_utf8_buffer()
+	
+	client_manager_to_relay_manager_tcp.put_u32(data.size())
+	client_manager_to_relay_manager_tcp.put_data(data)
 
 func trigger_tpc_client_command(command:String, info:Variant) -> void:
 	
@@ -222,9 +255,9 @@ func poll_client_udp() -> void:
 	
 	if can_poll_udp == false: return
 	
-	if relay_client_udp.get_available_packet_count() > 0:
+	if client_manager_to_relay_manager_udp.get_available_packet_count() > 0:
 		
-		var packet : Variant = relay_client_udp.get_packet()
+		var packet : Variant = client_manager_to_relay_manager_udp.get_packet()
 		var packet_string : Variant = packet.get_string_from_utf8()
 		
 		#print("Client Recieved Packet: ", packet)
@@ -246,7 +279,7 @@ func send_udp_packet_to_relay(command:String, info:Variant) -> void:
 	
 	var packet_to_send : Variant = JSON.stringify(packet)
 	
-	relay_client_udp.put_packet(packet_to_send.to_utf8_buffer())
+	client_manager_to_relay_manager_udp.put_packet(packet_to_send.to_utf8_buffer())
 
 @warning_ignore("unused_parameter")
 func trigger_udp_client_command(command:String, info:Variant) -> void:
@@ -263,9 +296,9 @@ func poll_client_ordered_udp() -> void:
 	
 	if can_poll_ordered_udp == false: return
 	
-	if relay_client_ordered_udp.get_available_packet_count() > 0:
+	if client_manager_to_relay_manager_ordered_udp.get_available_packet_count() > 0:
 		
-		var packet : Variant = relay_client_ordered_udp.get_packet()
+		var packet : Variant = client_manager_to_relay_manager_ordered_udp.get_packet()
 		var packet_string : Variant = packet.get_string_from_utf8()
 		
 		#print("Client Recieved Ordered Packet: ", packet)
@@ -303,7 +336,7 @@ func send_ordred_udp_packet_to_relay(command:String, info:Variant) -> void:
 	
 	var packet_to_send : Variant = JSON.stringify(packet)
 	
-	relay_client_ordered_udp.put_packet(packet_to_send.to_utf8_buffer())
+	client_manager_to_relay_manager_ordered_udp.put_packet(packet_to_send.to_utf8_buffer())
 
 func increment_ordered_packet_sequence_number() -> int:
 	
@@ -333,13 +366,13 @@ func request_active_lobbies_from_server() -> void:
 	
 	reset_active_lobby_data()
 	
-	send_tcp_data_to_relay("request_active_lobby", null)
+	send_tcp_data_to_lobby_manager("request_active_lobby", null)
 
 func reset_active_lobby_data() -> void:
 	received_active_lobbies.clear()
 
 func request_to_join_lobby(lobby_id:int) -> void:
-	send_tcp_data_to_relay("request_to_join_lobby", lobby_id)
+	send_tcp_data_to_lobby_manager("request_to_join_lobby", lobby_id)
 	
 	#print("CLIENT ATTEMPTED TO JOIN LOBBY")
 
@@ -350,7 +383,7 @@ func request_to_join_lobby(lobby_id:int) -> void:
 
 func create_lobby(lobby_name:String) -> void:
 	
-	send_tcp_data_to_relay("create_lobby", lobby_name)
+	send_tcp_data_to_lobby_manager("create_lobby", lobby_name)
 	
 	is_host = true
 
