@@ -16,11 +16,13 @@ const LOCALHOST_IPV6 : String = "::1"
 # Ports
 
 const LOBBY_MANAGER_TCP_PORT : int = 5378
+const LOBBY_MANAGER_UDP_PORT : int = 5379
+const LOBBY_MANAGER_ORDERED_UDP_PORT : int = 5380
 
-const RELAY_MANAGER_TCP_PORT : int = 5378
-const RELAY_MANAGER_UDP_PORT : int = 5380
-const RELAY_MANAGER_ORDERED_UDP_PORT  : int = 5381
+const RELAY_MANAGER_TCP_PORT : int = 5381
+const RELAY_MANAGER_UDP_PORT : int = 5382
+const RELAY_MANAGER_ORDERED_UDP_PORT  : int = 5383
 
-const P2P_TCP_PORT : int = 5382
-const P2P_UDP_PORT : int = 5383
-const P2P_ORDERED_UDP_PORT  : int = 5384
+const P2P_TCP_PORT : int = 5384
+const P2P_UDP_PORT : int = 5385
+const P2P_ORDERED_UDP_PORT  : int = 5386
