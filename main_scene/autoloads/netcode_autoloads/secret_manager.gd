@@ -13,3 +13,8 @@ With the exception of this message and variable names.
 const TEST_KEY : Variant = 12345 # FOR DEBUGGING LOCALLY ONLY!
 
 var RELAY_SERVER_US_KEY : Variant
+
+func _ready() -> void:
+	
+	if not OS.has_feature("dedicated_server"): 
+		queue_free()
