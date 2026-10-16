@@ -4,7 +4,10 @@ var relay_manager_tcp : TCPServer
 var relay_manager_udp : UDPServer
 var relay_manager_ordered_udp : UDPServer
 
+var relay_to_lobby_manager_tcp : StreamPeerTCP
+
 var connected_clients : Array[Dictionary] = []
+var relay_sessions : Array[Dictionary] = []
 
 func _ready() -> void:
 	
@@ -50,6 +53,13 @@ func create_relay() -> void:
 		EndpointManager.RELAY_MANAGER_ORDERED_UDP_PORT, 
 		EndpointManager.relay_regions[&"NA"])
 	print("Relay Ordered UDP Created")
+	
+	relay_to_lobby_manager_tcp = StreamPeerTCP.new()
+	relay_to_lobby_manager_tcp.connect_to_host(
+		EndpointManager.LOBBY_MANAGER_IPV4, 
+		EndpointManager.LOBBY_MANAGER_TCP_PORT)
+	print("Relay -> Lobby TCP Created")
+
 
 
 
@@ -168,6 +178,18 @@ func send_tcp_data_to_client(command:String, info:Variant, recipient:StreamPeerT
 	recipient.put_u32(data.size())
 	recipient.put_data(data)
 
+func send_tcp_data_to_lobby_manager(command:String, info:Variant) -> void:
+	
+	var packet : Dictionary = {
+	&"command": command,
+	&"info": info
+	}
+	
+	var data := JSON.stringify(packet).to_utf8_buffer()
+	
+	relay_to_lobby_manager_tcp.put_u32(data.size())
+	relay_to_lobby_manager_tcp.put_data(data)
+
 #func forward_tcp_data_to_specific_client(data:Variant, recipient:StreamPeerTCP) -> void:
 	#
 	#var command : String = data[&"command"]
@@ -198,6 +220,11 @@ peer:Variant, all_data:Variant, current_lobby:Variant, is_host:Variant)-> void:
 		#forward_tcp_data_to_all_clients(all_data, peer)
 	
 	pass
+	
+	if command == "create_new_lobby_instance":
+		pass
+		
+		
 
 
 
@@ -456,3 +483,12 @@ peer:Variant, whole_packet:Variant, current_lobby:Variant, is_host:Variant)-> vo
 		#if is_host == false:
 			#
 			#send_ordered_udp_packet_to_client("send_untrusted_position", )
+
+
+
+
+
+func create_relay_session_instance() -> void:
+	pass
+	
+	

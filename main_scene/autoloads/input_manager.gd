@@ -17,10 +17,6 @@ func _process(_delta:float) -> void:
 		track_movement_input()
 		track_jump_input()
 		track_operate_input()
-	
-	if Input.is_action_just_pressed("ui_cancel"):
-		
-		MouseManager.toggle_mouse()
 
 func track_movement_input() -> void:
 	

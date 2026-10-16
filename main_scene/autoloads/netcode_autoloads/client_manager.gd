@@ -65,12 +65,15 @@ func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("ui_cancel"):
 		
 		pass
+		
+		#MouseManager.toggle_mouse()
+		
+		send_udp_packet_to_lobby_manager("print", null)
 
 func _physics_process(_delta: float) -> void:
 	pass
 	#if is_host == false:
 		#send_player_position_to_host()
-
 
 
 
@@ -98,11 +101,15 @@ func open_lobby_manager_udp_channels() -> void:
 	can_poll_ordered_udp = true
 	
 	client_manager_to_lobby_manager_udp = PacketPeerUDP.new()
-	client_manager_to_lobby_manager_udp.connect_to_host(EndpointManager.LOBBY_MANAGER_IPV4, EndpointManager.LOBBY_MANAGER_UDP_PORT)
+	client_manager_to_lobby_manager_udp.connect_to_host(
+		EndpointManager.LOBBY_MANAGER_IPV4, 
+		EndpointManager.LOBBY_MANAGER_UDP_PORT)
 	register_to_lobby_udp_server()
 	
 	client_manager_to_lobby_manager_ordered_udp = PacketPeerUDP.new()
-	client_manager_to_lobby_manager_ordered_udp.connect_to_host(EndpointManager.LOBBY_MANAGER_IPV4, EndpointManager.LOBBY_MANAGER_ORDERED_UDP_PORT)
+	client_manager_to_lobby_manager_ordered_udp.connect_to_host(
+		EndpointManager.LOBBY_MANAGER_IPV4, 
+		EndpointManager.LOBBY_MANAGER_ORDERED_UDP_PORT)
 	register_to_lobby_ordered_udp_server()
 
 func register_to_lobby_udp_server() -> void:
@@ -132,7 +139,6 @@ func confirm_registration_to_lobby_ordered_udp_server() -> void:
 	if is_registered_with_lobby_ordered_udp == true: return
 	
 	register_to_lobby_ordered_udp_server()
-
 
 
 
@@ -194,15 +200,11 @@ func confirm_registration_to_relay_ordered_udp_server() -> void:
 
 
 
-
-
 func poll_client_tcp() -> void:
 	
 	if can_poll_tcp == false: return
 	
 	# Poll Lobby Manager TCP
-	if is_registered_with_lobby_manager_tcp == false: return
-	
 	client_manager_to_lobby_manager_tcp.poll()
 	
 	var lobby_manager_bytes : Variant = client_manager_to_lobby_manager_tcp.get_available_bytes()
@@ -218,7 +220,6 @@ func poll_client_tcp() -> void:
 	
 	# Poll Relay Manager TCP
 	if is_connected_to_relay == false: return
-	if is_registered_with_relay_manager_tcp == false: return
 	
 	client_manager_to_relay_manager_tcp.poll()
 	
@@ -373,8 +374,6 @@ func poll_client_udp() -> void:
 	if can_poll_udp == false: return
 	
 	# Poll Lobby Manager UDP
-	if is_registered_with_lobby_udp == false: return
-	
 	if client_manager_to_lobby_manager_udp.get_available_packet_count() > 0:
 		
 		var packet : Variant = client_manager_to_lobby_manager_udp.get_packet()
@@ -395,7 +394,6 @@ func poll_client_udp() -> void:
 	
 	# Poll Relay Manager UDP
 	if is_connected_to_relay == false: return
-	if is_registered_with_relay_udp == false: return
 	
 	if client_manager_to_relay_manager_udp.get_available_packet_count() > 0:
 		
@@ -417,8 +415,6 @@ func poll_client_udp() -> void:
 
 func send_udp_packet_to_lobby_manager(command:String, info:Variant) -> void:
 	
-	if is_registered_with_lobby_udp == false: return
-	
 	var packet : Dictionary = {&"command": command, &"info": info}
 	
 	var packet_to_send : Variant = JSON.stringify(packet)
@@ -428,7 +424,6 @@ func send_udp_packet_to_lobby_manager(command:String, info:Variant) -> void:
 func send_udp_packet_to_relay_manager(command:String, info:Variant) -> void:
 	
 	if is_connected_to_relay == false: return
-	if is_registered_with_relay_udp == false: return
 	
 	var packet : Dictionary = {&"command": command, &"info": info}
 	
@@ -452,8 +447,6 @@ func poll_client_ordered_udp() -> void:
 	if can_poll_ordered_udp == false: return
 	
 	# Poll Lobby Manager Ordered UDP
-	if is_registered_with_lobby_ordered_udp == false: return
-	
 	if client_manager_to_lobby_manager_ordered_udp.get_available_packet_count() > 0:
 		
 		var packet : Variant = client_manager_to_lobby_manager_ordered_udp.get_packet()
@@ -486,7 +479,6 @@ func poll_client_ordered_udp() -> void:
 	
 	# Poll Relay Manager Ordered UDP
 	if is_connected_to_relay == false: return
-	if is_registered_with_relay_ordered_udp == false: return
 	
 	if client_manager_to_relay_manager_ordered_udp.get_available_packet_count() > 0:
 		
@@ -520,8 +512,6 @@ func poll_client_ordered_udp() -> void:
 
 func send_ordred_udp_packet_to_lobby_manager(command:String, info:Variant) -> void:
 	
-	if is_registered_with_lobby_ordered_udp == false: return
-	
 	var packet : Dictionary = {
 		&"command": command, 
 		&"info": info,
@@ -535,7 +525,6 @@ func send_ordred_udp_packet_to_lobby_manager(command:String, info:Variant) -> vo
 func send_ordred_udp_packet_to_relay_manager(command:String, info:Variant) -> void:
 	
 	if is_connected_to_relay == false: return
-	if is_registered_with_relay_ordered_udp == false: return
 	
 	var packet : Dictionary = {
 		&"command": command, 
@@ -561,8 +550,6 @@ func trigger_ordered_udp_client_command(command:String, info:Variant) -> void:
 		
 		#print("GOTTEN")
 		pass
-		
-		
 
 
 

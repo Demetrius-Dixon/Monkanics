@@ -12,10 +12,18 @@ var next_lobby_id_to_assign : int = 0
 
 func _ready() -> void:
 	
-	if not OS.has_feature("dedicated_server"): 
+	if not OS.has_feature("dedicated_server") \
+	or not OS.has_feature("lobby_manager"): 
+		
 		queue_free()
-	else: 
+	
+	if OS.has_feature("lobby_manager"):
+		
 		create_lobby_manager()
+		
+	else: 
+		
+		queue_free()
 
 func _process(_delta: float) -> void:
 	
@@ -97,6 +105,7 @@ func poll_main_server() -> void:
 		
 		tcp_client.poll()
 		
+		# Check if the client is connected
 		if client[&"tcp_peer"].get_status() != \
 		StreamPeerTCP.STATUS_CONNECTED:
 			
@@ -197,6 +206,9 @@ peer:Variant, all_data:Variant, current_lobby:Variant, is_host:Variant)-> void:
 	#
 	#if command == "forward_tcp_to_all":
 		#forward_tcp_data_to_all_clients(all_data, peer)
+	
+	if command == "register_official_relay_server":
+		pass
 	
 	if command == "create_lobby":
 		create_lobby_instance(peer, info)
@@ -522,7 +534,7 @@ func create_lobby_instance(host:StreamPeerTCP, lobby_name:String) -> void:
 	host)
 	
 	#print("Lobbies on Server: ", active_lobbies)
-	#print("Lobby Created")
+	print("Lobby Created")
 
 func assign_lobby_id() -> int:
 	
