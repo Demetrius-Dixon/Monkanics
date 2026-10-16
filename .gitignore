@@ -6,6 +6,3 @@
 .vscode/
 quill-ide
 
-# Secrets
-main_scene/autoloads/netcode_autoloads/secret_manager.gd
-
