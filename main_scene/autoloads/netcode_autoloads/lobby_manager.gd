@@ -10,6 +10,8 @@ var relay_server_ordered_udp : UDPServer
 var active_lobbies : Array[Dictionary] = []
 var next_lobby_id_to_assign : int = 0
 
+var registered_relay_servers : Array[Dictionary] = []
+
 func _ready() -> void:
 	
 	if not OS.has_feature("dedicated_server") \
@@ -151,7 +153,7 @@ func decode_tcp_stream() -> void:
 			var data : PackedByteArray = data_buffer.slice(4, 4 + data_size)
 			var packet : Dictionary = JSON.parse_string(data.get_string_from_utf8())
 			
-			#print(packet)
+			print(packet)
 			
 			data_buffer = data_buffer.slice(4 + data_size)
 			tcp_client[&"tcp_data_buffer"] = data_buffer
@@ -208,7 +210,12 @@ peer:Variant, all_data:Variant, current_lobby:Variant, is_host:Variant)-> void:
 		#forward_tcp_data_to_all_clients(all_data, peer)
 	
 	if command == "register_official_relay_server":
-		pass
+		
+		var region_to_register : String = info[&"region"]
+		var sent_key : Variant = info[&"key"]
+		
+		print(region_to_register)
+		print(sent_key)
 	
 	if command == "create_lobby":
 		create_lobby_instance(peer, info)

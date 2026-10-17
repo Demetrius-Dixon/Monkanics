@@ -26,13 +26,13 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	
-	pass
+	poll_relay_manager_tcp()
+	decode_tcp_stream()
 	
-	#poll_relay_manager_tcp()
-	#decode_tcp_stream()
-	#
-	#poll_relay_manager_udp()
-	#poll_relay_manager_ordered_udp()
+	poll_relay_manager_udp()
+	poll_relay_manager_ordered_udp()
+	
+	connect_to_lobby_manager()
 
 func create_relay() -> void:
 	
@@ -59,6 +59,19 @@ func create_relay() -> void:
 		EndpointManager.LOBBY_MANAGER_IPV4, 
 		EndpointManager.LOBBY_MANAGER_TCP_PORT)
 	print("Relay -> Lobby TCP Created")
+
+func connect_to_lobby_manager() -> void:
+	
+	var relay_registration_info : Dictionary = {
+		
+		&"region": "US",
+		&"key": SecretManager.TEST_KEY
+		
+	}
+	
+	send_tcp_data_to_lobby_manager("register_official_relay_server", relay_registration_info)
+
+
 
 
 
