@@ -68,7 +68,7 @@ func _process(_delta: float) -> void:
 		
 		#MouseManager.toggle_mouse()
 		
-		send_udp_packet_to_lobby_manager("print", null)
+		send_tcp_data_to_lobby_manager("print", null)
 
 func _physics_process(_delta: float) -> void:
 	pass

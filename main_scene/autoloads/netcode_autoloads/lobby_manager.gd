@@ -153,7 +153,7 @@ func decode_tcp_stream() -> void:
 			var data : PackedByteArray = data_buffer.slice(4, 4 + data_size)
 			var packet : Dictionary = JSON.parse_string(data.get_string_from_utf8())
 			
-			print(packet)
+			#print(packet)
 			
 			data_buffer = data_buffer.slice(4 + data_size)
 			tcp_client[&"tcp_data_buffer"] = data_buffer
@@ -214,8 +214,30 @@ peer:Variant, all_data:Variant, current_lobby:Variant, is_host:Variant)-> void:
 		var region_to_register : String = info[&"region"]
 		var sent_key : Variant = info[&"key"]
 		
-		print(region_to_register)
-		print(sent_key)
+		#print(region_to_register)
+		#print(sent_key)
+		
+		if sent_key == SecretManager.TEST_KEY:
+			
+			# Check if the region is already registered
+			for relay in registered_relay_servers:
+				
+				if region_to_register == relay[&"region"]: 
+					return
+			
+			# Check if the IP is the official server
+			for endpoint:Variant in EndpointManager.relay_regions:
+				
+				if peer.get_connected_host() == endpoint:
+					
+					registered_relay_servers.append({
+					
+					&"region": "US",
+					&"relay_ip": peer.get_connected_host()
+					
+				})
+				
+				print(region_to_register, " relay registered")
 	
 	if command == "create_lobby":
 		create_lobby_instance(peer, info)
@@ -534,6 +556,16 @@ func create_lobby_instance(host:StreamPeerTCP, lobby_name:String) -> void:
 			client[&"is_host"] = true
 			
 			#print(client[&"current_lobby"])
+	
+	var relay_to_connect_to : Variant
+	
+	for relay in registered_relay_servers:
+		
+		if relay[&"region"] == EndpointManager.relay_regions[&"NA"]:
+			
+			
+	
+	send_tcp_data_to_client("client_connect_to_relay", )
 	
 	send_tcp_data_to_client("load_map", "bnza_zoolag", host)
 	send_tcp_data_to_client("spawn_own_player", 

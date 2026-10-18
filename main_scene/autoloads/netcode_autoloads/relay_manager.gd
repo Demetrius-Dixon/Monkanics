@@ -5,6 +5,7 @@ var relay_manager_udp : UDPServer
 var relay_manager_ordered_udp : UDPServer
 
 var relay_to_lobby_manager_tcp : StreamPeerTCP
+var tcp_data_buffer : PackedByteArray = PackedByteArray()
 
 var connected_clients : Array[Dictionary] = []
 var relay_sessions : Array[Dictionary] = []
@@ -32,7 +33,7 @@ func _process(_delta: float) -> void:
 	poll_relay_manager_udp()
 	poll_relay_manager_ordered_udp()
 	
-	connect_to_lobby_manager()
+	poll_relay_to_lobby_manager_tcp()
 
 func create_relay() -> void:
 	
@@ -59,6 +60,10 @@ func create_relay() -> void:
 		EndpointManager.LOBBY_MANAGER_IPV4, 
 		EndpointManager.LOBBY_MANAGER_TCP_PORT)
 	print("Relay -> Lobby TCP Created")
+	
+	await get_tree().create_timer(1).timeout
+	
+	connect_to_lobby_manager()
 
 func connect_to_lobby_manager() -> void:
 	
@@ -150,6 +155,21 @@ func poll_relay_manager_tcp() -> void:
 		
 		clients_to_erase.clear()
 
+func poll_relay_to_lobby_manager_tcp() -> void:
+	
+	relay_to_lobby_manager_tcp.poll()
+	
+	var lobby_manager_bytes : Variant = relay_to_lobby_manager_tcp.get_available_bytes()
+	
+	if lobby_manager_bytes > 0:
+		
+		var data : Variant = relay_to_lobby_manager_tcp.get_data(
+		lobby_manager_bytes)[1]
+		
+		#print(data)
+		
+		tcp_data_buffer.append_array(data)
+
 func decode_tcp_stream() -> void:
 	
 	if connected_clients.is_empty(): return
@@ -171,7 +191,7 @@ func decode_tcp_stream() -> void:
 			var data : PackedByteArray = data_buffer.slice(4, 4 + data_size)
 			var packet : Dictionary = JSON.parse_string(data.get_string_from_utf8())
 			
-			#print(packet)
+			print(packet)
 			
 			data_buffer = data_buffer.slice(4 + data_size)
 			tcp_client[&"tcp_data_buffer"] = data_buffer
