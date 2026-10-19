@@ -628,6 +628,9 @@ func client_join_lobby(client:StreamPeerTCP, client_id:int, lobby_id:int) -> voi
 			# Info to send to joining client
 			send_tcp_data_to_client("join_lobby", lobby_data, client)
 			
+			send_tcp_data_to_client("client_connect_to_relay", 
+			EndpointManager.relay_regions[&"NA"], client)
+			
 			send_tcp_data_to_client("spawn_own_player", 
 			{&"x": 0, &"y": 0, &"z": 0} , 
 			client)
