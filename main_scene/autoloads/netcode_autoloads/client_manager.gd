@@ -24,14 +24,17 @@ var is_registered_with_relay_ordered_udp : bool = false
 
 # All TCP
 var tcp_data_buffer : PackedByteArray = PackedByteArray()
-var can_poll_tcp : bool = false
+var can_poll_lobby_tcp : bool = false
+var can_poll_relay_tcp : bool = false
 
 # All UDP
-var can_poll_udp : bool = false
+var can_poll_lobby_udp : bool = false
+var can_poll_relay_udp : bool = false
 const UDP_REGISTRATION_RETRY_DELAY : float = 0.25
 
 # All Ordered UDP
-var can_poll_ordered_udp : bool = false
+var can_poll_lobby_ordered_udp : bool = false
+var can_poll_relay_ordered_udp : bool = false
 var current_ordered_packet_sequence_number : int = 0
 var last_server_packet_sequence_number : int = 0
 const ORDERED_UDP_REGISTRATION_RETRY_DELAY : float = 0.25
@@ -86,7 +89,7 @@ func create_client() -> void:
 	if is_registered_with_lobby_manager_tcp == true \
 	and is_registered_with_relay_manager_tcp == true: return
 	
-	can_poll_tcp = true
+	can_poll_lobby_tcp = true
 	
 	client_manager_to_lobby_manager_tcp = StreamPeerTCP.new()
 	client_manager_to_lobby_manager_tcp.connect_to_host(
@@ -97,8 +100,8 @@ func create_client() -> void:
 
 func open_lobby_manager_udp_channels() -> void:
 	
-	can_poll_udp = true
-	can_poll_ordered_udp = true
+	can_poll_lobby_udp = true
+	can_poll_lobby_ordered_udp = true
 	
 	client_manager_to_lobby_manager_udp = PacketPeerUDP.new()
 	client_manager_to_lobby_manager_udp.connect_to_host(
@@ -146,24 +149,29 @@ func confirm_registration_to_lobby_ordered_udp_server() -> void:
 
 
 
-func connect_to_relay_server() -> void:
+func connect_to_relay_server(relay_to_connect_to:String) -> void:
+	
+	can_poll_relay_tcp = true
 	
 	client_manager_to_relay_manager_tcp = StreamPeerTCP.new()
 	client_manager_to_relay_manager_tcp.connect_to_host(
-		EndpointManager.current_relay_region, 
+		relay_to_connect_to, 
 		EndpointManager.RELAY_MANAGER_TCP_PORT)
 
-func open_relay_manager_udp_channels() -> void:
+func open_relay_manager_udp_channels(relay_to_connect_to:String) -> void:
+	
+	can_poll_relay_udp = true
+	can_poll_relay_ordered_udp = true
 	
 	client_manager_to_relay_manager_udp = PacketPeerUDP.new()
 	client_manager_to_relay_manager_udp.connect_to_host(
-		EndpointManager.current_relay_region, 
+		relay_to_connect_to, 
 		EndpointManager.RELAY_MANAGER_UDP_PORT)
 	register_to_relay_udp_server()
 	
 	client_manager_to_relay_manager_ordered_udp = PacketPeerUDP.new()
 	client_manager_to_relay_manager_ordered_udp.connect_to_host(
-		EndpointManager.current_relay_region, 
+		relay_to_connect_to, 
 		EndpointManager.RELAY_MANAGER_ORDERED_UDP_PORT)
 	register_to_relay_ordered_udp_server()
 
@@ -202,7 +210,7 @@ func confirm_registration_to_relay_ordered_udp_server() -> void:
 
 func poll_client_tcp() -> void:
 	
-	if can_poll_tcp == false: return
+	if can_poll_lobby_tcp == false: return
 	
 	# Poll Lobby Manager TCP
 	client_manager_to_lobby_manager_tcp.poll()
@@ -219,7 +227,7 @@ func poll_client_tcp() -> void:
 		tcp_data_buffer.append_array(data)
 	
 	# Poll Relay Manager TCP
-	if is_connected_to_relay == false: return
+	if can_poll_relay_tcp == false: return
 	
 	client_manager_to_relay_manager_tcp.poll()
 	
@@ -315,7 +323,7 @@ func trigger_tpc_client_command(command:String, info:Variant) -> void:
 		
 		is_registered_with_relay_manager_tcp = true
 		
-		open_relay_manager_udp_channels()
+		open_relay_manager_udp_channels(info)
 		
 		print("Client -> Relay Manager TCP Registered")
 	
@@ -349,7 +357,8 @@ func trigger_tpc_client_command(command:String, info:Variant) -> void:
 		MapManager.load_map(info[&"map"])
 	
 	if command == "client_connect_to_relay":
-		pass
+		
+		connect_to_relay_server(info)
 	
 	# Game
 	if command == "new_player_joined":
@@ -371,7 +380,7 @@ func trigger_tpc_client_command(command:String, info:Variant) -> void:
 
 func poll_client_udp() -> void:
 	
-	if can_poll_udp == false: return
+	if can_poll_lobby_udp == false: return
 	
 	# Poll Lobby Manager UDP
 	if client_manager_to_lobby_manager_udp.get_available_packet_count() > 0:
@@ -393,7 +402,7 @@ func poll_client_udp() -> void:
 		trigger_udp_client_command(command, info)
 	
 	# Poll Relay Manager UDP
-	if is_connected_to_relay == false: return
+	if can_poll_relay_udp == false: return
 	
 	if client_manager_to_relay_manager_udp.get_available_packet_count() > 0:
 		
@@ -444,7 +453,7 @@ func trigger_udp_client_command(command:String, info:Variant) -> void:
 
 func poll_client_ordered_udp() -> void:
 	
-	if can_poll_ordered_udp == false: return
+	if can_poll_lobby_ordered_udp == false: return
 	
 	# Poll Lobby Manager Ordered UDP
 	if client_manager_to_lobby_manager_ordered_udp.get_available_packet_count() > 0:
@@ -478,7 +487,7 @@ func poll_client_ordered_udp() -> void:
 			last_server_packet_sequence_number = packet_sequence_number
 	
 	# Poll Relay Manager Ordered UDP
-	if is_connected_to_relay == false: return
+	if can_poll_relay_ordered_udp == false: return
 	
 	if client_manager_to_relay_manager_ordered_udp.get_available_packet_count() > 0:
 		

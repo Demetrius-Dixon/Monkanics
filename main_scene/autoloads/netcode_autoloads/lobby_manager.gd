@@ -557,15 +557,8 @@ func create_lobby_instance(host:StreamPeerTCP, lobby_name:String) -> void:
 			
 			#print(client[&"current_lobby"])
 	
-	var relay_to_connect_to : Variant
-	
-	for relay in registered_relay_servers:
-		
-		if relay[&"region"] == EndpointManager.relay_regions[&"NA"]:
-			
-			
-	
-	send_tcp_data_to_client("client_connect_to_relay", )
+	send_tcp_data_to_client("client_connect_to_relay", 
+	EndpointManager.relay_regions[&"NA"], host)
 	
 	send_tcp_data_to_client("load_map", "bnza_zoolag", host)
 	send_tcp_data_to_client("spawn_own_player", 

@@ -96,7 +96,7 @@ func poll_relay_manager_tcp() -> void:
 			&"ordered_udp_peer": null,
 			&"last_sequence_number": 0,
 			&"ip_address": 0,
-			#&"game_id": assign_client_game_id(),
+			&"game_id": -1,
 			&"current_lobby": null,
 			&"is_host": null,
 			&"host_tcp_peer": null,
@@ -111,7 +111,8 @@ func poll_relay_manager_tcp() -> void:
 		
 		connected_clients.append(client)
 		
-		send_tcp_data_to_client("confirm_tcp_registration", client[&"game_id"], peer)
+		send_tcp_data_to_client("confirm_relay_manager_tcp_registration", 
+		EndpointManager.relay_regions[&"NA"], peer)
 		
 		#print("TCP Client Connected: ", client)
 	
@@ -286,16 +287,17 @@ func poll_relay_manager_udp() -> void:
 			
 			if client[&"udp_peer"] == peer:
 				
-				send_tcp_data_to_client("confirm_udp_registration", null, client[&"tcp_peer"])
+				send_tcp_data_to_client("confirm_relay_manager_udp_registration", 
+				EndpointManager.relay_regions[&"NA"], client[&"udp_peer"])
 				
 				return
 			
-			if info == client[&"game_id"] \
-			and command == "register_to_relay_manager_udp":
+			if command == "register_to_relay_manager_udp":
 				
 				client[&"udp_peer"] = peer
 				
-				send_tcp_data_to_client("confirm_udp_registration", null, client[&"tcp_peer"])
+				send_tcp_data_to_client("confirm_relay_manager_udp_registration", 
+				null, client[&"tcp_peer"])
 	
 	for client in connected_clients:
 		
@@ -390,16 +392,17 @@ func poll_relay_manager_ordered_udp() -> void:
 			
 			if client[&"ordered_udp_peer"] == peer:
 				
-				send_tcp_data_to_client("confirm_ordered_udp_registration", null, client[&"tcp_peer"])
+				send_tcp_data_to_client("confirm_relay_manager_ordered_udp_registration", 
+				EndpointManager.relay_regions[&"NA"], client[&"ordered_udp_peer"])
 				
 				return
 			
-			if info == client[&"game_id"] \
-			and command == "register_to_relay_manager_ordered_udp":
+			if command == "register_to_relay_manager_ordered_udp":
 				
 				client[&"ordered_udp_peer"] = peer
 				
-				send_tcp_data_to_client("confirm_ordered_udp_registration", null, client[&"tcp_peer"])
+				send_tcp_data_to_client("confirm_relay_manager_ordered_udp_registration", 
+				null, client[&"tcp_peer"])
 	
 	for client in connected_clients:
 		
