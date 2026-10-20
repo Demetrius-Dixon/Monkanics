@@ -22,6 +22,7 @@
 
 ### Other Developer Socials:
 
+- Monkanics-Dev X/Twitter: https://x.com/monkanics_dev
 - Monkanics-Dev Bluesky: https://bsky.app/profile/monkanics-dev.bsky.social
 - Monkanics-Dev Tumblr: https://www.tumblr.com/blog/monkanics-dev
 - Monkanics_Dev TikTok: https://www.tiktok.com/@monkanicsdev
