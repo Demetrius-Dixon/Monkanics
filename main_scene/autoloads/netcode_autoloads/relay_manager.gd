@@ -6,9 +6,11 @@ var relay_manager_ordered_udp : UDPServer
 
 var relay_to_lobby_manager_tcp : StreamPeerTCP
 var tcp_data_buffer : PackedByteArray = PackedByteArray()
+var relay_to_lobby_tcp_data_buffer : PackedByteArray = PackedByteArray()
 
 var connected_clients : Array[Dictionary] = []
 var relay_sessions : Array[Dictionary] = []
+var next_session_id_to_assign : int = 0
 
 func _ready() -> void:
 	
@@ -34,6 +36,7 @@ func _process(_delta: float) -> void:
 	poll_relay_manager_ordered_udp()
 	
 	poll_relay_to_lobby_manager_tcp()
+	decode_lobby_tcp_stream()
 
 func create_relay() -> void:
 	
@@ -96,7 +99,7 @@ func poll_relay_manager_tcp() -> void:
 			&"ordered_udp_peer": null,
 			&"last_sequence_number": 0,
 			&"ip_address": 0,
-			&"game_id": -1,
+			&"client_id": -1,
 			&"current_lobby": null,
 			&"is_host": null,
 			&"host_tcp_peer": null,
@@ -169,7 +172,7 @@ func poll_relay_to_lobby_manager_tcp() -> void:
 		
 		#print(data)
 		
-		tcp_data_buffer.append_array(data)
+		relay_to_lobby_tcp_data_buffer.append_array(data)
 
 func decode_tcp_stream() -> void:
 	
@@ -199,6 +202,26 @@ func decode_tcp_stream() -> void:
 			
 			trigger_tcp_server_command(packet[&"command"], packet[&"info"], 
 			client, packet, current_lobby, is_host)
+
+func decode_lobby_tcp_stream() -> void:
+	
+	if relay_to_lobby_tcp_data_buffer.is_empty(): return
+	
+	while relay_to_lobby_tcp_data_buffer.size() >= 4:
+		
+		var data_size : int = relay_to_lobby_tcp_data_buffer.decode_u32(0)
+		
+		if relay_to_lobby_tcp_data_buffer.size() < 4 + data_size:
+			break
+		
+		var data : PackedByteArray = relay_to_lobby_tcp_data_buffer.slice(4, 4 + data_size)
+		var packet : Variant = JSON.parse_string(data.get_string_from_utf8())
+		
+		relay_to_lobby_tcp_data_buffer = relay_to_lobby_tcp_data_buffer.slice(4 + data_size)
+		
+		#print(packet)
+		
+		trigger_lobby_tcp_command(packet[&"command"], packet[&"info"])
 
 func send_tcp_data_to_client(command:String, info:Variant, recipient:StreamPeerTCP) -> void:
 	
@@ -245,7 +268,7 @@ func send_tcp_data_to_lobby_manager(command:String, info:Variant) -> void:
 		#send_tcp_data_to_client(command, info, client[&"peer"])
 
 func trigger_tcp_server_command(command:String, info:Variant, 
-peer:Variant, all_data:Variant, current_lobby:Variant, is_host:Variant)-> void:
+peer:Variant, all_data:Variant, current_lobby:Variant, is_host:Variant) -> void:
 	
 	#if command == "forward_tcp_to":
 		#forward_tcp_data_to_specific_client(all_data, info)
@@ -253,14 +276,25 @@ peer:Variant, all_data:Variant, current_lobby:Variant, is_host:Variant)-> void:
 	#if command == "forward_tcp_to_all":
 		#forward_tcp_data_to_all_clients(all_data, peer)
 	
-	pass
+	if command == "set_client_id":
+		
+		print("Function Triggered")
+		
+		for client in connected_clients:
+			
+			if client[&"tcp_peer"] == peer:
+				
+				client[&"client_id"] = info
+				
+				print(client[&"client_id"])
+
+func trigger_lobby_tcp_command(command:String, info:Variant) -> void:
 	
-	if command == "create_new_lobby_instance":
-		pass
-		
-		
-
-
+	if command == "start_relay_session":
+		create_relay_session_instance(info)
+	
+	if command == "join_relay_session":
+		join_relay_session(info)
 
 
 
@@ -524,7 +558,33 @@ peer:Variant, whole_packet:Variant, current_lobby:Variant, is_host:Variant)-> vo
 
 
 
-func create_relay_session_instance() -> void:
-	pass
+func create_relay_session_instance(info:Variant) -> void:
 	
+	var new_relay_sesson : Dictionary = {
+		
+		&"session_id": info[&"lobby_id"],
+		&"host": info[&"host"],
+		&"peers": [info[&"host"]]
+	}
 	
+	relay_sessions.append(new_relay_sesson)
+	
+	print("Relay Session Started")
+
+func assign_session_id() -> int:
+	
+	next_session_id_to_assign = \
+	next_session_id_to_assign + 1
+	
+	return next_session_id_to_assign
+
+func join_relay_session(info:Variant) -> void:
+	
+	for session in relay_sessions:
+		
+		if session[&"session_id"] == info[&"lobby_id"]:
+			
+			session[&"peers"].append(info[&"peer"])
+			
+			#print(session[&"peers"])
+			print("Client Joined Relay Session: ", session[&"session_id"])

@@ -2,7 +2,7 @@ extends Node
 
 var main_server : TCPServer
 var connected_clients : Array[Dictionary] = []
-var next_client_game_id_to_assign : int = 0
+var next_client_client_id_to_assign : int = 0
 
 var relay_server_udp : UDPServer
 var relay_server_ordered_udp : UDPServer
@@ -72,7 +72,7 @@ func poll_main_server() -> void:
 			&"ordered_udp_peer": null,
 			&"last_sequence_number": 0,
 			&"ip_address": 0,
-			&"game_id": assign_client_game_id(),
+			&"client_id": assign_client_client_id(),
 			&"current_lobby": null,
 			&"is_host": null,
 			&"host_tcp_peer": null,
@@ -87,7 +87,7 @@ func poll_main_server() -> void:
 		
 		connected_clients.append(client)
 		
-		send_tcp_data_to_client("confirm_lobby_manager_tcp_registration", client[&"game_id"], peer)
+		send_tcp_data_to_client("confirm_lobby_manager_tcp_registration", client[&"client_id"], peer)
 		
 		#print("TCP Client Connected: ", client)
 	
@@ -173,41 +173,15 @@ func send_tcp_data_to_client(command:String, info:Variant, recipient:StreamPeerT
 	recipient.put_u32(data.size())
 	recipient.put_data(data)
 
-#func forward_tcp_data_to_specific_client(data:Variant, recipient:StreamPeerTCP) -> void:
-	#
-	#var command : String = data[&"command"]
-	#var info : Dictionary = data[&"info"]
-	#
-	#send_tcp_data_to_client(command, info, recipient)
-#
-#func forward_tcp_data_to_all_clients(data:Variant, sender:StreamPeerTCP) -> void:
-	#
-	#var command : String = data[&"command"]
-	#var info : Dictionary = data[&"info"]
-	#
-	#for client in connected_clients:
-		#
-		#if sender == client[&"peer"]: 
-			#pass
-			#continue
-		#
-		#send_tcp_data_to_client(command, info, client[&"peer"])
-
-func assign_client_game_id() -> int:
+func assign_client_client_id() -> int:
 	
-	next_client_game_id_to_assign = \
-	next_client_game_id_to_assign + 1
+	next_client_client_id_to_assign = \
+	next_client_client_id_to_assign + 1
 	
-	return next_client_game_id_to_assign
+	return next_client_client_id_to_assign
 
 func trigger_tcp_server_command(command:String, info:Variant, 
 peer:Variant, all_data:Variant, current_lobby:Variant, is_host:Variant)-> void:
-	
-	#if command == "forward_tcp_to":
-		#forward_tcp_data_to_specific_client(all_data, info)
-	#
-	#if command == "forward_tcp_to_all":
-		#forward_tcp_data_to_all_clients(all_data, peer)
 	
 	if command == "register_official_relay_server":
 		
@@ -223,21 +197,17 @@ peer:Variant, all_data:Variant, current_lobby:Variant, is_host:Variant)-> void:
 			for relay in registered_relay_servers:
 				
 				if region_to_register == relay[&"region"]: 
+					
 					return
 			
-			# Check if the IP is the official server
-			for endpoint:Variant in EndpointManager.relay_regions:
-				
-				if peer.get_connected_host() == endpoint:
-					
-					registered_relay_servers.append({
-					
-					&"region": "US",
-					&"relay_ip": peer.get_connected_host()
-					
-				})
-				
-				print(region_to_register, " relay registered")
+			registered_relay_servers.append({
+			
+			&"relay_peer": peer,
+			&"region": "US",
+			&"relay_ip": peer.get_connected_host()
+			})
+			
+			print(region_to_register, " Relay Registered")
 	
 	if command == "create_lobby":
 		create_lobby_instance(peer, info)
@@ -250,7 +220,7 @@ peer:Variant, all_data:Variant, current_lobby:Variant, is_host:Variant)-> void:
 			
 			if peer == client[&"tcp_peer"]:
 				
-				id_to_get = client[&"game_id"]
+				id_to_get = client[&"client_id"]
 		
 		client_join_lobby(peer, id_to_get, info)
 	
@@ -294,7 +264,7 @@ func poll_relay_server_udp() -> void:
 				
 				return
 			
-			if info == client[&"game_id"] \
+			if info == client[&"client_id"] \
 			and command == "register_to_lobby_manager_udp":
 				
 				client[&"udp_peer"] = peer
@@ -335,34 +305,10 @@ func send_udp_packet_to_client(command:String, info:Variant, recipient:PacketPee
 	
 	recipient.put_packet(packet_to_send.to_utf8_buffer())
 
-#func forward_udp_packet_to_specific_client(packet:Dictionary, recipient:PacketPeerUDP) -> void:
-	#
-	#var packet_to_forward : Variant = JSON.stringify(packet)
-	#
-	#recipient.put_packet(packet_to_forward.to_utf8_buffer())
-#
-#func forward_udp_packet_to_all_clients(packet:Dictionary, sender:PacketPeerUDP) -> void:
-	#
-	#var packet_to_forward : Variant = JSON.stringify(packet)
-	#
-	#for client in connected_clients:
-		#
-		#if sender == client[&"udp_peer"]: 
-			#pass
-			#continue
-		#
-		#client[&"udp_peer"].put_packet(packet_to_forward.to_utf8_buffer())
-
 func trigger_udp_server_command(command:String, info:Variant, 
 peer:Variant, whole_packet:Variant, current_lobby:Variant, is_host:Variant)-> void:
 	
 	pass
-	
-	#if command == "forward_udp_to":
-		#forward_udp_packet_to_specific_client(whole_packet, info)
-	#
-	#if command == "forward_udp_to_all":
-		#forward_udp_packet_to_all_clients(whole_packet, peer)
 
 
 
@@ -398,7 +344,7 @@ func poll_relay_server_ordered_udp() -> void:
 				
 				return
 			
-			if info == client[&"game_id"] \
+			if info == client[&"client_id"] \
 			and command == "register_to_lobby_manager_ordered_udp":
 				
 				client[&"ordered_udp_peer"] = peer
@@ -467,32 +413,8 @@ sender:PacketPeerUDP, recipient:PacketPeerUDP) -> void:
 	
 	recipient.put_packet(packet_to_send.to_utf8_buffer())
 
-#func forward_ordered_udp_packet_to_specific_client(packet:Dictionary, recipient:PacketPeerUDP) -> void:
-	#
-	#var packet_to_forward : Variant = JSON.stringify(packet)
-	#
-	#recipient.put_packet(packet_to_forward.to_utf8_buffer())
-#
-#func forward_ordered_udp_packet_to_all_clients(packet:Dictionary, sender:PacketPeerUDP) -> void:
-	#
-	#var packet_to_forward : Variant = JSON.stringify(packet)
-	#
-	#for client in connected_clients:
-		#
-		#if sender == client[&"ordered_udp_peer"]: 
-			#pass
-			#continue
-		#
-		#client[&"ordered_udp_peer"].put_packet(packet_to_forward.to_utf8_buffer())
-
 func trigger_ordered_udp_server_command(command:String, info:Variant, 
 peer:Variant, whole_packet:Variant, current_lobby:Variant, is_host:Variant)-> void:
-	
-	#if command == "forward_ordered_udp_to":
-		#forward_ordered_udp_packet_to_specific_client(whole_packet, info)
-	#
-	#if command == "forward_ordered_udp_to_all":
-		#forward_ordered_udp_packet_to_all_clients(whole_packet, peer)
 	
 	if command == "send_untrusted_position_to_server":
 		
@@ -547,6 +469,9 @@ func create_lobby_instance(host:StreamPeerTCP, lobby_name:String) -> void:
 		
 	})
 	
+	var client_id : int
+	
+	# Assign the hosts current lobby
 	for client in connected_clients:
 		
 		if host == client[&"tcp_peer"]:
@@ -555,11 +480,29 @@ func create_lobby_instance(host:StreamPeerTCP, lobby_name:String) -> void:
 			
 			client[&"is_host"] = true
 			
+			client_id = client[&"client_id"]
+			
 			#print(client[&"current_lobby"])
 	
+	# Connect host to the relay
 	send_tcp_data_to_client("client_connect_to_relay", 
 	EndpointManager.relay_regions[&"NA"], host)
 	
+	await get_tree().create_timer(2).timeout
+	
+	# Create relay connection session
+	for relay in registered_relay_servers:
+		
+		if relay[&"relay_ip"] == EndpointManager.relay_regions[&"NA"]:
+			
+			var info_to_send : Dictionary = {
+				&"host": host, 
+				&"lobby_id": new_lobby_id,
+				&"client_id": client_id}
+			
+			send_tcp_data_to_client("start_relay_session", info_to_send, relay[&"relay_peer"])
+	
+	# Start host game locally
 	send_tcp_data_to_client("load_map", "bnza_zoolag", host)
 	send_tcp_data_to_client("spawn_own_player", 
 	{&"x": 0, &"y": 0, &"z": 0}, 
@@ -625,11 +568,26 @@ func client_join_lobby(client:StreamPeerTCP, client_id:int, lobby_id:int) -> voi
 					
 					client_in_lobby[&"host_ordered_udp_peer"] = host_ordered_udp_peer
 			
+			# Connect client to relay
+			send_tcp_data_to_client("client_connect_to_relay", 
+			EndpointManager.relay_regions[&"NA"], client)
+			
+			await get_tree().create_timer(2).timeout
+			
 			# Info to send to joining client
 			send_tcp_data_to_client("join_lobby", lobby_data, client)
 			
-			send_tcp_data_to_client("client_connect_to_relay", 
-			EndpointManager.relay_regions[&"NA"], client)
+			# Join relay connection session
+			for relay in registered_relay_servers:
+				
+				if relay[&"relay_ip"] == EndpointManager.relay_regions[&"NA"]:
+					
+					var info_to_send : Dictionary = {
+						&"lobby_id": lobby[&"lobby_id"],
+						&"peer": client
+						}
+					
+					send_tcp_data_to_client("join_relay_session", info_to_send, relay[&"relay_peer"])
 			
 			send_tcp_data_to_client("spawn_own_player", 
 			{&"x": 0, &"y": 0, &"z": 0} , 
@@ -652,7 +610,3 @@ func client_join_lobby(client:StreamPeerTCP, client_id:int, lobby_id:int) -> voi
 				if client_in_lobby == lobby[&"host"]: continue
 				
 				send_tcp_data_to_client("new_player_joined", client_id, client_in_lobby)
-
-func assign_host_in_lobby() -> void:
-	pass
-	
