@@ -43,7 +43,7 @@ var client_player_node : Node = null
 
 func _ready() -> void:
 	
-	if OS.has_feature("dedicated_server"): 
+	if OS.has_feature(FeatureManager.DEDICATED_SERVER): 
 		queue_free()
 	else: 
 		UiManager.load_ui_element("main_menu")

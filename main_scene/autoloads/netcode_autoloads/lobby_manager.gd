@@ -12,12 +12,12 @@ var next_lobby_id_to_assign : int = 0
 
 func _ready() -> void:
 	
-	if not OS.has_feature("dedicated_server") \
-	or not OS.has_feature("lobby_manager"): 
+	if not OS.has_feature(FeatureManager.DEDICATED_SERVER) \
+	or not OS.has_feature(FeatureManager.LOBBY_SERVER): 
 		
 		queue_free()
 	
-	if OS.has_feature("lobby_manager"):
+	if OS.has_feature(FeatureManager.LOBBY_SERVER):
 		
 		create_lobby_manager()
 		

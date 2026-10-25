@@ -39,6 +39,7 @@ LobbyManager="*uid://crrcqmy2l1p2t"
 UiManager="*uid://bk3y3wtflq61u"
 RelayManager="*uid://cbplu5f3rnsxs"
 SecretManager="*uid://6j4g27d3vyxo"
+FeatureManager="*uid://dhlih85dq2ijs"
 
 [debug]
 

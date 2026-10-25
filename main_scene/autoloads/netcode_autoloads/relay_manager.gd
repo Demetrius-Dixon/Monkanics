@@ -14,12 +14,12 @@ var next_session_id_to_assign : int = 0
 
 func _ready() -> void:
 	
-	if not OS.has_feature("dedicated_server") \
-	or not OS.has_feature("relay_manager"): 
+	if not OS.has_feature(FeatureManager.DEDICATED_SERVER) \
+	or not OS.has_feature(FeatureManager.RELAY_SERVER): 
 		
 		queue_free()
 	
-	if OS.has_feature("relay_manager"):
+	if OS.has_feature(FeatureManager.RELAY_SERVER):
 		
 		create_relay()
 		
