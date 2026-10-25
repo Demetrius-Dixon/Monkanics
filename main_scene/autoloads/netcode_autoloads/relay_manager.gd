@@ -92,19 +92,15 @@ func poll_relay_manager_tcp() -> void:
 		
 		var client : Dictionary = {
 			
-			&"username": "",
+			&"client_id": -1,
+			&"ip_address": 0,
 			&"tcp_peer": relay_manager_tcp.take_connection(),
 			&"tcp_data_buffer": PackedByteArray(),
 			&"udp_peer": null,
 			&"ordered_udp_peer": null,
 			&"last_sequence_number": 0,
-			&"ip_address": 0,
-			&"client_id": -1,
-			&"current_lobby": null,
-			&"is_host": null,
-			&"host_tcp_peer": null,
-			&"host_udp_peer": null,
-			&"host_ordered_udp_peer": null
+			&"current_session": null,
+			&"is_host": null
 			
 		}
 		
@@ -182,7 +178,7 @@ func decode_tcp_stream() -> void:
 		
 		var client : Variant = tcp_client[&"tcp_peer"]
 		var data_buffer : Variant = tcp_client[&"tcp_data_buffer"]
-		var current_lobby : Variant = tcp_client[&"current_lobby"]
+		var current_lobby : Variant = tcp_client[&"current_session"]
 		var is_host : Variant = tcp_client[&"is_host"]
 		
 		while data_buffer.size() >= 4:
@@ -195,7 +191,7 @@ func decode_tcp_stream() -> void:
 			var data : PackedByteArray = data_buffer.slice(4, 4 + data_size)
 			var packet : Dictionary = JSON.parse_string(data.get_string_from_utf8())
 			
-			print(packet)
+			#print(packet)
 			
 			data_buffer = data_buffer.slice(4 + data_size)
 			tcp_client[&"tcp_data_buffer"] = data_buffer

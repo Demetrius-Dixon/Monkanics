@@ -4,12 +4,6 @@ extends Node
 var client_manager_to_lobby_manager_tcp : StreamPeerTCP
 var is_registered_with_lobby_manager_tcp : bool = false
 
-var client_manager_to_lobby_manager_udp : PacketPeerUDP
-var is_registered_with_lobby_udp : bool = false
-
-var client_manager_to_lobby_manager_ordered_udp : PacketPeerUDP
-var is_registered_with_lobby_ordered_udp : bool = false
-
 # Relay Manager
 var is_connected_to_relay : bool = false
 
@@ -28,12 +22,10 @@ var can_poll_lobby_tcp : bool = false
 var can_poll_relay_tcp : bool = false
 
 # All UDP
-var can_poll_lobby_udp : bool = false
 var can_poll_relay_udp : bool = false
 const UDP_REGISTRATION_RETRY_DELAY : float = 0.25
 
 # All Ordered UDP
-var can_poll_lobby_ordered_udp : bool = false
 var can_poll_relay_ordered_udp : bool = false
 var current_ordered_packet_sequence_number : int = 0
 var last_server_packet_sequence_number : int = 0
@@ -70,8 +62,6 @@ func _process(_delta: float) -> void:
 		pass
 		
 		#MouseManager.toggle_mouse()
-		
-		send_tcp_data_to_lobby_manager("print", null)
 
 func _physics_process(_delta: float) -> void:
 	pass
@@ -86,8 +76,7 @@ func create_client() -> void:
 	
 	if OS.has_feature("dedicated_server"): return
 	
-	if is_registered_with_lobby_manager_tcp == true \
-	and is_registered_with_relay_manager_tcp == true: return
+	if is_registered_with_lobby_manager_tcp == true: return
 	
 	can_poll_lobby_tcp = true
 	
@@ -97,51 +86,6 @@ func create_client() -> void:
 		EndpointManager.LOBBY_MANAGER_TCP_PORT)
 	
 	print("Client Created")
-
-func open_lobby_manager_udp_channels() -> void:
-	
-	can_poll_lobby_udp = true
-	can_poll_lobby_ordered_udp = true
-	
-	client_manager_to_lobby_manager_udp = PacketPeerUDP.new()
-	client_manager_to_lobby_manager_udp.connect_to_host(
-		EndpointManager.LOBBY_MANAGER_IPV4, 
-		EndpointManager.LOBBY_MANAGER_UDP_PORT)
-	register_to_lobby_udp_server()
-	
-	client_manager_to_lobby_manager_ordered_udp = PacketPeerUDP.new()
-	client_manager_to_lobby_manager_ordered_udp.connect_to_host(
-		EndpointManager.LOBBY_MANAGER_IPV4, 
-		EndpointManager.LOBBY_MANAGER_ORDERED_UDP_PORT)
-	register_to_lobby_ordered_udp_server()
-
-func register_to_lobby_udp_server() -> void:
-	
-	send_udp_packet_to_lobby_manager("register_to_lobby_manager_udp", client_id)
-	
-	confirm_registration_to_lobby_udp_server()
-
-func confirm_registration_to_lobby_udp_server() -> void:
-	
-	await get_tree().create_timer(UDP_REGISTRATION_RETRY_DELAY).timeout
-	
-	if is_registered_with_lobby_udp == true: return
-	
-	register_to_lobby_udp_server()
-
-func register_to_lobby_ordered_udp_server() -> void:
-	
-	send_ordred_udp_packet_to_lobby_manager("register_to_lobby_manager_ordered_udp", client_id)
-	
-	confirm_registration_to_lobby_ordered_udp_server()
-
-func confirm_registration_to_lobby_ordered_udp_server() -> void:
-	
-	await get_tree().create_timer(ORDERED_UDP_REGISTRATION_RETRY_DELAY).timeout
-	
-	if is_registered_with_lobby_ordered_udp == true: return
-	
-	register_to_lobby_ordered_udp_server()
 
 
 
@@ -268,8 +212,6 @@ func decode_tcp_stream() -> void:
 
 func send_tcp_data_to_lobby_manager(command:String, info:Variant) -> void:
 	
-	if is_registered_with_lobby_manager_tcp == false: return
-	
 	var packet : Dictionary = {
 	&"command": command,
 	&"info": info
@@ -301,21 +243,11 @@ func trigger_tpc_client_command(command:String, info:Variant) -> void:
 		
 		client_id = info
 		
-		open_lobby_manager_udp_channels()
-		
 		print("Client -> Lobby Manager TCP Registered")
 	
-	if command == "confirm_lobby_manager_udp_registration":
-		
-		is_registered_with_lobby_udp = true
-		
-		print("Client -> Lobby Manager UDP Registered")
 	
-	if command == "confirm_lobby_manager_ordered_udp_registration":
-		
-		is_registered_with_lobby_ordered_udp = true
-		
-		print("Client -> Lobby Manager Ordered UDP Registered")
+	
+	
 	
 	# Relay Manager Registration
 	if command == "confirm_relay_manager_tcp_registration":
@@ -339,6 +271,10 @@ func trigger_tpc_client_command(command:String, info:Variant) -> void:
 		is_registered_with_relay_ordered_udp = true
 		
 		print("Client -> Relay Manager Ordered UDP Registered")
+	
+	
+	
+	
 	
 	# Lobby Management
 	if command == "receive_active_lobby":
@@ -380,27 +316,6 @@ func trigger_tpc_client_command(command:String, info:Variant) -> void:
 
 func poll_client_udp() -> void:
 	
-	if can_poll_lobby_udp == false: return
-	
-	# Poll Lobby Manager UDP
-	if client_manager_to_lobby_manager_udp.get_available_packet_count() > 0:
-		
-		var packet : Variant = client_manager_to_lobby_manager_udp.get_packet()
-		var packet_string : Variant = packet.get_string_from_utf8()
-		
-		#print("Client Recieved Packet: ", packet)
-		
-		var json_translation : Variant = JSON.new()
-		json_translation = JSON.parse_string(packet_string)
-		packet = json_translation
-		
-		var command : String = json_translation[&"command"]
-		var info : Variant = json_translation[&"info"]
-		
-		#print("Client Recieved Packet: ", packet)
-		
-		trigger_udp_client_command(command, info)
-	
 	# Poll Relay Manager UDP
 	if can_poll_relay_udp == false: return
 	
@@ -421,14 +336,6 @@ func poll_client_udp() -> void:
 		#print("Client Recieved Packet: ", packet)
 		
 		trigger_udp_client_command(command, info)
-
-func send_udp_packet_to_lobby_manager(command:String, info:Variant) -> void:
-	
-	var packet : Dictionary = {&"command": command, &"info": info}
-	
-	var packet_to_send : Variant = JSON.stringify(packet)
-	
-	client_manager_to_lobby_manager_udp.put_packet(packet_to_send.to_utf8_buffer())
 
 func send_udp_packet_to_relay_manager(command:String, info:Variant) -> void:
 	
@@ -452,39 +359,6 @@ func trigger_udp_client_command(command:String, info:Variant) -> void:
 
 
 func poll_client_ordered_udp() -> void:
-	
-	if can_poll_lobby_ordered_udp == false: return
-	
-	# Poll Lobby Manager Ordered UDP
-	if client_manager_to_lobby_manager_ordered_udp.get_available_packet_count() > 0:
-		
-		var packet : Variant = client_manager_to_lobby_manager_ordered_udp.get_packet()
-		var packet_string : Variant = packet.get_string_from_utf8()
-		
-		#print("Client Recieved Ordered Packet: ", packet)
-		
-		var json_translation : Variant = JSON.new()
-		json_translation = JSON.parse_string(packet_string)
-		packet = json_translation
-		
-		var command : String = json_translation[&"command"]
-		var info : Variant = json_translation[&"info"]
-		var packet_sequence_number : int = json_translation[&"sequence_number"]
-		
-		#print("Client Received Ordered Packet: ", packet)
-		
-		var sequence_difference : int = \
-		packet_sequence_number - last_server_packet_sequence_number
-		
-		if sequence_difference <= 0:
-			
-			return
-			
-		else:
-			
-			trigger_ordered_udp_client_command(command, info)
-			
-			last_server_packet_sequence_number = packet_sequence_number
 	
 	# Poll Relay Manager Ordered UDP
 	if can_poll_relay_ordered_udp == false: return
@@ -518,18 +392,6 @@ func poll_client_ordered_udp() -> void:
 			trigger_ordered_udp_client_command(command, info)
 			
 			last_server_packet_sequence_number = packet_sequence_number
-
-func send_ordred_udp_packet_to_lobby_manager(command:String, info:Variant) -> void:
-	
-	var packet : Dictionary = {
-		&"command": command, 
-		&"info": info,
-		&"sequence_number": increment_ordered_packet_sequence_number()
-		}
-	
-	var packet_to_send : Variant = JSON.stringify(packet)
-	
-	client_manager_to_lobby_manager_ordered_udp.put_packet(packet_to_send.to_utf8_buffer())
 
 func send_ordred_udp_packet_to_relay_manager(command:String, info:Variant) -> void:
 	

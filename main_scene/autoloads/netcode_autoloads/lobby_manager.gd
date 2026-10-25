@@ -1,16 +1,14 @@
 extends Node
 
-var main_server : TCPServer
+var lobby_manager_tpc : TCPServer
+
+var registered_relay_servers : Array[Dictionary] = []
+
 var connected_clients : Array[Dictionary] = []
 var next_client_client_id_to_assign : int = 0
 
-var relay_server_udp : UDPServer
-var relay_server_ordered_udp : UDPServer
-
 var active_lobbies : Array[Dictionary] = []
 var next_lobby_id_to_assign : int = 0
-
-var registered_relay_servers : Array[Dictionary] = []
 
 func _ready() -> void:
 	
@@ -29,55 +27,36 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	
-	poll_main_server()
+	poll_lobby_manager_tpc()
 	decode_tcp_stream()
-	
-	poll_relay_server_udp()
-	poll_relay_server_ordered_udp()
 
 func create_lobby_manager() -> void:
 	
-	main_server = TCPServer.new()
-	main_server.listen(
+	lobby_manager_tpc = TCPServer.new()
+	lobby_manager_tpc.listen(
 		EndpointManager.LOBBY_MANAGER_TCP_PORT, 
 		EndpointManager.LOBBY_MANAGER_IPV4)
 	print("Lobby Manager TCP Created")
-	
-	relay_server_udp = UDPServer.new()
-	relay_server_udp.listen(
-		EndpointManager.LOBBY_MANAGER_UDP_PORT, 
-		EndpointManager.LOBBY_MANAGER_IPV4)
-	print("Lobby Manager UDP Created")
-	
-	relay_server_ordered_udp = UDPServer.new()
-	relay_server_ordered_udp.listen(
-		EndpointManager.LOBBY_MANAGER_ORDERED_UDP_PORT, 
-		EndpointManager.LOBBY_MANAGER_IPV4)
-	print("Lobby Manager Ordered UDP Created")
 
 
 
 
-func poll_main_server() -> void:
+
+
+
+func poll_lobby_manager_tpc() -> void:
 	
 	# Register new clients
-	if main_server.is_connection_available():
+	if lobby_manager_tpc.is_connection_available():
 		
 		var client : Dictionary = {
 			
-			&"username": "",
-			&"tcp_peer": main_server.take_connection(),
-			&"tcp_data_buffer": PackedByteArray(),
-			&"udp_peer": null,
-			&"ordered_udp_peer": null,
-			&"last_sequence_number": 0,
-			&"ip_address": 0,
 			&"client_id": assign_client_client_id(),
+			&"ip_address": 0,
+			&"tcp_peer": lobby_manager_tpc.take_connection(),
+			&"tcp_data_buffer": PackedByteArray(),
 			&"current_lobby": null,
 			&"is_host": null,
-			&"host_tcp_peer": null,
-			&"host_udp_peer": null,
-			&"host_ordered_udp_peer": null
 			
 		}
 		
@@ -238,215 +217,6 @@ peer:Variant, all_data:Variant, current_lobby:Variant, is_host:Variant)-> void:
 
 
 
-func poll_relay_server_udp() -> void:
-	
-	relay_server_udp.poll()
-	
-	if relay_server_udp.is_connection_available():
-		
-		var peer : Variant = relay_server_udp.take_connection()
-		var packet : Variant = peer.get_packet().get_string_from_utf8()
-		
-		#print("Server Received Packet: ", packet)
-		
-		var json_translation : Variant = JSON.new()
-		json_translation = JSON.parse_string(packet)
-		packet = json_translation
-		
-		var command : String = json_translation[&"command"]
-		var info : Variant = json_translation[&"info"]
-		
-		for client in connected_clients:
-			
-			if client[&"udp_peer"] == peer:
-				
-				send_tcp_data_to_client("confirm_lobby_manager_udp_registration", null, client[&"tcp_peer"])
-				
-				return
-			
-			if info == client[&"client_id"] \
-			and command == "register_to_lobby_manager_udp":
-				
-				client[&"udp_peer"] = peer
-				
-				send_tcp_data_to_client("confirm_lobby_manager_udp_registration", null, client[&"tcp_peer"])
-	
-	for client in connected_clients:
-		
-		if client[&"udp_peer"] == null: continue
-		
-		if client[&"udp_peer"].get_available_packet_count() > 0:
-			
-			var peer : PacketPeerUDP = client[&"udp_peer"]
-			var packet : Variant = client[&"udp_peer"].get_packet().get_string_from_utf8()
-			var current_lobby : Variant = client[&"current_lobby"]
-			var is_host : Variant = client[&"is_host"]
-			
-			#print("Server Received Packet: ", packet)
-			
-			var json_translation : Variant = JSON.new()
-			json_translation = JSON.parse_string(packet)
-			packet = json_translation
-			
-			var command : String = json_translation[&"command"]
-			var info : Variant = json_translation[&"info"]
-			
-			#print("Server Received Packet: ", packet)
-			
-			trigger_udp_server_command(command, info, peer, packet, current_lobby, is_host)
-
-func send_udp_packet_to_client(command:String, info:Variant, recipient:PacketPeerUDP) -> void:
-	
-	var packet : Dictionary = {}
-	
-	packet = {&"command": command, &"info": info}
-	
-	var packet_to_send : Variant = JSON.stringify(packet)
-	
-	recipient.put_packet(packet_to_send.to_utf8_buffer())
-
-func trigger_udp_server_command(command:String, info:Variant, 
-peer:Variant, whole_packet:Variant, current_lobby:Variant, is_host:Variant)-> void:
-	
-	pass
-
-
-
-
-
-
-
-func poll_relay_server_ordered_udp() -> void:
-	
-	relay_server_ordered_udp.poll()
-	
-	if relay_server_ordered_udp.is_connection_available():
-		
-		var peer : Variant = relay_server_ordered_udp.take_connection()
-		var packet : Variant = peer.get_packet().get_string_from_utf8()
-		
-		#print("Server Received Ordered Packet: ", packet)
-		
-		var json_translation : Variant = JSON.new()
-		json_translation = JSON.parse_string(packet)
-		packet = json_translation
-		
-		var command : String = json_translation[&"command"]
-		var info : Variant = json_translation[&"info"]
-		
-		#print("Server Received Ordered Packet: ", packet)
-		
-		for client in connected_clients:
-			
-			if client[&"ordered_udp_peer"] == peer:
-				
-				send_tcp_data_to_client("confirm_lobby_manager_ordered_udp_registration", null, client[&"tcp_peer"])
-				
-				return
-			
-			if info == client[&"client_id"] \
-			and command == "register_to_lobby_manager_ordered_udp":
-				
-				client[&"ordered_udp_peer"] = peer
-				
-				send_tcp_data_to_client("confirm_lobby_manager_ordered_udp_registration", null, client[&"tcp_peer"])
-	
-	for client in connected_clients:
-		
-		if client[&"ordered_udp_peer"] == null: continue
-		
-		if client[&"ordered_udp_peer"].get_available_packet_count() > 0:
-			
-			var peer : PacketPeerUDP = client[&"ordered_udp_peer"]
-			var packet : Variant = client[&"ordered_udp_peer"].get_packet().get_string_from_utf8()
-			
-			#print("Server Received Ordered Packet: ", packet)
-			
-			var json_translation : Variant = JSON.new()
-			json_translation = JSON.parse_string(packet)
-			packet = json_translation
-			
-			var command : String = json_translation[&"command"]
-			var info : Variant = json_translation[&"info"]
-			var current_lobby : Variant = client[&"current_lobby"]
-			var is_host : Variant = client[&"is_host"]
-			var packet_sequence_number : int = json_translation[&"sequence_number"]
-			var expected_sequence_number : int = client[&"last_sequence_number"]
-			
-			#print("Server Received Ordered Packet: ", packet)
-			
-			var sequence_difference : int = \
-			packet_sequence_number - expected_sequence_number
-			
-			if sequence_difference <= 0:
-				
-				continue
-				
-			else:
-				
-				trigger_ordered_udp_server_command(command, info, peer, packet, current_lobby, is_host)
-				
-				client[&"last_sequence_number"] = packet_sequence_number
-
-func send_ordered_udp_packet_to_client(command:String, info:Variant, 
-sender:PacketPeerUDP, recipient:PacketPeerUDP) -> void:
-	
-	var sequence_number : int
-	
-	for client in connected_clients:
-		
-		if client[&"ordered_udp_peer"] == sender:
-			
-			client[&"last_sequence_number"] = \
-			client[&"last_sequence_number"] + 1
-			
-			sequence_number = client[&"last_sequence_number"]
-	
-	var packet : Dictionary = {}
-	
-	packet = {&"command": command, 
-	&"info": info,
-	&"sequence_number": sequence_number
-	}
-	
-	var packet_to_send : Variant = JSON.stringify(packet)
-	
-	recipient.put_packet(packet_to_send.to_utf8_buffer())
-
-func trigger_ordered_udp_server_command(command:String, info:Variant, 
-peer:Variant, whole_packet:Variant, current_lobby:Variant, is_host:Variant)-> void:
-	
-	if command == "send_untrusted_position_to_server":
-		
-		if current_lobby == 0: return
-		
-		for lobby in active_lobbies:
-			
-			if current_lobby == lobby[&"lobby_id"]:
-				
-				if is_host == true: 
-					return
-				
-				if is_host == false:
-					
-					for client in connected_clients:
-						
-						if client[&"ordered_udp_peer"] == peer:
-							
-							send_ordered_udp_packet_to_client(
-							"send_untrusted_position_to_host", info, 
-							peer, client[&"host_ordered_udp_peer"])
-		
-		#if is_host == false:
-			#
-			#send_ordered_udp_packet_to_client("send_untrusted_position", )
-
-
-
-
-
-
-
 
 
 
@@ -529,7 +299,7 @@ func client_join_lobby(client:StreamPeerTCP, client_id:int, lobby_id:int) -> voi
 			lobby[&"players"].append(client)
 			
 			#print(lobby[&"players"])
-			#print("New Client Joined Lobby: ", client)
+			print("New Client Joined Lobby: ", client)
 			
 			var lobby_data : Dictionary = {
 				
@@ -540,33 +310,13 @@ func client_join_lobby(client:StreamPeerTCP, client_id:int, lobby_id:int) -> voi
 				
 			}
 			
-			# Create host connection
-			var host_tcp_peer : StreamPeerTCP
-			var host_udp_peer : PacketPeerUDP
-			var host_ordered_udp_peer : PacketPeerUDP
-			
-			for host in connected_clients:
-				
-				if host[&"tcp_peer"] == lobby[&"host"]:
-					
-					host_tcp_peer = host[&"tcp_peer"]
-					host_udp_peer = host[&"udp_peer"]
-					host_ordered_udp_peer = host[&"ordered_udp_peer"]
-			
 			# Assign current lobby and host connection on joining client
 			for client_in_lobby in connected_clients:
 				
 				if client == client_in_lobby[&"tcp_peer"]:
 					
 					client_in_lobby[&"current_lobby"] = lobby_id
-					
 					client_in_lobby[&"is_host"] = false
-					
-					client_in_lobby[&"host_tcp_peer"] = host_tcp_peer
-					
-					client_in_lobby[&"host_udp_peer"] = host_udp_peer
-					
-					client_in_lobby[&"host_ordered_udp_peer"] = host_ordered_udp_peer
 			
 			# Connect client to relay
 			send_tcp_data_to_client("client_connect_to_relay", 
