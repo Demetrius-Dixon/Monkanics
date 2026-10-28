@@ -59,12 +59,13 @@ func _process(_delta: float) -> void:
 	
 	if Input.is_action_just_pressed("ui_cancel"):
 		
-		pass
+		#pass
 		
-		#MouseManager.toggle_mouse()
+		MouseManager.toggle_mouse()
 
 func _physics_process(_delta: float) -> void:
 	pass
+	
 	#if is_host == false:
 		#send_player_position_to_host()
 
@@ -440,6 +441,7 @@ func request_to_join_lobby(lobby_id:int) -> void:
 	send_tcp_data_to_lobby_manager("request_to_join_lobby", lobby_id)
 	
 	#print("CLIENT ATTEMPTED TO JOIN LOBBY")
+
 
 
 

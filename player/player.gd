@@ -357,6 +357,8 @@ func check_velocity() -> void:
 
 func _unhandled_input(event:InputEvent) -> void: ## Camera Controls
 	
+	if name != "own_player": return
+	
 	if MouseManager.is_mouse_visible == true: return
 	
 	var camera_horizontal_input : float = 0.0
