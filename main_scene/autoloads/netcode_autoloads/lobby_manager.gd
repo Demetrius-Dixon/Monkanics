@@ -159,6 +159,7 @@ func assign_client_client_id() -> int:
 	
 	return next_client_client_id_to_assign
 
+@warning_ignore("unused_parameter")
 func trigger_tcp_server_command(command:String, info:Variant, 
 peer:Variant, all_data:Variant, current_lobby:Variant, is_host:Variant)-> void:
 	

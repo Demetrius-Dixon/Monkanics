@@ -37,9 +37,18 @@ var is_in_lobby : bool = false
 var is_host : bool = false
 var players_in_lobby : Array
 
-# Game
+# Client
 var client_id : int = 0
 var client_player_node : Node = null
+
+# Game
+var players : Array[Node]
+var projectiles : Array[Node]
+
+
+
+
+
 
 func _ready() -> void:
 	
@@ -64,10 +73,11 @@ func _process(_delta: float) -> void:
 		MouseManager.toggle_mouse()
 
 func _physics_process(_delta: float) -> void:
-	pass
 	
-	#if is_host == false:
-		#send_player_position_to_host()
+	if is_host == true \
+	and is_connected_to_relay == true:
+		
+		host_get_new_gamestate()
 
 
 
@@ -465,12 +475,18 @@ func spawn_own_player() -> void:
 	own_player.camera.current = true
 	
 	client_player_node = own_player
+	
+	players.append(own_player)
 
 func spawn_other_player(node_name:String) -> void:
 	
 	var new_player : Node = SpawnManager.spawn_local("player", 0,0,0)
 	
 	new_player.name = node_name
+	
+	players.append(new_player)
+	
+	#print(client_players)
 
 func send_player_position_to_host() -> void:
 	
@@ -488,4 +504,28 @@ func host_get_new_gamestate() -> void:
 	
 	if not is_host: return
 	
+	var new_gamestate : Array[Dictionary] = []
 	
+	# Get the state of all connected players
+	for player in players:
+		
+		# Triggers move_and_slide() for all host-side players
+		# This line is required for host-side players to move
+		player.trigger_move_and_slide()
+		
+		# Player info for server reference
+		new_gamestate.append({
+			
+			&"NodeName": player.get_name(),
+			&"NodePath": player.get_path(),
+			&"Position": player.global_position,
+			&"Velocity": player.velocity,
+			&"BodyRotation": player.body_parts.rotation,
+			&"HeadRotation": player.head_parts.rotation
+			})
+	
+	
+	
+	
+	
+	#print(new_gamestate)

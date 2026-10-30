@@ -263,6 +263,7 @@ func send_tcp_data_to_lobby_manager(command:String, info:Variant) -> void:
 		#
 		#send_tcp_data_to_client(command, info, client[&"peer"])
 
+@warning_ignore("unused_parameter")
 func trigger_tcp_server_command(command:String, info:Variant, 
 peer:Variant, all_data:Variant, current_lobby:Variant, is_host:Variant) -> void:
 	
@@ -311,14 +312,13 @@ func poll_relay_manager_udp() -> void:
 		packet = json_translation
 		
 		var command : String = json_translation[&"command"]
-		var info : Variant = json_translation[&"info"]
 		
 		for client in connected_clients:
 			
 			if client[&"udp_peer"] == peer:
 				
 				send_tcp_data_to_client("confirm_relay_manager_udp_registration", 
-				EndpointManager.relay_regions[&"NA"], client[&"udp_peer"])
+				EndpointManager.relay_regions[&"NA"], client[&"tcp_peer"])
 				
 				return
 			
@@ -381,6 +381,7 @@ func send_udp_packet_to_client(command:String, info:Variant, recipient:PacketPee
 		#
 		#client[&"udp_peer"].put_packet(packet_to_forward.to_utf8_buffer())
 
+@warning_ignore("unused_parameter")
 func trigger_udp_server_command(command:String, info:Variant, 
 peer:Variant, whole_packet:Variant, current_lobby:Variant, is_host:Variant)-> void:
 	
@@ -414,7 +415,6 @@ func poll_relay_manager_ordered_udp() -> void:
 		packet = json_translation
 		
 		var command : String = json_translation[&"command"]
-		var info : Variant = json_translation[&"info"]
 		
 		#print("Server Received Ordered Packet: ", packet)
 		
@@ -423,7 +423,7 @@ func poll_relay_manager_ordered_udp() -> void:
 			if client[&"ordered_udp_peer"] == peer:
 				
 				send_tcp_data_to_client("confirm_relay_manager_ordered_udp_registration", 
-				EndpointManager.relay_regions[&"NA"], client[&"ordered_udp_peer"])
+				EndpointManager.relay_regions[&"NA"], client[&"tcp_peer"])
 				
 				return
 			
@@ -514,6 +514,7 @@ sender:PacketPeerUDP, recipient:PacketPeerUDP) -> void:
 		#
 		#client[&"ordered_udp_peer"].put_packet(packet_to_forward.to_utf8_buffer())
 
+@warning_ignore("unused_parameter")
 func trigger_ordered_udp_server_command(command:String, info:Variant, 
 peer:Variant, whole_packet:Variant, current_lobby:Variant, is_host:Variant)-> void:
 	
