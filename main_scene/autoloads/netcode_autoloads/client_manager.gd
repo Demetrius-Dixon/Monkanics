@@ -524,8 +524,6 @@ func host_get_new_gamestate() -> void:
 			&"HeadRotation": player.head_parts.rotation
 			})
 	
-	
-	
-	
+	send_udp_packet_to_relay_manager("host_send_gamestate", new_gamestate)
 	
 	#print(new_gamestate)

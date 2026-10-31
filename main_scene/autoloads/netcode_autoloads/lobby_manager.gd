@@ -267,7 +267,6 @@ func create_lobby_instance(host:StreamPeerTCP, lobby_name:String) -> void:
 		if relay[&"relay_ip"] == EndpointManager.relay_regions[&"NA"]:
 			
 			var info_to_send : Dictionary = {
-				&"host": host, 
 				&"lobby_id": new_lobby_id,
 				&"client_id": client_id}
 			
@@ -335,7 +334,7 @@ func client_join_lobby(client:StreamPeerTCP, client_id:int, lobby_id:int) -> voi
 					
 					var info_to_send : Dictionary = {
 						&"lobby_id": lobby[&"lobby_id"],
-						&"peer": client
+						&"client_id": client_id
 						}
 					
 					send_tcp_data_to_client("join_relay_session", info_to_send, relay[&"relay_peer"])
