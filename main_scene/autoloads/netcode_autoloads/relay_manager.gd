@@ -158,8 +158,8 @@ func poll_relay_to_client_manager_tcp() -> void:
 			&"udp_peer": null,
 			&"ordered_udp_peer": null,
 			&"last_sequence_number": 0,
-			&"current_session": null,
-			&"is_host": null
+			&"current_session": 0,
+			&"is_host": false
 			
 		}
 		
@@ -257,17 +257,9 @@ func send_tcp_data_to_client(command:String, info:Variant, recipient:StreamPeerT
 
 @warning_ignore("unused_parameter")
 func trigger_client_tcp_server_command(command:String, info:Variant, 
-peer:Variant, all_data:Variant, current_lobby:Variant, is_host:Variant) -> void:
-	
-	#if command == "forward_tcp_to":
-		#forward_tcp_data_to_specific_client(all_data, info)
-	#
-	#if command == "forward_tcp_to_all":
-		#forward_tcp_data_to_all_clients(all_data, peer)
+peer:Variant, all_data:Variant, current_session:Variant, is_host:Variant) -> void:
 	
 	if command == "set_client_id":
-		
-		print("Function Triggered")
 		
 		for client in connected_clients:
 			
@@ -279,30 +271,6 @@ peer:Variant, all_data:Variant, current_lobby:Variant, is_host:Variant) -> void:
 
 
 
-
-
-
-
-
-#func forward_tcp_data_to_specific_client(data:Variant, recipient:StreamPeerTCP) -> void:
-	#
-	#var command : String = data[&"command"]
-	#var info : Dictionary = data[&"info"]
-	#
-	#send_tcp_data_to_client(command, info, recipient)
-#
-#func forward_tcp_data_to_all_clients(data:Variant, sender:StreamPeerTCP) -> void:
-	#
-	#var command : String = data[&"command"]
-	#var info : Dictionary = data[&"info"]
-	#
-	#for client in connected_clients:
-		#
-		#if sender == client[&"peer"]: 
-			#pass
-			#continue
-		#
-		#send_tcp_data_to_client(command, info, client[&"peer"])
 
 
 
@@ -325,31 +293,33 @@ func poll_relay_manager_udp() -> void:
 		packet = json_translation
 		
 		var command : String = json_translation[&"command"]
+		var info : Variant = json_translation[&"info"]
 		
-		for client in connected_clients:
+		if command == "register_to_relay_manager_udp":
 			
-			if client[&"udp_peer"] == peer:
+			for client in connected_clients:
 				
-				send_tcp_data_to_client("confirm_relay_manager_udp_registration", 
-				EndpointManager.relay_regions[&"NA"], client[&"tcp_peer"])
-				
-				return
-			
-			if command == "register_to_relay_manager_udp":
-				
-				client[&"udp_peer"] = peer
-				
-				send_tcp_data_to_client("confirm_relay_manager_udp_registration", 
-				null, client[&"tcp_peer"])
+				if client[&"client_id"] == info:
+					
+					client[&"udp_peer"] = peer
+					
+					send_tcp_data_to_client("confirm_relay_manager_udp_registration", 
+					null, client[&"tcp_peer"])
+					
+					print("Registered UDP peer for client: ", client[&"client_id"])
+					print("UDP peer: ", client[&"udp_peer"])
 	
 	# Poll connected clients
 	for client in connected_clients:
 		
-		if client[&"udp_peer"] == null: continue
+		if client[&"udp_peer"] == null: 
+			continue
 		
 		if client[&"udp_peer"].get_available_packet_count() > 0:
 			
-			var peer : PacketPeerUDP = client[&"udp_peer"]
+			if client[&"udp_peer"] == null:
+				continue
+			
 			var packet : Variant = client[&"udp_peer"].get_packet().get_string_from_utf8()
 			var current_session : Variant = client[&"current_session"]
 			var is_host : Variant = client[&"is_host"]
@@ -365,7 +335,31 @@ func poll_relay_manager_udp() -> void:
 			
 			#print("Server Received Packet: ", packet)
 			
-			trigger_client_udp_server_command(command, info, peer, packet, current_session, is_host)
+			# Host forward logic (Host -> All Clients)
+			if is_host == true:
+				
+				for session in relay_sessions:
+					
+					if current_session == session[&"session_id"]:
+						
+						var client_ids : Array[int] = get_client_ids_from_session_id(current_session, false)
+						
+						for client_id in client_ids:
+							
+							send_udp_packet_to_client(command, info, get_udp_peer_from_client_id(client_id))
+			
+			# Client forwarding logic (All Clients -> Host)
+			if is_host == false:
+				
+				for session in relay_sessions:
+					
+					if current_session == session[&"session_id"]:
+						
+						var host_id : int = get_host_id_from_session_id(current_session)
+						
+						var host_peer : PacketPeerUDP = get_udp_peer_from_client_id(host_id)
+						
+						send_udp_packet_to_client(command, info, host_peer)
 
 func send_udp_packet_to_client(command:String, info:Variant, recipient:PacketPeerUDP) -> void:
 	
@@ -376,6 +370,32 @@ func send_udp_packet_to_client(command:String, info:Variant, recipient:PacketPee
 	var packet_to_send : Variant = JSON.stringify(packet)
 	
 	recipient.put_packet(packet_to_send.to_utf8_buffer())
+
+func get_udp_peer_from_client_id(client_id:int) -> PacketPeerUDP:
+	
+	for client in connected_clients:
+		
+		if client[&"client_id"] == client_id:
+			return client[&"udp_peer"]
+		
+	return null
+
+func get_client_ids_from_session_id(session_id:int, include_host:bool) -> Array[int]:
+	
+	var client_ids: Array[int] = []
+	
+	for client in connected_clients:
+		
+		if client[&"current_session"] != session_id:
+			continue
+		
+		if include_host == false \
+		and client[&"is_host"]:
+			continue
+		
+		client_ids.append(client[&"client_id"])
+		
+	return client_ids
 
 #func forward_udp_packet_to_specific_client(packet:Dictionary, recipient:PacketPeerUDP) -> void:
 	#
@@ -395,20 +415,16 @@ func send_udp_packet_to_client(command:String, info:Variant, recipient:PacketPee
 		#
 		#client[&"udp_peer"].put_packet(packet_to_forward.to_utf8_buffer())
 
-@warning_ignore("unused_parameter")
-func trigger_client_udp_server_command(command:String, info:Variant, 
-peer:Variant, whole_packet:Variant, current_lobby:Variant, is_host:Variant)-> void:
+func get_host_id_from_session_id(session_id:int) -> int:
 	
-	if command == "host_send_gamestate":
-		pass
+	for session in relay_sessions:
 		
-		
+		if session[&"session_id"] == session_id:
+			
+			return session[&"host"]
 	
-	#if command == "forward_udp_to":
-		#forward_udp_packet_to_specific_client(whole_packet, info)
-	#
-	#if command == "forward_udp_to_all":
-		#forward_udp_packet_to_all_clients(whole_packet, peer)
+	return 0
+
 
 
 
@@ -432,28 +448,28 @@ func poll_relay_manager_ordered_udp() -> void:
 		packet = json_translation
 		
 		var command : String = json_translation[&"command"]
+		var info : Variant = json_translation[&"info"]
 		
 		#print("Server Received Ordered Packet: ", packet)
 		
-		for client in connected_clients:
+		if command == "register_to_relay_manager_ordered_udp":
 			
-			if client[&"ordered_udp_peer"] == peer:
+			for client in connected_clients:
 				
-				send_tcp_data_to_client("confirm_relay_manager_ordered_udp_registration", 
-				EndpointManager.relay_regions[&"NA"], client[&"tcp_peer"])
-				
-				return
-			
-			if command == "register_to_relay_manager_ordered_udp":
-				
-				client[&"ordered_udp_peer"] = peer
-				
-				send_tcp_data_to_client("confirm_relay_manager_ordered_udp_registration", 
-				null, client[&"tcp_peer"])
+				if client[&"client_id"] == info:
+					
+					client[&"ordered_udp_peer"] = peer
+					
+					send_tcp_data_to_client("confirm_relay_manager_ordered_udp_registration", 
+					null, client[&"tcp_peer"])
+					
+					print("Registered Orered UDP peer for client: ", client[&"client_id"])
+					print("UDP peer: ", client[&"ordered_udp_peer"])
 	
 	for client in connected_clients:
 		
-		if client[&"ordered_udp_peer"] == null: continue
+		if client[&"ordered_udp_peer"] == null: 
+			continue
 		
 		if client[&"ordered_udp_peer"].get_available_packet_count() > 0:
 			
@@ -513,60 +529,13 @@ sender:PacketPeerUDP, recipient:PacketPeerUDP) -> void:
 	
 	recipient.put_packet(packet_to_send.to_utf8_buffer())
 
-#func forward_ordered_udp_packet_to_specific_client(packet:Dictionary, recipient:PacketPeerUDP) -> void:
-	#
-	#var packet_to_forward : Variant = JSON.stringify(packet)
-	#
-	#recipient.put_packet(packet_to_forward.to_utf8_buffer())
-#
-#func forward_ordered_udp_packet_to_all_clients(packet:Dictionary, sender:PacketPeerUDP) -> void:
-	#
-	#var packet_to_forward : Variant = JSON.stringify(packet)
-	#
-	#for client in connected_clients:
-		#
-		#if sender == client[&"ordered_udp_peer"]: 
-			#pass
-			#continue
-		#
-		#client[&"ordered_udp_peer"].put_packet(packet_to_forward.to_utf8_buffer())
+
 
 @warning_ignore("unused_parameter")
 func trigger_client_ordered_udp_server_command(command:String, info:Variant, 
-peer:Variant, whole_packet:Variant, current_lobby:Variant, is_host:Variant)-> void:
+peer:Variant, whole_packet:Variant, current_session:Variant, is_host:Variant)-> void:
 	
 	pass
-	
-	#if command == "forward_ordered_udp_to":
-		#forward_ordered_udp_packet_to_specific_client(whole_packet, info)
-	#
-	#if command == "forward_ordered_udp_to_all":
-		#forward_ordered_udp_packet_to_all_clients(whole_packet, peer)
-	
-	#if command == "send_untrusted_position_to_server":
-		#
-		#if current_lobby == 0: return
-		#
-		#for lobby in active_lobbies:
-			#
-			#if current_lobby == lobby[&"lobby_id"]:
-				#
-				#if is_host == true: 
-					#return
-				#
-				#if is_host == false:
-					#
-					#for client in connected_clients:
-						#
-						#if client[&"ordered_udp_peer"] == peer:
-							#
-							#send_ordered_udp_packet_to_client(
-							#"send_untrusted_position_to_host", info, 
-							#peer, client[&"host_ordered_udp_peer"])
-		
-		#if is_host == false:
-			#
-			#send_ordered_udp_packet_to_client("send_untrusted_position", )
 
 
 
@@ -577,7 +546,7 @@ peer:Variant, whole_packet:Variant, current_lobby:Variant, is_host:Variant)-> vo
 
 func create_relay_session_instance(info:Variant) -> void:
 	
-	var new_relay_sesson : Dictionary = {
+	var new_relay_session : Dictionary = {
 		
 		&"session_id": info[&"lobby_id"],
 		&"host": info[&"client_id"],
@@ -588,13 +557,13 @@ func create_relay_session_instance(info:Variant) -> void:
 		
 		if client[&"client_id"] == info[&"client_id"]:
 			
-			client[&"current_session"] = new_relay_sesson[&"session_id"]
+			client[&"current_session"] = new_relay_session[&"session_id"]
 			
 			client[&"is_host"] = true
 			
 		else: continue
 	
-	relay_sessions.append(new_relay_sesson)
+	relay_sessions.append(new_relay_session)
 	
 	print("Relay Session Started")
 

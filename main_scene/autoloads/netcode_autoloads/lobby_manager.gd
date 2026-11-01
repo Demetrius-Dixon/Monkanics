@@ -339,6 +339,15 @@ func client_join_lobby(client:StreamPeerTCP, client_id:int, lobby_id:int) -> voi
 					
 					send_tcp_data_to_client("join_relay_session", info_to_send, relay[&"relay_peer"])
 			
+			
+			
+			
+			
+			
+			
+			
+			#TODO Move to client commands forwarded from relay
+			
 			send_tcp_data_to_client("spawn_own_player", 
 			{&"x": 0, &"y": 0, &"z": 0} , 
 			client)

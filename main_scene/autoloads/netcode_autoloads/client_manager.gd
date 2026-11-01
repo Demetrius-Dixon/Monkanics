@@ -74,11 +74,31 @@ func _process(_delta: float) -> void:
 
 func _physics_process(_delta: float) -> void:
 	
-	if is_host == true \
-	and is_connected_to_relay == true:
-		
-		host_get_new_gamestate()
+	host_process()
+	
+	client_process()
 
+func host_process() -> void:
+	
+	if is_host == false: return
+	if is_connected_to_relay == false: return
+	
+	#host_get_new_gamestate()
+	
+	send_tcp_data_to_relay_manager("host_send_gamestate", null)
+	
+	#send_ordred_udp_packet_to_relay_manager("host_send_gamestate", null)
+
+func client_process() -> void:
+	
+	if is_host == true: return
+	if is_connected_to_relay == false: return
+	
+	#send_udp_packet_to_relay_manager("client_send_command", null)
+	
+	send_tcp_data_to_relay_manager("host_send_gamestate", null)
+	
+	#send_ordred_udp_packet_to_relay_manager("host_send_gamestate", null)
 
 
 
@@ -247,6 +267,13 @@ func send_tcp_data_to_relay_manager(command:String, info:Variant) -> void:
 
 func trigger_tpc_client_command(command:String, info:Variant) -> void:
 	
+	if command == "host_send_gamestate":
+		
+		print("Got Gamestate")
+	
+	
+	
+	
 	# Lobby Manager Registration
 	if command == "confirm_lobby_manager_tcp_registration":
 		
@@ -361,7 +388,13 @@ func send_udp_packet_to_relay_manager(command:String, info:Variant) -> void:
 @warning_ignore("unused_parameter")
 func trigger_udp_client_command(command:String, info:Variant) -> void:
 	
-	pass
+	if command == "host_send_gamestate":
+		
+		print("Got Gamestate")
+	
+	if command == "client_send_command":
+		
+		print("Got Client Command As Host")
 
 
 
@@ -425,6 +458,11 @@ func increment_ordered_packet_sequence_number() -> int:
 
 @warning_ignore("unused_parameter")
 func trigger_ordered_udp_client_command(command:String, info:Variant) -> void:
+	
+	if command == "host_send_gamestate":
+		
+		print("Got Gamestate")
+	
 	
 	if command == "send_untrusted_position_to_host":
 		
@@ -501,8 +539,6 @@ func send_player_position_to_host() -> void:
 		send_ordred_udp_packet_to_relay_manager("send_untrusted_position_to_server", untrusted_player_position)
 
 func host_get_new_gamestate() -> void:
-	
-	if not is_host: return
 	
 	var new_gamestate : Array[Dictionary] = []
 	
