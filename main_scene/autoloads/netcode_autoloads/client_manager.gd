@@ -84,9 +84,9 @@ func host_process() -> void:
 	
 	#host_get_new_gamestate()
 	
-	#send_tcp_data_to_relay_manager("host_send_gamestate", null)
+	send_tcp_data_to_relay_manager("host_send_gamestate", null)
 	
-	send_ordred_udp_packet_to_relay_manager("host_send_gamestate", null)
+	#send_ordred_udp_packet_to_relay_manager("host_send_gamestate", null)
 
 func client_process() -> void:
 	
@@ -95,9 +95,9 @@ func client_process() -> void:
 	
 	#send_udp_packet_to_relay_manager("client_send_command", null)
 	
-	#send_tcp_data_to_relay_manager("host_send_gamestate", null)
+	send_tcp_data_to_relay_manager("host_send_gamestate", null)
 	
-	send_ordred_udp_packet_to_relay_manager("host_send_gamestate", null)
+	#send_ordred_udp_packet_to_relay_manager("host_send_gamestate", null)
 
 
 
