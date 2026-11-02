@@ -28,7 +28,6 @@ const UDP_REGISTRATION_RETRY_DELAY : float = 0.25
 # All Ordered UDP
 var can_poll_relay_ordered_udp : bool = false
 var current_ordered_packet_sequence_number : int = 0
-var last_server_packet_sequence_number : int = 0
 const ORDERED_UDP_REGISTRATION_RETRY_DELAY : float = 0.25
 
 # Lobby
@@ -74,7 +73,7 @@ func _process(_delta: float) -> void:
 
 func _physics_process(_delta: float) -> void:
 	
-	host_process()
+	#host_process()
 	
 	client_process()
 
@@ -85,9 +84,9 @@ func host_process() -> void:
 	
 	#host_get_new_gamestate()
 	
-	send_tcp_data_to_relay_manager("host_send_gamestate", null)
+	#send_tcp_data_to_relay_manager("host_send_gamestate", null)
 	
-	#send_ordred_udp_packet_to_relay_manager("host_send_gamestate", null)
+	send_ordred_udp_packet_to_relay_manager("host_send_gamestate", null)
 
 func client_process() -> void:
 	
@@ -96,9 +95,9 @@ func client_process() -> void:
 	
 	#send_udp_packet_to_relay_manager("client_send_command", null)
 	
-	send_tcp_data_to_relay_manager("host_send_gamestate", null)
+	#send_tcp_data_to_relay_manager("host_send_gamestate", null)
 	
-	#send_ordred_udp_packet_to_relay_manager("host_send_gamestate", null)
+	send_ordred_udp_packet_to_relay_manager("host_send_gamestate", null)
 
 
 
@@ -420,12 +419,13 @@ func poll_client_ordered_udp() -> void:
 		
 		var command : String = json_translation[&"command"]
 		var info : Variant = json_translation[&"info"]
-		var packet_sequence_number : int = json_translation[&"sequence_number"]
+		var sequence_number : int = json_translation[&"sequence_number"]
+		var last_sequence_number : int = json_translation[&"last_sequence_number"]
 		
 		#print("Client Received Ordered Packet: ", packet)
 		
 		var sequence_difference : int = \
-		packet_sequence_number - last_server_packet_sequence_number
+		sequence_number - last_sequence_number
 		
 		if sequence_difference <= 0:
 			
@@ -434,8 +434,6 @@ func poll_client_ordered_udp() -> void:
 		else:
 			
 			trigger_ordered_udp_client_command(command, info)
-			
-			last_server_packet_sequence_number = packet_sequence_number
 
 func send_ordred_udp_packet_to_relay_manager(command:String, info:Variant) -> void:
 	

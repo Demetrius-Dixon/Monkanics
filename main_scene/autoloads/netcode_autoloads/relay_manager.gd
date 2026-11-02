@@ -157,7 +157,7 @@ func poll_relay_to_client_manager_tcp() -> void:
 			&"tcp_data_buffer": PackedByteArray(),
 			&"udp_peer": null,
 			&"ordered_udp_peer": null,
-			&"last_sequence_number": 0,
+			&"last_client_sequence_number": 0,
 			&"current_session": 0,
 			&"is_host": false
 			
@@ -484,58 +484,100 @@ func poll_relay_manager_ordered_udp() -> void:
 			
 			var command : String = json_translation[&"command"]
 			var info : Variant = json_translation[&"info"]
-			var current_lobby : Variant = client[&"current_session"]
+			var current_session : Variant = client[&"current_session"]
 			var is_host : Variant = client[&"is_host"]
 			var packet_sequence_number : int = json_translation[&"sequence_number"]
-			var expected_sequence_number : int = client[&"last_sequence_number"]
+			var last_sequence_number : int = client[&"last_client_sequence_number"]
 			
 			#print("Server Received Ordered Packet: ", packet)
 			
-			var sequence_difference : int = \
-			packet_sequence_number - expected_sequence_number
+			client[&"last_client_sequence_number"] = packet_sequence_number
 			
-			if sequence_difference <= 0:
+			# Host forward logic (Host -> All Clients)
+			if is_host == true:
 				
-				continue
+				for session in relay_sessions:
+					
+					if current_session == session[&"session_id"]:
+						
+						var client_ids : Array[int] = get_client_ids_from_session_id(current_session, false)
+						
+						for client_id in client_ids:
+							
+							send_ordered_udp_packet_to_client(command, info, \
+							get_ordered_udp_peer_from_client_id(client_id), \
+							packet_sequence_number, last_sequence_number)
+			
+			# Client forwarding logic (All Clients -> Host)
+			if is_host == false:
 				
-			else:
-				
-				trigger_client_ordered_udp_server_command(command, info, peer, packet, current_lobby, is_host)
-				
-				client[&"last_sequence_number"] = packet_sequence_number
+				for session in relay_sessions:
+					
+					if current_session == session[&"session_id"]:
+						
+						var host_id : int = get_host_id_from_session_id(current_session)
+						
+						var host_peer : PacketPeerUDP = get_ordered_udp_peer_from_client_id(host_id)
+						
+						send_ordered_udp_packet_to_client(command, info, \
+						host_peer, \
+						packet_sequence_number, last_sequence_number)
+			
+			
+			
+			
+			
+			
+			
+			
+			#var sequence_difference : int = \
+			#packet_sequence_number - last_sequence_number
+			#
+			#if sequence_difference <= 0:
+				#
+				#continue
+				#
+			#else:
+				#
+				#trigger_client_ordered_udp_server_command(command, info, peer, packet, current_lobby, is_host)
+				#
+				#client[&"last_sequence_number"] = packet_sequence_number
 
-func send_ordered_udp_packet_to_client(command:String, info:Variant, 
-sender:PacketPeerUDP, recipient:PacketPeerUDP) -> void:
-	
-	var sequence_number : int
+func get_ordered_udp_peer_from_client_id(client_id:int) -> PacketPeerUDP:
 	
 	for client in connected_clients:
 		
-		if client[&"ordered_udp_peer"] == sender:
-			
-			client[&"last_sequence_number"] = \
-			client[&"last_sequence_number"] + 1
-			
-			sequence_number = client[&"last_sequence_number"]
+		if client[&"client_id"] == client_id:
+			return client[&"ordered_udp_peer"]
+		
+	return null
+
+func send_ordered_udp_packet_to_client(command:String, info:Variant, 
+recipient:PacketPeerUDP, sequence_number:int, last_sequence_number:int) -> void:
 	
-	var packet : Dictionary = {}
+	#var sequence_number : int
+	#
+	#for client in connected_clients:
+		#
+		#if client[&"ordered_udp_peer"] == recipient:
+			#
+			#client[&"last_client_sequence_number"] = \
+			#client[&"last_client_sequence_number"] + 1
+			#
+			#sequence_number = client[&"last_client_sequence_number"]
 	
-	packet = {&"command": command, 
-	&"info": info,
-	&"sequence_number": sequence_number
+	var packet : Dictionary = {
+		
+		&"command": command, 
+		&"info": info,
+		&"sequence_number": sequence_number,
+		&"last_sequence_number": last_sequence_number
 	}
 	
 	var packet_to_send : Variant = JSON.stringify(packet)
 	
 	recipient.put_packet(packet_to_send.to_utf8_buffer())
 
-
-
-@warning_ignore("unused_parameter")
-func trigger_client_ordered_udp_server_command(command:String, info:Variant, 
-peer:Variant, whole_packet:Variant, current_session:Variant, is_host:Variant)-> void:
-	
-	pass
 
 
 
