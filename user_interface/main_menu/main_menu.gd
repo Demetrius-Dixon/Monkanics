@@ -9,7 +9,7 @@ func _ready() -> void:
 
 func _on_play_pressed() -> void:
 	
-	ClientManager.create_client()
+	ClientManager.create_client_and_connect_to_lobby_server_tcp()
 	
 	UiManager.unload_ui_element("main_menu")
 	

@@ -1,10 +1,10 @@
 extends Node
 
-var relay_manager_tcp : TCPServer
-var relay_manager_udp : UDPServer
-var relay_manager_ordered_udp : UDPServer
+var relay_server_tcp : TCPServer
+var relay_server_udp : UDPServer
+var relay_server_ordered_udp : UDPServer
 
-var relay_to_lobby_manager_tcp : StreamPeerTCP
+var relay_to_lobby_server_tcp : StreamPeerTCP
 var tcp_data_buffer : PackedByteArray = PackedByteArray()
 var relay_to_lobby_tcp_data_buffer : PackedByteArray = PackedByteArray()
 
@@ -32,43 +32,43 @@ func _process(_delta: float) -> void:
 	poll_relay_to_client_manager_tcp()
 	decode_client_tcp_stream()
 	
-	poll_relay_manager_udp()
-	poll_relay_manager_ordered_udp()
+	poll_relay_server_udp()
+	poll_relay_server_ordered_udp()
 	
-	poll_relay_to_lobby_manager_tcp()
+	poll_relay_to_lobby_server_tcp()
 	decode_lobby_tcp_stream()
 
 func create_relay() -> void:
 	
-	relay_manager_tcp = TCPServer.new()
-	relay_manager_tcp.listen(
+	relay_server_tcp = TCPServer.new()
+	relay_server_tcp.listen(
 		EndpointManager.RELAY_MANAGER_TCP_PORT, 
-		EndpointManager.relay_regions[&"NA"])
+		EndpointManager.RELAY_REGIONS[&"NA"])
 	print("Relay TCP Created")
 	
-	relay_manager_udp = UDPServer.new()
-	relay_manager_udp.listen(
+	relay_server_udp = UDPServer.new()
+	relay_server_udp.listen(
 		EndpointManager.RELAY_MANAGER_UDP_PORT, 
-		EndpointManager.relay_regions[&"NA"])
+		EndpointManager.RELAY_REGIONS[&"NA"])
 	print("Relay UDP Created")
 	
-	relay_manager_ordered_udp = UDPServer.new()
-	relay_manager_ordered_udp.listen(
+	relay_server_ordered_udp = UDPServer.new()
+	relay_server_ordered_udp.listen(
 		EndpointManager.RELAY_MANAGER_ORDERED_UDP_PORT, 
-		EndpointManager.relay_regions[&"NA"])
+		EndpointManager.RELAY_REGIONS[&"NA"])
 	print("Relay Ordered UDP Created")
 	
-	relay_to_lobby_manager_tcp = StreamPeerTCP.new()
-	relay_to_lobby_manager_tcp.connect_to_host(
+	relay_to_lobby_server_tcp = StreamPeerTCP.new()
+	relay_to_lobby_server_tcp.connect_to_host(
 		EndpointManager.LOBBY_MANAGER_IPV4, 
 		EndpointManager.LOBBY_MANAGER_TCP_PORT)
 	print("Relay -> Lobby TCP Created")
 	
 	await get_tree().create_timer(1).timeout
 	
-	connect_to_lobby_manager()
+	connect_to_lobby_server()
 
-func connect_to_lobby_manager() -> void:
+func connect_to_lobby_server() -> void:
 	
 	var relay_registration_info : Dictionary = {
 		
@@ -77,23 +77,23 @@ func connect_to_lobby_manager() -> void:
 		
 	}
 	
-	send_tcp_data_to_lobby_manager("register_official_relay_server", relay_registration_info)
+	send_tcp_data_to_lobby_server("register_official_relay_server", relay_registration_info)
 
 
 
 
 
 
-func poll_relay_to_lobby_manager_tcp() -> void:
+func poll_relay_to_lobby_server_tcp() -> void:
 	
-	relay_to_lobby_manager_tcp.poll()
+	relay_to_lobby_server_tcp.poll()
 	
-	var lobby_manager_bytes : Variant = relay_to_lobby_manager_tcp.get_available_bytes()
+	var lobby_server_bytes : Variant = relay_to_lobby_server_tcp.get_available_bytes()
 	
-	if lobby_manager_bytes > 0:
+	if lobby_server_bytes > 0:
 		
-		var data : Variant = relay_to_lobby_manager_tcp.get_data(
-		lobby_manager_bytes)[1]
+		var data : Variant = relay_to_lobby_server_tcp.get_data(
+		lobby_server_bytes)[1]
 		
 		#print(data)
 		
@@ -119,7 +119,7 @@ func decode_lobby_tcp_stream() -> void:
 		
 		trigger_lobby_tcp_command(packet[&"command"], packet[&"info"])
 
-func send_tcp_data_to_lobby_manager(command:String, info:Variant) -> void:
+func send_tcp_data_to_lobby_server(command:String, info:Variant) -> void:
 	
 	var packet : Dictionary = {
 	&"command": command,
@@ -128,8 +128,8 @@ func send_tcp_data_to_lobby_manager(command:String, info:Variant) -> void:
 	
 	var data := JSON.stringify(packet).to_utf8_buffer()
 	
-	relay_to_lobby_manager_tcp.put_u32(data.size())
-	relay_to_lobby_manager_tcp.put_data(data)
+	relay_to_lobby_server_tcp.put_u32(data.size())
+	relay_to_lobby_server_tcp.put_data(data)
 
 func trigger_lobby_tcp_command(command:String, info:Variant) -> void:
 	
@@ -147,13 +147,13 @@ func trigger_lobby_tcp_command(command:String, info:Variant) -> void:
 func poll_relay_to_client_manager_tcp() -> void:
 	
 	# Register new clients
-	if relay_manager_tcp.is_connection_available():
+	if relay_server_tcp.is_connection_available():
 		
 		var client : Dictionary = {
 			
 			&"client_id": -1,
 			&"ip_address": 0,
-			&"tcp_peer": relay_manager_tcp.take_connection(),
+			&"tcp_peer": relay_server_tcp.take_connection(),
 			&"tcp_data_buffer": PackedByteArray(),
 			&"udp_peer": null,
 			&"ordered_udp_peer": null,
@@ -169,8 +169,8 @@ func poll_relay_to_client_manager_tcp() -> void:
 		
 		connected_clients.append(client)
 		
-		send_tcp_data_to_client("confirm_relay_manager_tcp_registration", 
-		EndpointManager.relay_regions[&"NA"], peer)
+		send_tcp_data_to_client("confirm_relay_server_tcp_registration", 
+		EndpointManager.RELAY_REGIONS[&"NA"], peer)
 		
 		#print("TCP Client Connected: ", client)
 	
@@ -250,7 +250,7 @@ func decode_client_tcp_stream() -> void:
 					
 					if client[&"tcp_peer"] == peer:
 						
-						client[&"client_id"] = info
+						client[&"client_id"] = int(info)
 						
 						print("Relay Server Applied Client ID: ", \
 						client[&"client_id"])
@@ -341,14 +341,14 @@ func get_host_id_from_session_id(session_id:int) -> int:
 
 
 
-func poll_relay_manager_udp() -> void:
+func poll_relay_server_udp() -> void:
 	
-	relay_manager_udp.poll()
+	relay_server_udp.poll()
 	
 	# Poll for new UDP connections
-	if relay_manager_udp.is_connection_available():
+	if relay_server_udp.is_connection_available():
 		
-		var peer : Variant = relay_manager_udp.take_connection()
+		var peer : Variant = relay_server_udp.take_connection()
 		var packet : Variant = peer.get_packet().get_string_from_utf8()
 		
 		#print("Server Received Packet: ", packet)
@@ -360,7 +360,7 @@ func poll_relay_manager_udp() -> void:
 		var command : String = json_translation[&"command"]
 		var info : Variant = json_translation[&"info"]
 		
-		if command == "register_to_relay_manager_udp":
+		if command == "register_to_relay_server_udp":
 			
 			for client in connected_clients:
 				
@@ -368,7 +368,7 @@ func poll_relay_manager_udp() -> void:
 					
 					client[&"udp_peer"] = peer
 					
-					send_tcp_data_to_client("confirm_relay_manager_udp_registration", 
+					send_tcp_data_to_client("confirm_relay_server_udp_registration", 
 					null, client[&"tcp_peer"])
 					
 					print("Registered UDP peer for client: ", client[&"client_id"])
@@ -380,7 +380,7 @@ func poll_relay_manager_udp() -> void:
 		if client[&"udp_peer"] == null: 
 			continue
 		
-		if client[&"udp_peer"].get_available_packet_count() > 0:
+		while client[&"udp_peer"].get_available_packet_count() > 0:
 			
 			if client[&"udp_peer"] == null:
 				continue
@@ -454,13 +454,13 @@ func send_udp_packet_to_client(command:String, info:Variant, recipient:PacketPee
 
 
 
-func poll_relay_manager_ordered_udp() -> void:
+func poll_relay_server_ordered_udp() -> void:
 	
-	relay_manager_ordered_udp.poll()
+	relay_server_ordered_udp.poll()
 	
-	if relay_manager_ordered_udp.is_connection_available():
+	if relay_server_ordered_udp.is_connection_available():
 		
-		var peer : Variant = relay_manager_ordered_udp.take_connection()
+		var peer : Variant = relay_server_ordered_udp.take_connection()
 		var packet : Variant = peer.get_packet().get_string_from_utf8()
 		
 		#print("Server Received Ordered Packet: ", packet)
@@ -474,7 +474,7 @@ func poll_relay_manager_ordered_udp() -> void:
 		
 		#print("Server Received Ordered Packet: ", packet)
 		
-		if command == "register_to_relay_manager_ordered_udp":
+		if command == "register_to_relay_server_ordered_udp":
 			
 			for client in connected_clients:
 				
@@ -482,7 +482,7 @@ func poll_relay_manager_ordered_udp() -> void:
 					
 					client[&"ordered_udp_peer"] = peer
 					
-					send_tcp_data_to_client("confirm_relay_manager_ordered_udp_registration", 
+					send_tcp_data_to_client("confirm_relay_server_ordered_udp_registration", 
 					null, client[&"tcp_peer"])
 					
 					print("Registered Orered UDP peer for client: ", client[&"client_id"])
@@ -493,7 +493,7 @@ func poll_relay_manager_ordered_udp() -> void:
 		if client[&"ordered_udp_peer"] == null: 
 			continue
 		
-		if client[&"ordered_udp_peer"].get_available_packet_count() > 0:
+		while client[&"ordered_udp_peer"].get_available_packet_count() > 0:
 			
 			var packet : Variant = client[&"ordered_udp_peer"].get_packet().get_string_from_utf8()
 			
@@ -593,6 +593,12 @@ func create_relay_session_instance(info:Variant) -> void:
 			
 			client[&"is_host"] = true
 			
+			# Start host game client-side
+			send_tcp_data_to_client("load_map", "bnza_zoolag", client[&"tcp_peer"])
+			send_tcp_data_to_client("spawn_own_player", 
+			{&"x": 0, &"y": 0, &"z": 0}, 
+			client[&"tcp_peer"])
+			
 		else: continue
 	
 	relay_sessions.append(new_relay_session)
@@ -623,6 +629,27 @@ func join_relay_session(info:Variant) -> void:
 					client[&"current_session"] = session[&"session_id"]
 					
 					client[&"is_host"] = false
+					
+					var peer : StreamPeerTCP = client[&"tcp_peer"]
+					var id : int = client[&"client_id"]
+					
+					send_tcp_data_to_client("new_player_joined", id, peer)
+					
+					send_tcp_data_to_client("spawn_own_player", 
+					{&"x": 0, &"y": 0, &"z": 0} , 
+					peer)
+					
+					#TODO While existing clients get new spawns, new clients-
+					# don't get old spawns. Build a client_id array that sends to new clients.
+					
+					# Send info to all other clients
+					for session_peer:Variant in \
+					get_client_ids_from_session_id(session[&"session_id"], true):
+						
+						if session_peer == id: continue
+						
+						send_tcp_data_to_client("new_player_joined", session_peer, 
+						get_tcp_peer_from_client_id(session_peer))
 					
 				else: continue
 			

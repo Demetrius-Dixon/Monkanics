@@ -1,6 +1,6 @@
 extends Node
 
-var lobby_manager_tpc : TCPServer
+var lobby_server_tpc : TCPServer
 
 var registered_relay_servers : Array[Dictionary] = []
 
@@ -19,7 +19,7 @@ func _ready() -> void:
 	
 	if OS.has_feature(FeatureManager.LOBBY_SERVER):
 		
-		create_lobby_manager()
+		create_lobby_server()
 		
 	else: 
 		
@@ -27,13 +27,13 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	
-	poll_lobby_manager_tpc()
+	poll_lobby_server_tpc()
 	decode_tcp_stream()
 
-func create_lobby_manager() -> void:
+func create_lobby_server() -> void:
 	
-	lobby_manager_tpc = TCPServer.new()
-	lobby_manager_tpc.listen(
+	lobby_server_tpc = TCPServer.new()
+	lobby_server_tpc.listen(
 		EndpointManager.LOBBY_MANAGER_TCP_PORT, 
 		EndpointManager.LOBBY_MANAGER_IPV4)
 	print("Lobby Manager TCP Created")
@@ -44,16 +44,16 @@ func create_lobby_manager() -> void:
 
 
 
-func poll_lobby_manager_tpc() -> void:
+func poll_lobby_server_tpc() -> void:
 	
 	# Register new clients
-	if lobby_manager_tpc.is_connection_available():
+	if lobby_server_tpc.is_connection_available():
 		
 		var client : Dictionary = {
 			
 			&"client_id": assign_client_client_id(),
 			&"ip_address": 0,
-			&"tcp_peer": lobby_manager_tpc.take_connection(),
+			&"tcp_peer": lobby_server_tpc.take_connection(),
 			&"tcp_data_buffer": PackedByteArray(),
 			&"current_lobby": null,
 			&"is_host": null,
@@ -66,7 +66,7 @@ func poll_lobby_manager_tpc() -> void:
 		
 		connected_clients.append(client)
 		
-		send_tcp_data_to_client("confirm_lobby_manager_tcp_registration", client[&"client_id"], peer)
+		send_tcp_data_to_client("confirm_lobby_server_tcp_registration", client[&"client_id"], peer)
 		
 		#print("TCP Client Connected: ", client)
 	
@@ -236,7 +236,7 @@ func create_lobby_instance(host:StreamPeerTCP, lobby_name:String) -> void:
 		#&"current_player_count": 0,
 		#&"max_players": 6,
 		&"players": [host],
-		&"relay": EndpointManager.relay_regions[&"NA"]
+		&"relay": EndpointManager.RELAY_REGIONS[&"NA"]
 		
 	})
 	
@@ -257,26 +257,20 @@ func create_lobby_instance(host:StreamPeerTCP, lobby_name:String) -> void:
 	
 	# Connect host to the relay
 	send_tcp_data_to_client("client_connect_to_relay", 
-	EndpointManager.relay_regions[&"NA"], host)
+	EndpointManager.RELAY_REGIONS[&"NA"], host)
 	
 	await get_tree().create_timer(2).timeout
 	
 	# Create relay connection session
 	for relay in registered_relay_servers:
 		
-		if relay[&"relay_ip"] == EndpointManager.relay_regions[&"NA"]:
+		if relay[&"relay_ip"] == EndpointManager.RELAY_REGIONS[&"NA"]:
 			
 			var info_to_send : Dictionary = {
 				&"lobby_id": new_lobby_id,
 				&"client_id": client_id}
 			
 			send_tcp_data_to_client("start_relay_session", info_to_send, relay[&"relay_peer"])
-	
-	# Start host game locally
-	send_tcp_data_to_client("load_map", "bnza_zoolag", host)
-	send_tcp_data_to_client("spawn_own_player", 
-	{&"x": 0, &"y": 0, &"z": 0}, 
-	host)
 	
 	#print("Lobbies on Server: ", active_lobbies)
 	print("Lobby Created")
@@ -320,7 +314,7 @@ func client_join_lobby(client:StreamPeerTCP, client_id:int, lobby_id:int) -> voi
 			
 			# Connect client to relay
 			send_tcp_data_to_client("client_connect_to_relay", 
-			EndpointManager.relay_regions[&"NA"], client)
+			EndpointManager.RELAY_REGIONS[&"NA"], client)
 			
 			await get_tree().create_timer(2).timeout
 			
@@ -330,7 +324,7 @@ func client_join_lobby(client:StreamPeerTCP, client_id:int, lobby_id:int) -> voi
 			# Join relay connection session
 			for relay in registered_relay_servers:
 				
-				if relay[&"relay_ip"] == EndpointManager.relay_regions[&"NA"]:
+				if relay[&"relay_ip"] == EndpointManager.RELAY_REGIONS[&"NA"]:
 					
 					var info_to_send : Dictionary = {
 						&"lobby_id": lobby[&"lobby_id"],
@@ -346,26 +340,25 @@ func client_join_lobby(client:StreamPeerTCP, client_id:int, lobby_id:int) -> voi
 			
 			
 			
-			#TODO Move to client commands forwarded from relay
 			
-			send_tcp_data_to_client("spawn_own_player", 
-			{&"x": 0, &"y": 0, &"z": 0} , 
-			client)
-			
-			for client_in_lobby:Variant in lobby[&"players"]:
-				
-				if client_in_lobby == client: continue
-				
-				send_tcp_data_to_client("new_player_joined", client_id, client)
-			
-			# info to send to current host
-			send_tcp_data_to_client("new_player_joined", client_id, lobby[&"host"])
-			
-			# Send info to all other clients
-			for client_in_lobby:Variant in lobby[&"players"]:
-				
-				if client_in_lobby == client: continue
-				
-				if client_in_lobby == lobby[&"host"]: continue
-				
-				send_tcp_data_to_client("new_player_joined", client_id, client_in_lobby)
+			#send_tcp_data_to_client("spawn_own_player", 
+			#{&"x": 0, &"y": 0, &"z": 0} , 
+			#client)
+			#
+			#for client_in_lobby:Variant in lobby[&"players"]:
+				#
+				#if client_in_lobby == client: continue
+				#
+				#send_tcp_data_to_client("new_player_joined", client_id, client)
+			#
+			## info to send to current host
+			#send_tcp_data_to_client("new_player_joined", client_id, lobby[&"host"])
+			#
+			## Send info to all other clients
+			#for client_in_lobby:Variant in lobby[&"players"]:
+				#
+				#if client_in_lobby == client: continue
+				#
+				#if client_in_lobby == lobby[&"host"]: continue
+				#
+				#send_tcp_data_to_client("new_player_joined", client_id, client_in_lobby)
