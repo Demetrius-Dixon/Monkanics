@@ -21,6 +21,7 @@ Contribute today and follow the contribution guidelines in the `CONTRIBUTING` fi
 - Frozen_Fried - Concept Artist
 - Alexandre Marcati - Logo Artist
 - Hyperjragon - Programming
+- istubedmytoe - Programming
 
 ## Financial Backers (All-Time)
 
