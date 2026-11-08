@@ -208,9 +208,9 @@ visible = false
 [node name="CameraVerticalRotation" type="Node3D" parent="CameraHorizonalRotation" unique_id=332764294]
 
 [node name="CameraSpringArm" type="SpringArm3D" parent="CameraHorizonalRotation/CameraVerticalRotation" unique_id=1158340770]
-transform = Transform3D(-0.999827, 0.0176161, -0.00590412, 0.0160472, 0.97896, 0.203419, 0.00936334, 0.203289, -0.979074, 0.172905, 3.32345, -0.0406206)
+transform = Transform3D(-0.999827, 0.0176161, -0.00590412, 0.0160472, 0.97896, 0.203419, 0.00936334, 0.203289, -0.979074, 0.173, 3.323, 4)
 shape = SubResource("SphereShape3D_qjkh3")
-spring_length = 8.0
+spring_length = 13.0
 margin = 1.0
 
 [node name="Camera" type="Camera3D" parent="CameraHorizonalRotation/CameraVerticalRotation/CameraSpringArm" unique_id=1884407364]
