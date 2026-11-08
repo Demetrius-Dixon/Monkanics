@@ -8,6 +8,11 @@ var ui_scenes : Dictionary = {
 	
 }
 
+func _ready() -> void:
+	
+	if OS.has_feature(FeatureManager.DEDICATED_SERVER): 
+		queue_free()
+
 func load_ui_element(ui_element_to_load:String) -> void:
 	
 	var ui_element : String = ui_scenes[ui_element_to_load]

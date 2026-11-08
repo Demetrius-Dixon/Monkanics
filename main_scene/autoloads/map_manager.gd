@@ -9,6 +9,11 @@ var map_list : Dictionary = {
 	
 }
 
+func _ready() -> void:
+	
+	if OS.has_feature(FeatureManager.DEDICATED_SERVER): 
+		queue_free()
+
 func load_map(map_to_load:String) -> void:
 	
 	if current_map != null:

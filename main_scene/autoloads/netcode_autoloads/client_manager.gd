@@ -159,7 +159,8 @@ func send_tcp_data_to_lobby_server(command:String, info:Variant) -> void:
 
 func trigger_lobby_server_tpc_command(command:String, info:Variant) -> void:
 	
-	# Lobby Manager Registration
+	# Lobby Server Registration
+	
 	if command == "confirm_lobby_server_tcp_registration":
 		
 		is_registered_with_lobby_server_tcp = true
@@ -168,31 +169,10 @@ func trigger_lobby_server_tpc_command(command:String, info:Variant) -> void:
 		
 		print("Client -> Lobby Manager TCP Registered")
 	
-	# Relay Manager Registration
+	# Relay Server Registration
+	
 	if command == "client_connect_to_relay":
 		connect_to_relay_server(info)
-	
-	if command == "confirm_relay_server_tcp_registration":
-		
-		is_connected_to_relay = true
-		
-		is_registered_with_relay_server_tcp = true
-		
-		open_relay_server_udp_channels(info)
-		
-		print("Client -> Relay Manager TCP Registered")
-	
-	if command == "confirm_relay_server_udp_registration":
-		
-		is_registered_with_relay_udp = true
-		
-		print("Client -> Relay Manager UDP Registered")
-	
-	if command == "confirm_relay_server_ordered_udp_registration":
-		
-		is_registered_with_relay_ordered_udp = true
-		
-		print("Client -> Relay Manager Ordered UDP Registered")
 	
 	# Lobby Management
 	if command == "receive_active_lobby":
@@ -337,7 +317,27 @@ func send_tcp_data_to_relay_server(command:String, info:Variant) -> void:
 
 func trigger_relay_server_tpc_command(command:String, info:Variant) -> void:
 	
-	# Game
+	# Relay Registration Confirmation
+	
+	if command == "confirm_relay_server_tcp_registration":
+		
+		is_connected_to_relay = true
+		is_registered_with_relay_server_tcp = true
+		
+		open_relay_server_udp_channels(info)
+		
+		print("Client -> Relay Manager TCP Registered")
+	
+	if command == "confirm_relay_server_udp_registration":
+		is_registered_with_relay_udp = true
+		print("Client -> Relay Manager UDP Registered")
+	
+	if command == "confirm_relay_server_ordered_udp_registration":
+		is_registered_with_relay_ordered_udp = true
+		print("Client -> Relay Manager Ordered UDP Registered")
+	
+	# Game Logic
+	
 	if command == "add_new_client_id_to_client_instance":
 		client_ids_in_lobby.append(info)
 	
@@ -456,12 +456,9 @@ func increment_ordered_packet_sequence_number() -> int:
 @warning_ignore("unused_parameter")
 func trigger_relay_server_ordered_udp_command(command:String, info:Variant) -> void:
 	
-	if command == "host_send_gamestate":
+	if command == "apply_new_gamestate":
 		
-		pass
-		
-		
-		
+		apply_new_gamestate_from_host(info)
 		
 		#print("Got Gamestate")
 
@@ -553,6 +550,7 @@ func host_get_new_gamestate() -> void:
 	for player in players:
 		
 		var player_node : Node = player[&"player_node"]
+		var player_id : int = player[&"player_id"]
 		
 		# Triggers move_and_slide() for all host-side players
 		# This line is required for host-side players to move
@@ -561,14 +559,29 @@ func host_get_new_gamestate() -> void:
 		# Player info for server reference
 		new_gamestate.append({
 			
-			&"NodeName": player_node.get_name(),
-			&"NodePath": player_node.get_path(),
-			&"Position": player_node.global_position,
-			&"Velocity": player_node.velocity,
-			&"BodyRotation": player_node.body_parts.rotation,
-			&"HeadRotation": player_node.head_parts.rotation
+			&"node_name": player_node.get_name(),
+			&"node_path": player_node.get_path(),
+			&"player_id": player_id,
+			&"position": player_node.global_position,
+			&"velocity": player_node.velocity,
+			&"body_rotation": player_node.body_parts.rotation,
+			&"head_rotation": player_node.head_parts.rotation
 			})
 	
-	send_ordered_udp_packet_to_relay_server("host_send_gamestate", new_gamestate)
+	send_ordered_udp_packet_to_relay_server("apply_new_gamestate", new_gamestate)
 	
 	#print(new_gamestate)
+
+func apply_new_gamestate_from_host(new_gamestate:Array) -> void:
+	
+	for player:Variant in new_gamestate:
+		
+		#TODO Match send client Id with node name on this client
+		
+		#var player_node : Node = player[&"node_name"]
+		
+		print(player[&"position"])
+		
+		#player_node.position = player[&"position"]
+	
+	#print("Applied New Gamestate")

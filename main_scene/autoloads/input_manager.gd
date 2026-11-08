@@ -10,6 +10,11 @@ var is_holding_walk_right_input : bool = false
 var is_pressing_jump_input : bool = false
 var is_pressing_operate_input : bool = false
 
+func _ready() -> void:
+	
+	if OS.has_feature(FeatureManager.DEDICATED_SERVER): 
+		queue_free()
+
 func _process(_delta:float) -> void:
 	
 	if is_in_menu == false:

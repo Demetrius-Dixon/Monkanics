@@ -332,33 +332,3 @@ func client_join_lobby(client:StreamPeerTCP, client_id:int, lobby_id:int) -> voi
 						}
 					
 					send_tcp_data_to_client("join_relay_session", info_to_send, relay[&"relay_peer"])
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			#send_tcp_data_to_client("spawn_own_player", 
-			#{&"x": 0, &"y": 0, &"z": 0} , 
-			#client)
-			#
-			#for client_in_lobby:Variant in lobby[&"players"]:
-				#
-				#if client_in_lobby == client: continue
-				#
-				#send_tcp_data_to_client("new_player_joined", client_id, client)
-			#
-			## info to send to current host
-			#send_tcp_data_to_client("new_player_joined", client_id, lobby[&"host"])
-			#
-			## Send info to all other clients
-			#for client_in_lobby:Variant in lobby[&"players"]:
-				#
-				#if client_in_lobby == client: continue
-				#
-				#if client_in_lobby == lobby[&"host"]: continue
-				#
-				#send_tcp_data_to_client("new_player_joined", client_id, client_in_lobby)
