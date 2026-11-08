@@ -331,7 +331,7 @@ func get_host_id_from_session_id(session_id:int) -> int:
 		
 		if session[&"session_id"] == session_id:
 			
-			return session[&"host"]
+			return session[&"host_id"]
 	
 	return 0
 
@@ -581,8 +581,8 @@ func create_relay_session_instance(info:Variant) -> void:
 	var new_relay_session : Dictionary = {
 		
 		&"session_id": info[&"lobby_id"],
-		&"host": info[&"client_id"],
-		&"peers": [info[&"client_id"]]
+		&"host_id": info[&"client_id"],
+		&"client_ids": [info[&"client_id"]]
 	}
 	
 	for client in connected_clients:
@@ -595,6 +595,7 @@ func create_relay_session_instance(info:Variant) -> void:
 			
 			# Start host game client-side
 			send_tcp_data_to_client("load_map", "bnza_zoolag", client[&"tcp_peer"])
+			send_tcp_data_to_client("add_new_client_id_to_client_instance", client[&"client_id"], client[&"tcp_peer"])
 			send_tcp_data_to_client("spawn_own_player", 
 			{&"x": 0, &"y": 0, &"z": 0}, 
 			client[&"tcp_peer"])
@@ -619,7 +620,7 @@ func join_relay_session(info:Variant) -> void:
 		
 		if session[&"session_id"] == info[&"lobby_id"]:
 			
-			session[&"peers"].append(info[&"client_id"])
+			session[&"client_ids"].append(info[&"client_id"])
 			
 			# Update client info
 			for client in connected_clients:
@@ -630,30 +631,52 @@ func join_relay_session(info:Variant) -> void:
 					
 					client[&"is_host"] = false
 					
-					var peer : StreamPeerTCP = client[&"tcp_peer"]
-					var id : int = client[&"client_id"]
+					var new_client_peer : StreamPeerTCP = client[&"tcp_peer"]
+					var new_client_id : int = client[&"client_id"]
 					
-					send_tcp_data_to_client("new_player_joined", id, peer)
+					send_tcp_data_to_client("add_new_client_id_to_client_instance", new_client_id, new_client_peer)
 					
 					send_tcp_data_to_client("spawn_own_player", 
 					{&"x": 0, &"y": 0, &"z": 0} , 
-					peer)
+					new_client_peer)
 					
 					#TODO While existing clients get new spawns, new clients-
 					# don't get old spawns. Build a client_id array that sends to new clients.
+					
+					# Spawn old clients on the newly joined client
+					for session_client_id:Variant in session[&"client_ids"]:
+						
+						var old_client_id : int = session_client_id
+						
+						var old_client_peer : StreamPeerTCP = \
+						get_tcp_peer_from_client_id(session_client_id)
+						
+						if old_client_peer == new_client_peer: continue
+						
+						send_tcp_data_to_client("add_new_client_id_to_client_instance", \
+						old_client_id, new_client_peer)
+						
+						send_tcp_data_to_client("spawn_other_player", \
+						old_client_id, new_client_peer)
 					
 					# Send info to all other clients
 					for session_peer:Variant in \
 					get_client_ids_from_session_id(session[&"session_id"], true):
 						
-						if session_peer == id: continue
+						if session_peer == new_client_id: continue
 						
-						send_tcp_data_to_client("new_player_joined", session_peer, 
-						get_tcp_peer_from_client_id(session_peer))
+						var session_tcp_peer : StreamPeerTCP = \
+						get_tcp_peer_from_client_id(session_peer)
+						
+						send_tcp_data_to_client("add_new_client_id_to_client_instance", \
+						session_peer, session_tcp_peer)
+						
+						send_tcp_data_to_client("spawn_other_player", \
+						session_peer, session_tcp_peer)
 					
 				else: continue
 			
-			#print(session[&"peers"])
+			#print(session[&"client_ids"])
 			print("Client Joined Relay Session: ", session[&"session_id"])
 			
 		else: continue

@@ -29,14 +29,14 @@ const ORDERED_UDP_REGISTRATION_RETRY_DELAY : float = 0.25
 var received_active_lobbies : Array[Dictionary] = []
 var is_in_lobby : bool = false
 var is_host : bool = false
-var players_in_lobby : Array
+var client_ids_in_lobby : Array
 
 # Client
 var client_id : int = 0
 var client_player_node : Node = null
 
 # Game
-var players : Array[Node]
+var players : Array[Dictionary]
 var projectiles : Array[Node]
 
 
@@ -205,7 +205,7 @@ func trigger_lobby_server_tpc_command(command:String, info:Variant) -> void:
 		
 		is_in_lobby = true
 		
-		players_in_lobby.append(client_manager_to_lobby_server_tcp)
+		client_ids_in_lobby.append(client_manager_to_lobby_server_tcp)
 		
 		UiManager.unload_all_ui_elements()
 		
@@ -338,17 +338,17 @@ func send_tcp_data_to_relay_server(command:String, info:Variant) -> void:
 func trigger_relay_server_tpc_command(command:String, info:Variant) -> void:
 	
 	# Game
-	if command == "new_player_joined":
-		
-		players_in_lobby.append(info)
-		
-		spawn_other_player(str(info))
+	if command == "add_new_client_id_to_client_instance":
+		client_ids_in_lobby.append(info)
 	
 	if command == "load_map":
 		MapManager.load_map(info)
 	
 	if command == "spawn_own_player":
 		spawn_own_player()
+	
+	if command == "spawn_other_player":
+		spawn_other_player(str(info))
 
 
 
@@ -509,7 +509,14 @@ func spawn_own_player() -> void:
 	
 	client_player_node = own_player
 	
-	players.append(own_player)
+	players.append({
+		
+		&"player_node": own_player,
+		&"player_node_name": own_player.name
+		
+		})
+	
+	#print("Own player spawned")
 
 func spawn_other_player(node_name:String) -> void:
 	
@@ -517,7 +524,12 @@ func spawn_other_player(node_name:String) -> void:
 	
 	new_player.name = str(int(node_name))
 	
-	players.append(new_player)
+	players.append({
+		
+		&"player_node": new_player,
+		&"player_node_name": new_player.name
+		
+		})
 	
 	#print(client_players)
 
@@ -540,19 +552,21 @@ func host_get_new_gamestate() -> void:
 	# Get the state of all connected players
 	for player in players:
 		
+		var player_node : Node = player[&"player_node"]
+		
 		# Triggers move_and_slide() for all host-side players
 		# This line is required for host-side players to move
-		player.trigger_move_and_slide()
+		player_node.trigger_move_and_slide()
 		
 		# Player info for server reference
 		new_gamestate.append({
 			
-			&"NodeName": player.get_name(),
-			&"NodePath": player.get_path(),
-			&"Position": player.global_position,
-			&"Velocity": player.velocity,
-			&"BodyRotation": player.body_parts.rotation,
-			&"HeadRotation": player.head_parts.rotation
+			&"NodeName": player_node.get_name(),
+			&"NodePath": player_node.get_path(),
+			&"Position": player_node.global_position,
+			&"Velocity": player_node.velocity,
+			&"BodyRotation": player_node.body_parts.rotation,
+			&"HeadRotation": player_node.head_parts.rotation
 			})
 	
 	send_ordered_udp_packet_to_relay_server("host_send_gamestate", new_gamestate)
