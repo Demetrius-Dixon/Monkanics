@@ -634,14 +634,11 @@ func join_relay_session(info:Variant) -> void:
 					var new_client_peer : StreamPeerTCP = client[&"tcp_peer"]
 					var new_client_id : int = client[&"client_id"]
 					
+					# Spawn the new client's player on their instance
 					send_tcp_data_to_client("add_new_client_id_to_client_instance", new_client_id, new_client_peer)
-					
 					send_tcp_data_to_client("spawn_own_player", 
 					{&"x": 0, &"y": 0, &"z": 0} , 
 					new_client_peer)
-					
-					#TODO While existing clients get new spawns, new clients-
-					# don't get old spawns. Build a client_id array that sends to new clients.
 					
 					# Spawn old clients on the newly joined client
 					for session_client_id:Variant in session[&"client_ids"]:

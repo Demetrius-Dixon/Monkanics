@@ -7,6 +7,11 @@ var spawnable_objects : Dictionary = {
 	
 }
 
+func _ready() -> void:
+	
+	if OS.has_feature(FeatureManager.DEDICATED_SERVER): 
+		queue_free()
+
 func spawn_local(spawnable:String, 
 spawn_x:float, spawn_y:float, spawn_z:float) -> Variant:
 	
