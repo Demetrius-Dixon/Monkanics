@@ -550,7 +550,7 @@ func host_get_new_gamestate() -> void:
 	for player in players:
 		
 		var player_node : Node = player[&"player_node"]
-		var player_id : int = player[&"player_id"]
+		#var player_id : int = player[&"player_id"]
 		
 		# Triggers move_and_slide() for all host-side players
 		# This line is required for host-side players to move
@@ -561,8 +561,9 @@ func host_get_new_gamestate() -> void:
 			
 			&"node_name": player_node.get_name(),
 			&"node_path": player_node.get_path(),
-			&"player_id": player_id,
-			&"position": player_node.global_position,
+			&"position_x": player_node.global_position.x,
+			&"position_y": player_node.global_position.y,
+			&"position_z": player_node.global_position.z,
 			&"velocity": player_node.velocity,
 			&"body_rotation": player_node.body_parts.rotation,
 			&"head_rotation": player_node.head_parts.rotation
@@ -574,14 +575,37 @@ func host_get_new_gamestate() -> void:
 
 func apply_new_gamestate_from_host(new_gamestate:Array) -> void:
 	
-	for player:Variant in new_gamestate:
+	for new_player_state:Variant in new_gamestate:
 		
-		#TODO Match send client Id with node name on this client
+		var player_node : Node = \
+		get_player_node_from_node_name(new_player_state[&"node_name"])
 		
-		#var player_node : Node = player[&"node_name"]
+		if player_node == client_player_node: continue
 		
-		print(player[&"position"])
+		#if player_node == null: continue
 		
-		#player_node.position = player[&"position"]
+		#print(player_node.global_position)
+		#print(new_player_state[&"position"])
+		
+		player_node.global_position.x = new_player_state[&"position_x"]
+		player_node.global_position.y = new_player_state[&"position_y"]
+		player_node.global_position.z = new_player_state[&"position_z"]
+		
+		#print(player_node)
+		
+		pass
+		#print(player[&"position"])
+		
+		
 	
 	#print("Applied New Gamestate")
+
+func get_player_node_from_node_name(node_name:StringName) -> Node:
+	
+	for player in players:
+		
+		if player[&"player_node_name"] == node_name:
+			
+			return player[&"player_node"]
+	
+	return null
