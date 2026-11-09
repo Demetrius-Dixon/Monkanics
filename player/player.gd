@@ -8,7 +8,7 @@ var current_velocity_x : float = 0.0
 var current_velocity_y : float = 0.0
 var current_velocity_z : float = 0.0
 
-const MAX_MOVEMENT_SPEED : float = 50.0
+const MAX_MOVEMENT_SPEED : float = 25.0
 const MIN_MOVEMENT_SPEED : float = 0.0
 
 var current_movement_speed_multiplier : float = 1.0
