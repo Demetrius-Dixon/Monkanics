@@ -201,7 +201,7 @@ func start_client_game() -> void:
 	# Create client
 	var client : ENetMultiplayerPeer = ENetMultiplayerPeer.new()
 	
-	client.create_client(ServerInfo.RELAY_ROUTER_IPV4, ServerInfo.RELAY_ROUTER_PORT)
+	#client.create_client(ServerInfo.RELAY_ROUTER_IPV4, ServerInfo.RELAY_ROUTER_PORT)
 	
 	# Make the client's multiplayer_peer the client
 	multiplayer.multiplayer_peer = client

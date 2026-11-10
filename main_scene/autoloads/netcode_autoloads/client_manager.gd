@@ -461,6 +461,11 @@ func trigger_relay_server_ordered_udp_command(command:String, info:Variant) -> v
 		apply_new_gamestate_from_host(info)
 		
 		#print("Got Gamestate")
+	
+	if command == "send_and_apply_client_input":
+		pass
+		
+		
 
 
 
@@ -481,8 +486,6 @@ func request_to_join_lobby(lobby_id:int) -> void:
 	send_tcp_data_to_lobby_server("request_to_join_lobby", lobby_id)
 	
 	#print("CLIENT ATTEMPTED TO JOIN LOBBY")
-
-
 
 
 
@@ -560,7 +563,7 @@ func host_get_new_gamestate() -> void:
 		new_gamestate.append({
 			
 			&"node_name": player_node.get_name(),
-			&"node_path": player_node.get_path(),
+			#&"node_path": player_node.get_path(),
 			&"position_x": player_node.global_position.x,
 			&"position_y": player_node.global_position.y,
 			&"position_z": player_node.global_position.z,
@@ -581,21 +584,11 @@ func apply_new_gamestate_from_host(new_gamestate:Array) -> void:
 		get_player_node_from_node_name(new_player_state[&"node_name"])
 		
 		if player_node == client_player_node: continue
-		
-		#if player_node == null: continue
-		
-		#print(player_node.global_position)
-		#print(new_player_state[&"position"])
+		if player_node == null: continue
 		
 		player_node.global_position.x = new_player_state[&"position_x"]
 		player_node.global_position.y = new_player_state[&"position_y"]
 		player_node.global_position.z = new_player_state[&"position_z"]
-		
-		#print(player_node)
-		
-		pass
-		#print(player[&"position"])
-		
 		
 	
 	#print("Applied New Gamestate")
@@ -609,3 +602,19 @@ func get_player_node_from_node_name(node_name:StringName) -> Node:
 			return player[&"player_node"]
 	
 	return null
+
+
+
+
+
+
+
+func send_movement_input_to_host() -> void:
+	pass
+	
+	
+
+func apply_sent_client_input() -> void:
+	pass
+	
+	
