@@ -16,26 +16,26 @@ This script controls:
 
 # Projectile Stats
 
-var assigned_owning_client : String
+var assigned_owning_client: String
 
-var assigned_spawn_position : Vector3
-var assigned_target_position : Vector3
-var assigned_target_rotation : Vector3
+var assigned_spawn_position: Vector3
+var assigned_target_position: Vector3
+var assigned_target_rotation: Vector3
 
-var assigned_projectile_speed : float
-const MAX_PROJECTILE_SPEED : float = 1_000.0
-const MIN_PROJECTILE_SPEED : float = 1.0
+var assigned_projectile_speed: float
+const MAX_PROJECTILE_SPEED: float = 1_000.0
+const MIN_PROJECTILE_SPEED: float = 1.0
 
-var assigned_projectile_damage : float = 10.0
+var assigned_projectile_damage: float = 10.0
 
-var current_projectile_lifetime : float = 0.0
-const MAX_PROJECTILE_LIFETIME : float = 45.0
+var current_projectile_lifetime: float = 0.0
+const MAX_PROJECTILE_LIFETIME: float = 45.0
 
 # Projectile State
 
-var ready_for_deletion : bool = false
-var spawned_too_close : bool = false
-var can_act_by_itself : bool = false
+var ready_for_deletion: bool = false
+var spawned_too_close: bool = false
+var can_act_by_itself: bool = false
 
 # Projectile Nodes
 
@@ -108,11 +108,11 @@ func _on_body_entered(body:Node) -> void:
 		process_client_predicted_collision(body)
 
 @warning_ignore("unused_parameter")
-func process_client_predicted_collision(body:Node) -> void:
+func process_client_predicted_collision(body: Node) -> void:
 	
 	ready_for_deletion = true
 
-func process_true_server_collision(body:Node) -> void:
+func process_true_server_collision(body: Node) -> void:
 	
 	notify_collision_for_server.emit(body, \
 	assigned_projectile_damage, \

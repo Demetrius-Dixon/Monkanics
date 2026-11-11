@@ -35,6 +35,6 @@ Feature Tag List:
 	-Then, the relay is the one who forwards all game packets to all clients.
 """
 
-const DEDICATED_SERVER : String = "dedicated_server"
-const LOBBY_SERVER : String = "lobby_server"
-const RELAY_SERVER : String = "relay_server"
+const DEDICATED_SERVER: String = "dedicated_server"
+const LOBBY_SERVER: String = "lobby_server"
+const RELAY_SERVER: String = "relay_server"

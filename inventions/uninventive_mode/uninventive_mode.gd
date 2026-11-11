@@ -22,27 +22,27 @@ Remember to always:
 
 # Univeral
 
-var can_operate : bool = true
-@onready var player_ref : Node
+var can_operate: bool = true
+@onready var player_ref: Node
 
 # Uninventive Melee
 
-@onready var uninventive_melee_hitbox : Node
-const UNINVENTIVE_MELEE_DAMAGE : int = 30
+@onready var uninventive_melee_hitbox: Node
+const UNINVENTIVE_MELEE_DAMAGE: int = 30
 
 # Uninventive Projectile
 
 @onready var universal_projectile := preload("uid://bn1b4438pxw3l")
-@onready var universal_projectile_origin : Node
-const UNINVENTIVE_PROJECTILE_FIRE_RATE : float = 0.10
-const MIN_PROJECTILE_SHOOT_DISTANCE : float = 7.5
+@onready var universal_projectile_origin: Node
+const UNINVENTIVE_PROJECTILE_FIRE_RATE: float = 0.10
+const MIN_PROJECTILE_SHOOT_DISTANCE: float = 7.5
 
 #------------------------------------------#
 # Uninventive Attacks:
 #------------------------------------------#
 
-func setup_node_references(player_ref_node:Node,
-universal_projectile_origin_node:Node) -> void:
+func setup_node_references(player_ref_node: Node,
+universal_projectile_origin_node: Node) -> void:
 	
 	player_ref = player_ref_node
 	
@@ -54,21 +54,21 @@ func uninventive_projectile_attack() -> void:
 	player_ref.camera_raycast.force_raycast_update()
 	
 	# Create collision variables
-	var camera_raycast_collision_point : Vector3 = player_ref.camera_raycast.get_collision_point()
-	var new_muzzle_raycast_collision_point : Vector3 = player_ref.global_muzzle_raycast.to_local(camera_raycast_collision_point)
+	var camera_raycast_collision_point: Vector3 = player_ref.camera_raycast.get_collision_point()
+	var new_muzzle_raycast_collision_point: Vector3 = player_ref.global_muzzle_raycast.to_local(camera_raycast_collision_point)
 	
 	# Update muzzle raycast to go toward camera raycast hit location
 	player_ref.global_muzzle_raycast.target_position = new_muzzle_raycast_collision_point
 	player_ref.global_muzzle_raycast.force_raycast_update()
 	
 	# Create hit distance variable
-	var muzzle_raycast_hit_distance : Variant
+	var muzzle_raycast_hit_distance: Variant
 	
 	# Get the distance between the start/end of the muzzle raycast
 	muzzle_raycast_hit_distance = player_ref.global_muzzle_raycast.global_position.distance_to(player_ref.camera_raycast.get_collision_point())
 	
 	# Instantiate projectile
-	var projectile_instance : Node = universal_projectile.instantiate()
+	var projectile_instance: Node = universal_projectile.instantiate()
 	
 	# Spawn projectile in scene
 	add_sibling(projectile_instance)
@@ -110,8 +110,8 @@ func uninventive_projectile_attack() -> void:
 	#for Box:Area3D in Hitboxes:
 		#
 		## Get the Area3D's parent node and parent name (This works)
-		#var Hitbox : Node = Box.get_parent()
-		#var Hitbox_Name : String = Box.get_parent().name
+		#var Hitbox: Node = Box.get_parent()
+		#var Hitbox_Name: String = Box.get_parent().name
 		#
 		## Loops through the collided hitboxes for-
 		## - players to hit. (And ignore self)
@@ -119,8 +119,8 @@ func uninventive_projectile_attack() -> void:
 		#and Hitbox_Name != player_ref.Client_ID:
 			#
 			## Get the enemy's LOS reference node and local hitbox position
-			#var Hit_Player_LOS_Position : Vector3 = Hitbox.get_node("GlobalLineOfSightReference").global_position
-			#var Raycast_Target_Location : Vector3 = player_ref.global_los_checker.to_local(Hit_Player_LOS_Position)
+			#var Hit_Player_LOS_Position: Vector3 = Hitbox.get_node("GlobalLineOfSightReference").global_position
+			#var Raycast_Target_Location: Vector3 = player_ref.global_los_checker.to_local(Hit_Player_LOS_Position)
 			#
 			## Send the LOS raycast to the enemy's location and force and update
 			#player_ref.global_los_checker.target_position = Raycast_Target_Location

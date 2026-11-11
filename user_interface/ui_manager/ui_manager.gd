@@ -1,7 +1,7 @@
 extends Node
 
-var main_menu : Node
-var main_menu_preload : PackedScene = preload("uid://cuetqgx13tv6s")
+var main_menu: Node
+var main_menu_preload: PackedScene = preload("uid://cuetqgx13tv6s")
 
 func _ready() -> void:
 	load_main_menu()

@@ -1,6 +1,6 @@
 extends Node
 
-var mouse_sensitivity : float = 0.003
+var mouse_sensitivity: float = 0.003
 
 func _ready() -> void:
 	

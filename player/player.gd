@@ -1,97 +1,95 @@
 extends CharacterBody3D
 
-var is_walking : bool = false
-var is_movement_input_held : bool = false
+var is_walking: bool = false
+var is_movement_input_held: bool = false
 
-var current_movement_speed : float = 0.0
-var current_velocity_x : float = 0.0
-var current_velocity_y : float = 0.0
-var current_velocity_z : float = 0.0
+var current_movement_speed: float = 0.0
+var current_velocity_x: float = 0.0
+var current_velocity_y: float = 0.0
+var current_velocity_z: float = 0.0
 
-const MAX_MOVEMENT_SPEED : float = 25.0
-const MIN_MOVEMENT_SPEED : float = 0.0
+const MAX_MOVEMENT_SPEED: float = 25.0
+const MIN_MOVEMENT_SPEED: float = 0.0
 
-var current_movement_speed_multiplier : float = 1.0
-var active_speed_multipliers : Array[String]
-const MAX_MOVEMENT_SPEED_MULTIPLIER : float = 2.0 # (+200% Movement Speed)
-const MIN_MOVEMENT_SPEED_MULTIPLIER : float = 0.6 # (-40% Movement Speed)
-const DEFAULT_MOVEMENT_SPEED_MULTIPLIER : float = 1.0
+var current_movement_speed_multiplier: float = 1.0
+var active_speed_multipliers: Array[String]
+const MAX_MOVEMENT_SPEED_MULTIPLIER: float = 2.0 # (+200% Movement Speed)
+const MIN_MOVEMENT_SPEED_MULTIPLIER: float = 0.6 # (-40% Movement Speed)
+const DEFAULT_MOVEMENT_SPEED_MULTIPLIER: float = 1.0
 
-const MOVEMENT_ACCELERATION_RATE : float = 15_000.0
+const MOVEMENT_ACCELERATION_RATE: float = 15_000.0
 
-const MOVEMENT_DECELERATION_RATE_GROUNDED : float = 5_250.0
-const MOVEMENT_DECELERATION_RATE_AIRBORNE : float = 0.0
+const MOVEMENT_DECELERATION_RATE_GROUNDED: float = 5_250.0
+const MOVEMENT_DECELERATION_RATE_AIRBORNE: float = 0.0
 
-var global_movement_direction : Vector3 
-var movement_direction_x : float
-var movement_direction_z : float
+var global_movement_direction: Vector3 
+var movement_direction_x: float
+var movement_direction_z: float
 
-var is_airborne : bool = false
-var is_jump_input_new : bool = true
-var can_jump : bool = true 
-var is_jumping : bool = false 
+var is_airborne: bool = false
+var is_jump_input_new: bool = true
+var can_jump: bool = true 
+var is_jumping: bool = false 
 
-const INITIAL_JUMP_FORCE : float = 20.0
-const GRADUAL_JUMP_FORCE : float = 1.0
+const INITIAL_JUMP_FORCE: float = 20.0
+const GRADUAL_JUMP_FORCE: float = 1.0
 
-var current_jump_time : float = 0.0 
-const JUMP_TIME_PROGRESSION : float = 0.045 
-const JUMP_TIME_AWAIT_DURATION : float = 0.001 
-const MIN_JUMP_TIME : float = 0.0
-const MAX_JUMP_TIME : float = 0.35
+var current_jump_time: float = 0.0 
+const JUMP_TIME_PROGRESSION: float = 0.045 
+const JUMP_TIME_AWAIT_DURATION: float = 0.001 
+const MIN_JUMP_TIME: float = 0.0
+const MAX_JUMP_TIME: float = 0.35
 
-var is_jump_input_buffered : bool = false
-var current_jump_buffer_duration : float = 0.0
-const MAX_JUMP_BUFFER_DURATION : float = 0.10
-const MIN_JUMP_BUFFER_DURATION : float = 0.0
-const JUMP_BUFFER_PROGRESSION : float = 0.045 
-const JUMP_BUFFER_AWAIT_DURATION : float = 0.001 
+var is_jump_input_buffered: bool = false
+var current_jump_buffer_duration: float = 0.0
+const MAX_JUMP_BUFFER_DURATION: float = 0.10
+const MIN_JUMP_BUFFER_DURATION: float = 0.0
+const JUMP_BUFFER_PROGRESSION: float = 0.045 
+const JUMP_BUFFER_AWAIT_DURATION: float = 0.001 
 
-var can_coyote_jump : bool = false
-var current_coyote_time : float = 0.0
-const MAX_COYOTE_TIME : float = 0.2
-const MIN_COYOTE_TIME : float = 0.0
-const COYOTE_TIMER_PROGRESSION : float = 0.045 
-const COYOTE_TIMER_AWAIT_DURATION : float = 0.001 
+var can_coyote_jump: bool = false
+var current_coyote_time: float = 0.0
+const MAX_COYOTE_TIME: float = 0.2
+const MIN_COYOTE_TIME: float = 0.0
+const COYOTE_TIMER_PROGRESSION: float = 0.045 
+const COYOTE_TIMER_AWAIT_DURATION: float = 0.001 
 
-var is_newly_grounded : bool = false
+var is_newly_grounded: bool = false
 
-var can_apply_gravity : bool = true
-var current_gravity_force : float = 115.0
-const DEFUALT_GRAVITY_FORCE : float = 115.0
-const MIN_GRAVITY_FORCE : float = 0.0
+var can_apply_gravity: bool = true
+var current_gravity_force: float = 115.0
+const DEFUALT_GRAVITY_FORCE: float = 115.0
+const MIN_GRAVITY_FORCE: float = 0.0
 
-var current_health : int = 100
-var current_max_health : int = 100
-const DEFAULT_MAX_HEALTH : int = 100
-const MIN_HEALTH : int = 0
+var current_health: int = 100
+var current_max_health: int = 100
+const DEFAULT_MAX_HEALTH: int = 100
+const MIN_HEALTH: int = 0
 
-var can_operate : bool = true
-var is_operating : bool = false
-var is_operate_input_held : bool = false
+var can_operate: bool = true
+var is_operating: bool = false
+var is_operate_input_held: bool = false
 
-@onready var camera : Node = $CameraHorizonalRotation/CameraVerticalRotation/CameraSpringArm/Camera
-@onready var camera_horizonal_rotation : Node = $CameraHorizonalRotation
-@onready var camera_vertical_rotation : Node = $CameraHorizonalRotation/CameraVerticalRotation
-const MAX_LOOK_DEGREES : int = 75
-const MIN_LOOK_DEGREES : int = -75
+@onready var camera: Camera3D = $CameraHorizonalRotation/CameraVerticalRotation/CameraSpringArm/Camera
+@onready var camera_horizonal_rotation: Node3D = $CameraHorizonalRotation
+@onready var camera_vertical_rotation: Node3D = $CameraHorizonalRotation/CameraVerticalRotation
+const MAX_LOOK_DEGREES: int = 75
+const MIN_LOOK_DEGREES: int = -75
 
-@onready var body_parts : Node = $BodyParts
-@onready var head_parts : Node = $HeadParts
+@onready var body_parts: Node3D = $BodyParts
+@onready var head_parts: Node3D = $HeadParts
 
-@onready var player_hitbox : Node = $PlayerDamageTaker
-@onready var global_los_checker : Node = $CameraHorizonalRotation/CameraVerticalRotation/GlobalLOSChecker
-@onready var los_reference : Node = $LOSReference
+@onready var player_hitbox: RigidBody3D = $PlayerDamageTaker
+@onready var global_los_checker: RayCast3D = $CameraHorizonalRotation/CameraVerticalRotation/GlobalLOSChecker
+@onready var los_reference: Node3D = $LOSReference
 
-@onready var camera_raycast : Node = $CameraHorizonalRotation/CameraVerticalRotation/CameraSpringArm/Camera/CameraRaycast
-@onready var global_muzzle_raycast : Node = $GlobalMuzzleRaycast
+@onready var camera_raycast: RayCast3D = $CameraHorizonalRotation/CameraVerticalRotation/CameraSpringArm/Camera/CameraRaycast
+@onready var global_muzzle_raycast: RayCast3D = $GlobalMuzzleRaycast
 
-const MIN_PROJECTILE_SHOOT_DISTANCE : float = 9.5
-const END_PROJECTILE_SHOOT_DISTANCE : float = 3.0
+const MIN_PROJECTILE_SHOOT_DISTANCE: float = 9.5
+const END_PROJECTILE_SHOOT_DISTANCE: float = 3.0
 
-@onready var global_projectile_origin : Node = $CameraHorizonalRotation/CameraVerticalRotation/GlobalProjectileOrigin
-
-#@onready var health_bar : Node = $PlayerHUD/PlayerHealthBar
+@onready var global_projectile_origin: Marker3D = $CameraHorizonalRotation/CameraVerticalRotation/GlobalProjectileOrigin
 
 func _ready() -> void:
 	pass
@@ -102,7 +100,7 @@ func _physics_process(delta: float) -> void:
 	
 	check_if_player_is_airborne()
 	
-	check_velocity() #INFO Add an "upon_stoping" function later
+	check_velocity()
 	
 	move_and_slide()
 	
@@ -118,7 +116,11 @@ func _process(_delta: float) -> void:
 	else:
 		apply_jump_input()
 
-func apply_movement_input(delta:float) -> void:
+## This function runs when the player's XZ Velocity reaches (0, 0).
+func upon_stoping() -> void:
+	pass
+
+func apply_movement_input(delta: float) -> void:
 	
 	if InputManager.is_holding_walk_forward_input == true \
 	or InputManager.is_holding_walk_backward_input == true \
@@ -127,7 +129,7 @@ func apply_movement_input(delta:float) -> void:
 		
 		is_movement_input_held = true
 		
-		var input:Vector2 = Input.get_vector(
+		var input: Vector2 = Input.get_vector(
 		"walk_right", "walk_left", "walk_backward", "walk_forward")
 		
 		start_walking(input, delta)
@@ -141,7 +143,7 @@ func apply_movement_input(delta:float) -> void:
 		
 		stop_walking(delta)
 
-func start_walking(input:Vector2, delta:float) -> void:
+func start_walking(input: Vector2, delta: float) -> void:
 	
 	is_walking = true
 	
@@ -162,7 +164,7 @@ func start_walking(input:Vector2, delta:float) -> void:
 		movement_direction_x = global_movement_direction.x
 		movement_direction_z = global_movement_direction.z
 
-func stop_walking(delta:float) -> void:
+func stop_walking(delta: float) -> void:
 	
 	is_walking = false
 	
@@ -345,6 +347,10 @@ func stop_coyote_timer() -> void:
 
 func check_velocity() -> void:
 	
+	if (velocity.x == 0 and current_velocity_x != 0) and \
+	(velocity.z == 0 and current_velocity_z != 0):
+		upon_stoping()
+	
 	current_velocity_x = velocity.x
 	
 	current_velocity_y = velocity.y
@@ -355,15 +361,15 @@ func check_velocity() -> void:
 	#" Y: ", current_velocity_y, \
 	#" Z: ", current_velocity_z)
 
-func _unhandled_input(event:InputEvent) -> void: ## Camera Controls
+func _unhandled_input(event: InputEvent) -> void: ## Camera Controls
 	
 	if name != "own_player": return
 	
 	if MouseManager.is_mouse_visible == true: return
 	
-	var camera_horizontal_input : float = 0.0
-	var camera_vertical_input : float = -0.0
-	const NULL_CAMERA_INPUT : float = 0.0
+	var camera_horizontal_input: float = 0.0
+	var camera_vertical_input: float = -0.0
+	const NULL_CAMERA_INPUT: float = 0.0
 	
 	if event is InputEventMouseMotion and Input.MOUSE_MODE_CAPTURED:
 		camera_horizontal_input = - event.relative.x * SettingsManager.mouse_sensitivity
@@ -405,7 +411,7 @@ func _unhandled_input(event:InputEvent) -> void: ## Camera Controls
 	## Update the server's camera horizontal rotation
 	#camera_vertical_rotation.rotation.x = new_camera_vertical_rotation
 
-func player_take_damage(damage:int) -> void:
+func player_take_damage(damage: int) -> void:
 	
 	if current_health >= MIN_HEALTH:
 		
@@ -420,7 +426,7 @@ func kill_player() -> void:
 	
 	visible = false
 
-func respawn_player(new_spawn_point:Vector3) -> void:
+func respawn_player(new_spawn_point: Vector3) -> void:
 	
 	global_position = new_spawn_point
 	

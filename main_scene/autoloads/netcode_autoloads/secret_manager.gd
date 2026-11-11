@@ -20,9 +20,9 @@ VERY IMPORTANT TIPS:
 	3. KEEP ALL KEYS LOCAL! A relay's key stays on the physical relay server.
 """
 
-const TEST_KEY : Variant = 12345 # FOR DEBUGGING LOCALLY ONLY!
+const TEST_KEY: Variant = 12345 # FOR DEBUGGING LOCALLY ONLY!
 
-var RELAY_SERVER_US_KEY : Variant
+var RELAY_SERVER_US_KEY: Variant
 
 func _ready() -> void:
 	

@@ -1,8 +1,8 @@
 extends Node3D
 
-@onready var spawn_point_container : Node = $PlayerSpawnPoints
+@onready var spawn_point_container: Node = $PlayerSpawnPoints
 
-@onready var spawn_points : Array[Vector3] = [
+@onready var spawn_points: Array[Vector3] = [
 	$"PlayerSpawnPoints/1".global_position,
 	$"PlayerSpawnPoints/2".global_position,
 	$"PlayerSpawnPoints/3".global_position,
