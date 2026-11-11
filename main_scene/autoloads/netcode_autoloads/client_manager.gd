@@ -1,43 +1,43 @@
 extends Node
 
 # Lobby Server
-var client_manager_to_lobby_server_tcp : StreamPeerTCP
-var is_registered_with_lobby_server_tcp : bool = false
-var can_poll_lobby_tcp : bool = false
-var lobby_server_tcp_data_buffer : PackedByteArray = PackedByteArray()
+var client_manager_to_lobby_server_tcp: StreamPeerTCP
+var is_registered_with_lobby_server_tcp: bool = false
+var can_poll_lobby_tcp: bool = false
+var lobby_server_tcp_data_buffer: PackedByteArray = PackedByteArray()
 
 # Relay Server
-var is_connected_to_relay : bool = false
+var is_connected_to_relay: bool = false
 
-var client_manager_to_relay_server_tcp : StreamPeerTCP
-var is_registered_with_relay_server_tcp : bool = false
-var can_poll_relay_tcp : bool = false
-var relay_server_tcp_data_buffer : PackedByteArray = PackedByteArray()
+var client_manager_to_relay_server_tcp: StreamPeerTCP
+var is_registered_with_relay_server_tcp: bool = false
+var can_poll_relay_tcp: bool = false
+var relay_server_tcp_data_buffer: PackedByteArray = PackedByteArray()
 
-var client_manager_to_relay_server_udp : PacketPeerUDP
-var is_registered_with_relay_udp : bool = false
-var can_poll_relay_udp : bool = false
-const UDP_REGISTRATION_RETRY_DELAY : float = 0.25
+var client_manager_to_relay_server_udp: PacketPeerUDP
+var is_registered_with_relay_udp: bool = false
+var can_poll_relay_udp: bool = false
+const UDP_REGISTRATION_RETRY_DELAY: float = 0.25
 
-var client_manager_to_relay_server_ordered_udp : PacketPeerUDP
-var is_registered_with_relay_ordered_udp : bool = false
-var can_poll_relay_ordered_udp : bool = false
-var current_ordered_packet_sequence_number : int = 0
-const ORDERED_UDP_REGISTRATION_RETRY_DELAY : float = 0.25
+var client_manager_to_relay_server_ordered_udp: PacketPeerUDP
+var is_registered_with_relay_ordered_udp: bool = false
+var can_poll_relay_ordered_udp: bool = false
+var current_ordered_packet_sequence_number: int = 0
+const ORDERED_UDP_REGISTRATION_RETRY_DELAY: float = 0.25
 
 # Lobby
-var received_active_lobbies : Array[Dictionary] = []
-var is_in_lobby : bool = false
-var is_host : bool = false
-var client_ids_in_lobby : Array
+var received_active_lobbies: Array[Dictionary] = []
+var is_in_lobby: bool = false
+var is_host: bool = false
+var client_ids_in_lobby: Array
 
 # Client
-var client_id : int = 0
-var client_player_node : Node = null
+var client_id: int = 0
+var client_player_node: Node = null
 
 # Game
-var players : Array[Dictionary]
-var projectiles : Array[Node]
+var players: Array[Dictionary]
+var projectiles: Array[Node]
 
 
 
@@ -114,11 +114,11 @@ func poll_client_to_lobby_server_tcp() -> void:
 	# Poll Lobby Manager TCP
 	client_manager_to_lobby_server_tcp.poll()
 	
-	var lobby_server_bytes : Variant = client_manager_to_lobby_server_tcp.get_available_bytes()
+	var lobby_server_bytes: Variant = client_manager_to_lobby_server_tcp.get_available_bytes()
 	
 	if lobby_server_bytes > 0:
 		
-		var data : Variant = client_manager_to_lobby_server_tcp.get_data(
+		var data: Variant = client_manager_to_lobby_server_tcp.get_data(
 		lobby_server_bytes)[1]
 		
 		lobby_server_tcp_data_buffer.append_array(data)
@@ -131,13 +131,13 @@ func decode_lobby_server_tcp_stream() -> void:
 	
 	while lobby_server_tcp_data_buffer.size() >= 4:
 		
-		var data_size : int = lobby_server_tcp_data_buffer.decode_u32(0)
+		var data_size: int = lobby_server_tcp_data_buffer.decode_u32(0)
 		
 		if lobby_server_tcp_data_buffer.size() < 4 + data_size:
 			break
 		
-		var data : PackedByteArray = lobby_server_tcp_data_buffer.slice(4, 4 + data_size)
-		var packet : Variant = JSON.parse_string(data.get_string_from_utf8())
+		var data: PackedByteArray = lobby_server_tcp_data_buffer.slice(4, 4 + data_size)
+		var packet: Variant = JSON.parse_string(data.get_string_from_utf8())
 		
 		lobby_server_tcp_data_buffer = lobby_server_tcp_data_buffer.slice(4 + data_size)
 		
@@ -145,9 +145,9 @@ func decode_lobby_server_tcp_stream() -> void:
 		
 		#print(packet)
 
-func send_tcp_data_to_lobby_server(command:String, info:Variant) -> void:
+func send_tcp_data_to_lobby_server(command: String, info: Variant) -> void:
 	
-	var packet : Dictionary = {
+	var packet: Dictionary = {
 	&"command": command,
 	&"info": info
 	}
@@ -157,7 +157,7 @@ func send_tcp_data_to_lobby_server(command:String, info:Variant) -> void:
 	client_manager_to_lobby_server_tcp.put_u32(data.size())
 	client_manager_to_lobby_server_tcp.put_data(data)
 
-func trigger_lobby_server_tpc_command(command:String, info:Variant) -> void:
+func trigger_lobby_server_tpc_command(command: String, info: Variant) -> void:
 	
 	# Lobby Server Registration
 	
@@ -199,7 +199,7 @@ func trigger_lobby_server_tpc_command(command:String, info:Variant) -> void:
 
 
 
-func connect_to_relay_server(relay_to_connect_to:String) -> void:
+func connect_to_relay_server(relay_to_connect_to: String) -> void:
 	
 	can_poll_relay_tcp = true
 	
@@ -212,7 +212,7 @@ func connect_to_relay_server(relay_to_connect_to:String) -> void:
 	
 	send_tcp_data_to_relay_server("set_client_id", client_id)
 
-func open_relay_server_udp_channels(relay_to_connect_to:String) -> void:
+func open_relay_server_udp_channels(relay_to_connect_to: String) -> void:
 	
 	can_poll_relay_udp = true
 	can_poll_relay_ordered_udp = true
@@ -272,11 +272,11 @@ func poll_client_to_relay_server_tcp() -> void:
 	
 	client_manager_to_relay_server_tcp.poll()
 	
-	var relay_server_bytes : Variant = client_manager_to_relay_server_tcp.get_available_bytes()
+	var relay_server_bytes: Variant = client_manager_to_relay_server_tcp.get_available_bytes()
 	
 	if relay_server_bytes > 0:
 		
-		var data : Variant = client_manager_to_relay_server_tcp.get_data(
+		var data: Variant = client_manager_to_relay_server_tcp.get_data(
 		relay_server_bytes)[1]
 		
 		relay_server_tcp_data_buffer.append_array(data)
@@ -289,13 +289,13 @@ func decode_relay_server_tcp_stream() -> void:
 	
 	while relay_server_tcp_data_buffer.size() >= 4:
 		
-		var data_size : int = relay_server_tcp_data_buffer.decode_u32(0)
+		var data_size: int = relay_server_tcp_data_buffer.decode_u32(0)
 		
 		if relay_server_tcp_data_buffer.size() < 4 + data_size:
 			break
 		
-		var data : PackedByteArray = relay_server_tcp_data_buffer.slice(4, 4 + data_size)
-		var packet : Variant = JSON.parse_string(data.get_string_from_utf8())
+		var data: PackedByteArray = relay_server_tcp_data_buffer.slice(4, 4 + data_size)
+		var packet: Variant = JSON.parse_string(data.get_string_from_utf8())
 		
 		relay_server_tcp_data_buffer = relay_server_tcp_data_buffer.slice(4 + data_size)
 		
@@ -305,7 +305,7 @@ func decode_relay_server_tcp_stream() -> void:
 
 func send_tcp_data_to_relay_server(command:String, info:Variant) -> void:
 	
-	var packet : Dictionary = {
+	var packet: Dictionary = {
 	&"command": command,
 	&"info": info
 	}
@@ -363,17 +363,17 @@ func poll_client_to_relay_server_udp() -> void:
 	
 	while client_manager_to_relay_server_udp.get_available_packet_count() > 0:
 		
-		var packet : Variant = client_manager_to_relay_server_udp.get_packet()
-		var packet_string : Variant = packet.get_string_from_utf8()
+		var packet: Variant = client_manager_to_relay_server_udp.get_packet()
+		var packet_string: Variant = packet.get_string_from_utf8()
 		
 		#print("Client Recieved Packet: ", packet)
 		
-		var json_translation : Variant = JSON.new()
+		var json_translation: Variant = JSON.new()
 		json_translation = JSON.parse_string(packet_string)
 		packet = json_translation
 		
-		var command : String = json_translation[&"command"]
-		var info : Variant = json_translation[&"info"]
+		var command: String = json_translation[&"command"]
+		var info: Variant = json_translation[&"info"]
 		
 		#print("Client Recieved Packet: ", packet)
 		
@@ -383,9 +383,9 @@ func send_udp_packet_to_relay_server(command:String, info:Variant) -> void:
 	
 	if is_connected_to_relay == false: return
 	
-	var packet : Dictionary = {&"command": command, &"info": info}
+	var packet: Dictionary = {&"command": command, &"info": info}
 	
-	var packet_to_send : Variant = JSON.stringify(packet)
+	var packet_to_send: Variant = JSON.stringify(packet)
 	
 	client_manager_to_relay_server_udp.put_packet(packet_to_send.to_utf8_buffer())
 
@@ -407,23 +407,23 @@ func poll_client_to_relay_server_ordered_udp() -> void:
 	
 	while client_manager_to_relay_server_ordered_udp.get_available_packet_count() > 0:
 		
-		var packet : Variant = client_manager_to_relay_server_ordered_udp.get_packet()
-		var packet_string : Variant = packet.get_string_from_utf8()
+		var packet: Variant = client_manager_to_relay_server_ordered_udp.get_packet()
+		var packet_string: Variant = packet.get_string_from_utf8()
 		
 		#print("Client Recieved Ordered Packet: ", packet)
 		
-		var json_translation : Variant = JSON.new()
+		var json_translation: Variant = JSON.new()
 		json_translation = JSON.parse_string(packet_string)
 		packet = json_translation
 		
-		var command : String = json_translation[&"command"]
-		var info : Variant = json_translation[&"info"]
-		var sequence_number : int = json_translation[&"sequence_number"]
-		var last_sequence_number : int = json_translation[&"last_sequence_number"]
+		var command: String = json_translation[&"command"]
+		var info: Variant = json_translation[&"info"]
+		var sequence_number: int = json_translation[&"sequence_number"]
+		var last_sequence_number: int = json_translation[&"last_sequence_number"]
 		
 		#print("Client Received Ordered Packet: ", packet)
 		
-		var sequence_difference : int = \
+		var sequence_difference: int = \
 		sequence_number - last_sequence_number
 		
 		if sequence_difference <= 0:
@@ -436,13 +436,13 @@ func poll_client_to_relay_server_ordered_udp() -> void:
 
 func send_ordered_udp_packet_to_relay_server(command:String, info:Variant) -> void:
 	
-	var packet : Dictionary = {
+	var packet: Dictionary = {
 		&"command": command, 
 		&"info": info,
 		&"sequence_number": increment_ordered_packet_sequence_number()
 		}
 	
-	var packet_to_send : Variant = JSON.stringify(packet)
+	var packet_to_send: Variant = JSON.stringify(packet)
 	
 	client_manager_to_relay_server_ordered_udp.put_packet(packet_to_send.to_utf8_buffer())
 
@@ -501,7 +501,7 @@ func create_lobby(lobby_name:String) -> void:
 
 func spawn_own_player() -> void:
 	
-	var own_player : Node = SpawnManager.spawn_local("player", 0,0,0)
+	var own_player: Node = SpawnManager.spawn_local("player", 0,0,0)
 	
 	own_player.name = "own_player"
 	
@@ -520,7 +520,7 @@ func spawn_own_player() -> void:
 
 func spawn_other_player(node_name:String) -> void:
 	
-	var new_player : Node = SpawnManager.spawn_local("player", 0,0,0)
+	var new_player: Node = SpawnManager.spawn_local("player", 0,0,0)
 	
 	new_player.name = str(int(node_name))
 	
@@ -541,19 +541,19 @@ func send_player_position_to_host() -> void:
 		
 	else:
 		
-		var untrusted_player_position : Vector3 = client_player_node.position
+		var untrusted_player_position: Vector3 = client_player_node.position
 		
 		send_ordered_udp_packet_to_relay_server("send_untrusted_position_to_server", untrusted_player_position)
 
 func host_get_new_gamestate() -> void:
 	
-	var new_gamestate : Array[Dictionary] = []
+	var new_gamestate: Array[Dictionary] = []
 	
 	# Get the state of all connected players
 	for player in players:
 		
-		var player_node : Node = player[&"player_node"]
-		#var player_id : int = player[&"player_id"]
+		var player_node: Node = player[&"player_node"]
+		#var player_id: int = player[&"player_id"]
 		
 		# Triggers move_and_slide() for all host-side players
 		# This line is required for host-side players to move
@@ -580,7 +580,7 @@ func apply_new_gamestate_from_host(new_gamestate:Array) -> void:
 	
 	for new_player_state:Variant in new_gamestate:
 		
-		var player_node : Node = \
+		var player_node: Node = \
 		get_player_node_from_node_name(new_player_state[&"node_name"])
 		
 		if player_node == client_player_node: continue

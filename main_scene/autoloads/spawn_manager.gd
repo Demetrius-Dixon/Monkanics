@@ -1,6 +1,6 @@
 extends Node
 
-var spawnable_objects : Dictionary = {
+var spawnable_objects: Dictionary = {
 	
 	&"player": "uid://bv5ucnu7shjsd",
 	&"dummy_player": "uid://byomjy8wiwd5j"
@@ -12,14 +12,14 @@ func _ready() -> void:
 	if OS.has_feature(FeatureManager.DEDICATED_SERVER): 
 		queue_free()
 
-func spawn_local(spawnable:String, 
-spawn_x:float, spawn_y:float, spawn_z:float) -> Variant:
+func spawn_local(spawnable: String, 
+spawn_x: float, spawn_y: float, spawn_z: float) -> Variant:
 	
-	var object : String = spawnable_objects[spawnable]
+	var object: String = spawnable_objects[spawnable]
 	
 	var object_to_spawn := load(object)
 	
-	var object_instantiation : Variant = object_to_spawn.instantiate()
+	var object_instantiation: Variant = object_to_spawn.instantiate()
 	
 	add_child(object_instantiation)
 	

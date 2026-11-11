@@ -1,6 +1,6 @@
 extends Node
 
-var is_mouse_visible : bool = true
+var is_mouse_visible: bool = true
 
 func _ready() -> void:
 	

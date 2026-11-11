@@ -1,14 +1,14 @@
 extends Node
 
-var lobby_server_tpc : TCPServer
+var lobby_server_tpc: TCPServer
 
-var registered_relay_servers : Array[Dictionary] = []
+var registered_relay_servers: Array[Dictionary] = []
 
-var connected_clients : Array[Dictionary] = []
-var next_client_client_id_to_assign : int = 0
+var connected_clients: Array[Dictionary] = []
+var next_client_client_id_to_assign: int = 0
 
-var active_lobbies : Array[Dictionary] = []
-var next_lobby_id_to_assign : int = 0
+var active_lobbies: Array[Dictionary] = []
+var next_lobby_id_to_assign: int = 0
 
 func _ready() -> void:
 	
@@ -49,7 +49,7 @@ func poll_lobby_server_tpc() -> void:
 	# Register new clients
 	if lobby_server_tpc.is_connection_available():
 		
-		var client : Dictionary = {
+		var client: Dictionary = {
 			
 			&"client_id": assign_client_client_id(),
 			&"ip_address": 0,
@@ -60,7 +60,7 @@ func poll_lobby_server_tpc() -> void:
 			
 		}
 		
-		var peer : Variant = client[&"tcp_peer"]
+		var peer: Variant = client[&"tcp_peer"]
 		
 		client[&"ip_address"] = peer.get_connected_host()
 		
@@ -73,7 +73,7 @@ func poll_lobby_server_tpc() -> void:
 	if connected_clients.is_empty(): return
 	
 	# Set up erasure array (For loops cannot iterate while looping)
-	var clients_to_erase : Array = []
+	var clients_to_erase: Array = []
 	
 	# Poll current clients
 	for client in connected_clients:
@@ -81,8 +81,8 @@ func poll_lobby_server_tpc() -> void:
 		if client[&"tcp_peer"] == null: 
 			continue
 		
-		var tcp_client : Variant = client[&"tcp_peer"]
-		var data_buffer : Variant = client[&"tcp_data_buffer"]
+		var tcp_client: Variant = client[&"tcp_peer"]
+		var data_buffer: Variant = client[&"tcp_data_buffer"]
 		
 		tcp_client.poll()
 		
@@ -94,18 +94,18 @@ func poll_lobby_server_tpc() -> void:
 			
 			continue
 		
-		var bytes : Variant = tcp_client.get_available_bytes()
+		var bytes: Variant = tcp_client.get_available_bytes()
 		
 		if bytes > 0:
 			
-			var data : Variant = tcp_client.get_data(bytes)[1]
+			var data: Variant = tcp_client.get_data(bytes)[1]
 			
 			data_buffer.append_array(data)
 	
 	# Remove disconnected clients
 	if not clients_to_erase.is_empty():
 		
-		for client:Variant in clients_to_erase:
+		for client: Variant in clients_to_erase:
 			
 			connected_clients.erase(client)
 		
@@ -117,20 +117,20 @@ func decode_tcp_stream() -> void:
 	
 	for tcp_client in connected_clients:
 		
-		var client : Variant = tcp_client[&"tcp_peer"]
-		var data_buffer : Variant = tcp_client[&"tcp_data_buffer"]
-		var current_lobby : Variant = tcp_client[&"current_lobby"]
-		var is_host : Variant = tcp_client[&"is_host"]
+		var client: Variant = tcp_client[&"tcp_peer"]
+		var data_buffer: Variant = tcp_client[&"tcp_data_buffer"]
+		var current_lobby: Variant = tcp_client[&"current_lobby"]
+		var is_host: Variant = tcp_client[&"is_host"]
 		
 		while data_buffer.size() >= 4:
 			
-			var data_size : int = data_buffer.decode_u32(0)
+			var data_size: int = data_buffer.decode_u32(0)
 			
 			if data_buffer.size() < 4 + data_size:
 				break
 			
-			var data : PackedByteArray = data_buffer.slice(4, 4 + data_size)
-			var packet : Dictionary = JSON.parse_string(data.get_string_from_utf8())
+			var data: PackedByteArray = data_buffer.slice(4, 4 + data_size)
+			var packet: Dictionary = JSON.parse_string(data.get_string_from_utf8())
 			
 			#print(packet)
 			
@@ -142,7 +142,7 @@ func decode_tcp_stream() -> void:
 
 func send_tcp_data_to_client(command:String, info:Variant, recipient:StreamPeerTCP) -> void:
 	
-	var packet : Dictionary = {
+	var packet: Dictionary = {
 	&"command": command,
 	&"info": info
 	}
@@ -160,13 +160,13 @@ func assign_client_client_id() -> int:
 	return next_client_client_id_to_assign
 
 @warning_ignore("unused_parameter")
-func trigger_tcp_server_command(command:String, info:Variant, 
-peer:Variant, all_data:Variant, current_lobby:Variant, is_host:Variant)-> void:
+func trigger_tcp_server_command(command: String, info: Variant, 
+peer: Variant, all_data: Variant, current_lobby: Variant, is_host: Variant)-> void:
 	
 	if command == "register_official_relay_server":
 		
-		var region_to_register : String = info[&"region"]
-		var sent_key : Variant = info[&"key"]
+		var region_to_register: String = info[&"region"]
+		var sent_key: Variant = info[&"key"]
 		
 		#print(region_to_register)
 		#print(sent_key)
@@ -194,7 +194,7 @@ peer:Variant, all_data:Variant, current_lobby:Variant, is_host:Variant)-> void:
 	
 	if command == "request_to_join_lobby":
 		
-		var id_to_get : int
+		var id_to_get: int
 		
 		for client in connected_clients:
 			
@@ -224,7 +224,7 @@ peer:Variant, all_data:Variant, current_lobby:Variant, is_host:Variant)-> void:
 
 func create_lobby_instance(host:StreamPeerTCP, lobby_name:String) -> void:
 	
-	var new_lobby_id : int = assign_lobby_id()
+	var new_lobby_id: int = assign_lobby_id()
 	
 	active_lobbies.append({
 		
@@ -240,7 +240,7 @@ func create_lobby_instance(host:StreamPeerTCP, lobby_name:String) -> void:
 		
 	})
 	
-	var client_id : int
+	var client_id: int
 	
 	# Assign the hosts current lobby
 	for client in connected_clients:
@@ -266,7 +266,7 @@ func create_lobby_instance(host:StreamPeerTCP, lobby_name:String) -> void:
 		
 		if relay[&"relay_ip"] == EndpointManager.RELAY_REGIONS[&"NA"]:
 			
-			var info_to_send : Dictionary = {
+			var info_to_send: Dictionary = {
 				&"lobby_id": new_lobby_id,
 				&"client_id": client_id}
 			
@@ -295,7 +295,7 @@ func client_join_lobby(client:StreamPeerTCP, client_id:int, lobby_id:int) -> voi
 			#print(lobby[&"players"])
 			print("New Client Joined Lobby: ", client)
 			
-			var lobby_data : Dictionary = {
+			var lobby_data: Dictionary = {
 				
 				&"host": lobby[&"host"],
 				&"game_mode": lobby[&"game_mode"],
@@ -326,7 +326,7 @@ func client_join_lobby(client:StreamPeerTCP, client_id:int, lobby_id:int) -> voi
 				
 				if relay[&"relay_ip"] == EndpointManager.RELAY_REGIONS[&"NA"]:
 					
-					var info_to_send : Dictionary = {
+					var info_to_send: Dictionary = {
 						&"lobby_id": lobby[&"lobby_id"],
 						&"client_id": client_id
 						}

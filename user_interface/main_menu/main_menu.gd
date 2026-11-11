@@ -1,7 +1,7 @@
 extends Control
 
-@onready var main_menu : Node = $"."
-@onready var main_screen_nodes : Node = $MainScreen
+@onready var main_menu: Node = $"."
+@onready var main_screen_nodes: Node = $MainScreen
 
 func _ready() -> void:
 	

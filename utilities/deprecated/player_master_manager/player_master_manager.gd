@@ -1,6 +1,6 @@
 extends Node
 
-var player_sub_managers : Array[String] = [
+var player_sub_managers: Array[String] = [
 	
 	"uid://oylpkixktb7v", # Spawn
 	

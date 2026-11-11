@@ -57,7 +57,7 @@ project/assembly_name="Monkanics"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/quill-ide/plugin.cfg")
+enabled=PackedStringArray()
 
 [file_customization]
 

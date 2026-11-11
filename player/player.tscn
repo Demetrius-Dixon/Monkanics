@@ -225,6 +225,7 @@ transform = Transform3D(13.4, 0, 0, 0, -2.67559e-07, 2.3, 0, -6.1210394, -1.0053
 visible = false
 collision_mask = 4
 
-[node name="GlobalProjectileOrigin" type="Node3D" parent="CameraHorizonalRotation/CameraVerticalRotation" unique_id=301358322]
+[node name="GlobalProjectileOrigin" type="Marker3D" parent="CameraHorizonalRotation/CameraVerticalRotation" unique_id=58302368]
 transform = Transform3D(0.99999964, 0, 0, 0, 0.99999964, 0, 0, 0, 0.99999964, 0.00515091, 1.5837831, 1.2103686)
 visible = false
+gizmo_extents = 0.35

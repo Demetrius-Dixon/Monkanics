@@ -1,13 +1,13 @@
 extends Control
 
-@onready var lobby_list : Node = $"TabContainer/Join Lobby"
+@onready var lobby_list: Node = $"TabContainer/Join Lobby"
 var lobby_selection_button := "uid://ibl4vlin44xa"
 
-var new_lobby_name : String = ""
-var lobby_map_selection : String = ""
-var lobby_game_mode_selection : String = ""
+var new_lobby_name: String = ""
+var lobby_map_selection: String = ""
+var lobby_game_mode_selection: String = ""
 
-var lobby_entries : Array[Node] = []
+var lobby_entries: Array[Node] = []
 
 func _ready() -> void:
 	add_entry_to_lobby_list()
@@ -37,7 +37,7 @@ func add_entry_to_lobby_list() -> void:
 		
 		var new_lobby_selection_button := load(lobby_selection_button)
 		
-		var new_lobby_selection_button_instantiation : Variant = new_lobby_selection_button.instantiate()
+		var new_lobby_selection_button_instantiation: Variant = new_lobby_selection_button.instantiate()
 		
 		lobby_list.add_child(new_lobby_selection_button_instantiation)
 		

@@ -1,9 +1,9 @@
 extends Node
 
-var current_map : Node = null
-var next_map_to_load : PackedScene = null
+var current_map: Node = null
+var next_map_to_load: PackedScene = null
 
-var map_list : Dictionary = {
+var map_list: Dictionary = {
 	
 	&"bnza_zoolag": "uid://b1vrb25aej0x1"
 	
@@ -14,7 +14,7 @@ func _ready() -> void:
 	if OS.has_feature(FeatureManager.DEDICATED_SERVER): 
 		queue_free()
 
-func load_map(map_to_load:String) -> void:
+func load_map(map_to_load: String) -> void:
 	
 	if current_map != null:
 		unload_map()
