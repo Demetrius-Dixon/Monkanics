@@ -567,7 +567,7 @@ func track_client_position() -> void:
 	# Set the new local client position
 	current_client_position = client_player.global_position
 
-@rpc("any_peer","call_remote","unreliable_ordered", 0) @warning_ignore("unused_parameter")
+@rpc("any_peer","call_remote","unreliable_ordered", 0) @warning_ignore("unused_parameter", "shadowed_variable")
 func send_client_position_to_server(sender_client_id: int, client_position: Vector3, previous_client_position: Vector3) -> void:
 	
 	# Does nothing intentionally. Only used to communicate with the server
