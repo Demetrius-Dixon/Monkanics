@@ -21,7 +21,7 @@ Side Features:
 
 --------------------------------------------------------------
 
-*NOTE: This project is still very early in development and has no public version as of yet, so features will be incomplete for now. However, I've decided to open-source the code early in order to get the hang of open-source development (by actually developing while open-source).*
+*NOTE: This project is still very early in development and has no public release version as of yet, so features will be incomplete for now. However, I've decided to open-source the code early in order to get the hang of open-source development (by actually developing while open-source).*
 
 --------------------------------------------------------------
 
@@ -42,7 +42,7 @@ Art assets are separate: they're free to use and remix *non-commercially*, but c
 - Easy moddability by players (You only need a PCK file with the game export).
 - Real-time development transparency.
 - The community to support Monkanics’ development directly.
-- And the ability for the game to survive without me (the relay server code is in the game files and costs almost nothing to run on any public IPv4 on a Linux distro/image).
+- And the ability for the game to survive without me (the server code is in the game files and costs almost nothing to run on any public IPv4 on a Linux distro/image).
 
 --------------------------------------------------------------
 
@@ -62,7 +62,7 @@ I plan to fund Monkanics' development via croudfunding, bootstrapping, and other
 
 # Other Root Files in the Repo
 
-- `CONTRIBUTING` will be a guide on how to support this repo and how the codebase works. However, it is currently unfinished and will be fleshed out later as development continues.
+- `CONTRIBUTING` is a guide on how to make pull requests to the repo.
 - See `CODE_LICENSE` and `ART_LICENSE` for details on how Monkanics is legally able to be redistributed.
 - `CREDITS` is a list of everyone who's worked on the project.
 
