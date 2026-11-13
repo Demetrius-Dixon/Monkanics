@@ -1,10 +1,6 @@
 <img width="538" height="161" alt="monkanics_logo_blue_4k" src="https://github.com/user-attachments/assets/5b358d4e-f2e8-4692-84c5-88938e4bea40" />
 
-**The D-I-Why, Combat Collect-a-Thon that's serious monkey business!**
-
-Monkanics (Monkey + Mechanics) is a D-I-Why, FOSS arena shooter that's made with Godot 4. And runs natively on Windows 10, Windows 11, and Linux x86_64.
-
-Monkanics is also a grassroots live-service game (I coined this term to differentiate Monkanics from other PvP live-service shooters).
+**Monkanics (Monkey + Mechanics): The D-I-Why, FOSS arena shooter that's serious monkey business. Made with Godot 4! For Windows 10/11 and Linux x86_64.** (Created by Demetrius Dixon & Wackshop Games)
 
 In the game, you’ll invent your own weapons of mass misconstruction from the ground up. Directly controlling how, where, and what you shoot. 
 
@@ -20,6 +16,8 @@ Side Features:
 - In-depth monkanic customization (Purely visual).
 - A vibrant low-poly art style.
 - A simple excuse plot (that’s only used to support the gameplay).
+
+**Monkanics is also a grassroots live-service game** (I coined this term to differentiate Monkanics from other PvP live-service shooters).
 
 --------------------------------------------------------------
 
@@ -58,23 +56,44 @@ Also, due to the server archetecture being open-source, Monkanics will never hav
 
 The reason I did this is because I want to focus my game development career on creating a really fun game, with great people like you, the reader. Instead of chasing profit endlessly. 
 
-I plan to fund Monkanics' development via croudfunding, bootstrapping, and other sources. View more information in the `FUNDING` file.
+I plan to fund Monkanics' development via croudfunding, bootstrapping, and other sources.
 
 --------------------------------------------------------------
 
-## Other Root Files in the Repo
+# Other Root Files in the Repo
 
 - `CONTRIBUTING` will be a guide on how to support this repo and how the codebase works. However, it is currently unfinished and will be fleshed out later as development continues.
-- `CODE_LICENSE` and `ART_LICENSE` I've already gone over.
+- See `CODE_LICENSE` and `ART_LICENSE` for details on how Monkanics is legally able to be redistributed.
 - `CREDITS` is a list of everyone who's worked on the project.
 
 --------------------------------------------------------------
 
-## Monkanics' Socials & Links
+# Monkanics' Socials & Links
 
-- Join the Monkanics Discord community: https://discord.gg/kRkvwdnaVz
-- Watch video updates on the Monkanics YouTube: https://www.youtube.com/@MonkanicsDev
-- Support Monkanics financially on it's Ko-Fi page: https://ko-fi.com/monkanics
+### Keep up with Monkanics Updates (Main Socials):
+
+- Monkanics_Dev YouTube: https://www.youtube.com/@MonkanicsDev
+
+### Community Hubs:
+
+- Monkanics Community Discord: https://discord.gg/kRkvwdnaVz
+- r/Monkanics: [Coming Soon]
+
+### Contribute to Monkanics Development:
+
+- Wackshop Games Developer and Contributor Discord (Approval Only): https://discord.gg/yMHaKU3Pnt
+- Monkanics Raw Source File Repo: [Coming Later]
+- Monkanics Documentation: [Coming Later]
+
+- Monkanics Ko-Fi: https://ko-fi.com/monkanics
+- Wackshop Games' Financial Records: [Coming first week of December]
+
+### Other Developer Socials:
+
+- Monkanics-Dev X/Twitter: https://x.com/monkanics_dev
+- Monkanics-Dev Bluesky: https://bsky.app/profile/monkanics-dev.bsky.social
+- Monkanics-Dev Tumblr: https://www.tumblr.com/blog/monkanics-dev
+- Monkanics_Dev TikTok: https://www.tiktok.com/@monkanicsdev
 
 --------------------------------------------------------------
 <img width="500" height="500" alt="Monkanics_Icon_2" src="https://github.com/user-attachments/assets/12ea6d07-5bfe-43e7-b08d-2f7a94b6ae0a" />
