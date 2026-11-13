@@ -67,7 +67,6 @@ I plan to fund Monkanics' development via croudfunding, bootstrapping, and other
 - `CONTRIBUTING` will be a guide on how to support this repo and how the codebase works. However, it is currently unfinished and will be fleshed out later as development continues.
 - `CODE_LICENSE` and `ART_LICENSE` I've already gone over.
 - `CREDITS` is a list of everyone who's worked on the project.
-- `FUNDING` shows how Monkanics' fund money is used and monthly income goals.
 
 --------------------------------------------------------------
 
