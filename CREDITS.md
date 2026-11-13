@@ -4,7 +4,7 @@
 
 *Want to be here?*
 
-Contribute today and follow the contribution guidelines in the `CONTRIBUTING` file. And make sure to join the Monkanics discord (https://discord.gg/kRkvwdnaVz).
+Contribute today and follow the contribution guidelines in the `CONTRIBUTING` file. And make sure to join the MWackshop Games discord (https://discord.gg/yMHaKU3Pnt). The official way we collaborate on Monkanics.
 
 *If you’ve already contributed or want to request a change/removal, open a pull request with your changes to this file.*
 
@@ -22,14 +22,13 @@ Contribute today and follow the contribution guidelines in the `CONTRIBUTING` fi
 - Alexandre Marcati - Logo Artist
 - Hyperjragon - Programming
 - istubedmytoe - Programming
+- At_mr_James - Programming
 
 ## Financial Backers (All-Time)
 
 *Put your name on this awesome list via (https://ko-fi.com/monkanics)*
 
-*See how Monkanics' funding is used via `FUNDING.md`*
-
 - Pennyloafers
 - WCHC/Kuba
 - Max (Snailsnaps/@snai1snaps)
-- **Be listed here via (https://ko-fi.com/monkanics)**
+- **Be listed here next via (https://ko-fi.com/monkanics)**
