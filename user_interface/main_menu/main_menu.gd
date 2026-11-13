@@ -1,0 +1,22 @@
+extends Control
+
+@onready var main_menu: Node = $"."
+@onready var main_screen_nodes: Node = $MainScreen
+
+func _ready() -> void:
+	
+	pass
+
+func _on_play_pressed() -> void:
+	
+	ClientManager.create_client_and_connect_to_lobby_server_tcp()
+	
+	UiManager.unload_ui_element("main_menu")
+	
+	UiManager.load_ui_element("server_browser")
+
+func _on_play_2_pressed() -> void:
+	pass # Replace with function body.
+
+func _on_quit_game_pressed() -> void:
+	QuittingManager.quit_monkanics()

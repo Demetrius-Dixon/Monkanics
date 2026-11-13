@@ -1,9 +1,25 @@
-### Monkanics (monkey + mechanics)
-**The D-I-Why Combat Collect-a-Thon that's (un)serious monkey business**
+<img width="538" height="161" alt="monkanics_logo_blue_4k" src="https://github.com/user-attachments/assets/5b358d4e-f2e8-4692-84c5-88938e4bea40" />
 
-Monkanics is a third-person multiplayer FOSS arena shooter made with Godot 4.7 for Windows 10/11 and Linux x86_64.
+**The D-I-Why, Combat Collect-a-Thon that's serious monkey business!**
 
-In the game, you play as cyborg lab monkeys whose creators have gone on lunch break and never came back. Now, they build weapons of mass misconstruction and fight in crazy arenas to collect bean-anas and whatever scrap they can find.
+Monkanics (Monkey + Mechanics) is a D-I-Why, FOSS arena shooter that's made with Godot 4. And runs natively on Windows 10, Windows 11, and Linux x86_64.
+
+Monkanics is also a grassroots live-service game (I coined this term to differentiate Monkanics from other PvP live-service shooters).
+
+In the game, you’ll invent your own weapons of mass misconstruction from the ground up. Directly controlling how, where, and what you shoot. 
+
+Combined with a monkey-like moveset where you run fast, jump high, climb any vertical surface, and grab items/steal from enemies; you'll fight to the death to collect the Monkanics' most precious resource: Bean-anas (A super sweet hybrid of a bean and banana that the monkanics are obsessed with).
+
+Core Game Features:
+
+- Crazy, multiplayer, combat collect-a-thon gameplay.
+- In-depth projectile weaponcrafting.
+- FOSS forever with Godot v4.7+ on Windows and Linux.
+
+Side Features:
+- In-depth monkanic customization (Purely visual).
+- A vibrant low-poly art style.
+- A simple excuse plot (that’s only used to support the gameplay).
 
 --------------------------------------------------------------
 
@@ -11,7 +27,12 @@ In the game, you play as cyborg lab monkeys whose creators have gone on lunch br
 
 --------------------------------------------------------------
 
-### Monkanics is dual licensed:
+## Who are the Monkanics?
+
+The Monkanics are cyborg lab apes whose human creators went on lunch break and never came back. Left without a purpose, if they ever had one to begin with, their greed and ingenuity now knew no bounds in a world turned downside-up.
+
+## Monkanics is Dual Licensed
+
 - It's code is licensed under the copyleft AGPLv3 (See `CODE_LICENSE`)
 - It's art is licensed under the CC BY-NC-SA 4.0 (See `ART_LICENSE`)
 
@@ -25,23 +46,36 @@ Art assets are separate: they're free to use and remix *non-commercially*, but c
 - The community to support Monkanics’ development directly.
 - And the ability for the game to survive without me (the relay server code is in the game files and costs almost nothing to run on any public IPv4 on a Linux distro/image).
 
-Monkanics will also be free from in-game microtransactions & FOMO tactics found in modern day live-service shooters. Focusing more on creating a really fun game.
+--------------------------------------------------------------
+
+## What is a "Grassroots Live-Service Game"
+
+Like a live-service game, Monkanics will be getting content updates after its release.
+
+HOWEVER, unlike most live-service/free-to-play games, Monkanics is actually 100% free. *The game will have absolutely NO in-game microtransactions, FOMO, and other predatory tactics found in the gaming industry nowadays.*
+
+Also, due to the server archetecture being open-source, Monkanics will never have an end-of-service. I've designed the game to outlive me.
+
+The reason I did this is because I want to focus my game development career on creating a really fun game, with great people like you, the reader. Instead of chasing profit endlessly. 
+
+I plan to fund Monkanics' development via croudfunding, bootstrapping, and other sources. View more information in the `FUNDING` file.
 
 --------------------------------------------------------------
 
-### Other Files in the Repo:
+## Other Root Files in the Repo
 
-- `CONTRIBUTING` will be a guide on how to support this repo. However, it is currently unfinished and will be fleshed out later as development continues.
+- `CONTRIBUTING` will be a guide on how to support this repo and how the codebase works. However, it is currently unfinished and will be fleshed out later as development continues.
 - `CODE_LICENSE` and `ART_LICENSE` I've already gone over.
-- `CREDITS_AND_CONTRIBUTORS` is a list of everyone who's worked on the project.
-- `SPECIAL_THANKS` is a personal list to show your gratitude to the people/events that've shaped you. You can add to it yourself in your commit.
+- `CREDITS` is a list of everyone who's worked on the project.
+- `FUNDING` shows how Monkanics' fund money is used and monthly income goals.
 
 --------------------------------------------------------------
 
-### Monkanics' Socials & Links
+## Monkanics' Socials & Links
 
 - Join the Monkanics Discord community: https://discord.gg/kRkvwdnaVz
 - Watch video updates on the Monkanics YouTube: https://www.youtube.com/@MonkanicsDev
 - Support Monkanics financially on it's Ko-Fi page: https://ko-fi.com/monkanics
 
 --------------------------------------------------------------
+<img width="500" height="500" alt="Monkanics_Icon_2" src="https://github.com/user-attachments/assets/12ea6d07-5bfe-43e7-b08d-2f7a94b6ae0a" />

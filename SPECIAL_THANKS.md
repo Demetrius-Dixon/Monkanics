@@ -1,8 +1,8 @@
-### Special Thanks
+### Monkanics' Special Thanks
 
 **This file is loosely kept list to show gratitude to everyone who hasn't directly contributed to the project, but instead, contributed to yourself as a person.**
 
-*In order to be added to this list, you must have made a contribution to the repo and be listed in the `CREDITS_AND_CONTRIBUTORS` file.*
+*In order to be added to this list, you must have made a contribution to the repo and be listed in the `CREDITS` file.*
 
 ### Demetrius Dixon Thanks...
 
@@ -17,6 +17,7 @@
 - YouTube as a whole for providing years of entertainment and my first look into my career path.
 - GD-Sync devs for helping me reverse engineer Monkanics’ relay server.
 - Ezcha for helping me figure out the correct Bash commands for the relay server.
+- Retobe33 for remembering my past endeavours, giving me a shoutout, and helping me reconnect with my roots.
 
 ### [Your Name Here] Thanks...
 

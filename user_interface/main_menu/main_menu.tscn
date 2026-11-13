@@ -1,0 +1,91 @@
+[gd_scene format=3 uid="uid://cuetqgx13tv6s"]
+
+[ext_resource type="Script" uid="uid://mkg3caem1j3b" path="res://user_interface/main_menu/main_menu.gd" id="1_p78xx"]
+[ext_resource type="Texture2D" uid="uid://5pdcos2bgam6" path="res://utilities/deprecated/monkanics_banner/Monkanics_Banner_No_Logo.png" id="2_p78xx"]
+[ext_resource type="Texture2D" uid="uid://tktcm0tskdlp" path="res://user_interface/main_menu/monkanics_logo/monkanics_logo_blue_4k.webp" id="3_hnapd"]
+[ext_resource type="PackedScene" uid="uid://d1xld8umo8m53" path="res://user_interface/center_of_screen_reference/center_of_screen_reference.tscn" id="4_hnapd"]
+
+[node name="MainMenu" type="Control" unique_id=99476665]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_p78xx")
+
+[node name="MonkanicsBannerNoLogo" type="TextureRect" parent="." unique_id=514379721]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.023
+offset_bottom = 0.16003418
+texture = ExtResource("2_p78xx")
+expand_mode = 1
+
+[node name="MainScreen" type="Control" parent="." unique_id=2128371209]
+layout_mode = 1
+anchor_right = 1.0
+anchor_bottom = 1.019
+offset_left = 625.0
+offset_top = 375.0
+offset_right = -615.0
+offset_bottom = -325.52002
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MonkanicsLogo" type="TextureRect" parent="MainScreen" unique_id=1439620847]
+layout_mode = 0
+offset_left = 15.0
+offset_top = -175.0
+offset_right = 655.0
+offset_bottom = 185.0
+mouse_filter = 2
+texture = ExtResource("3_hnapd")
+
+[node name="MainMenuContainer" type="PanelContainer" parent="MainScreen" unique_id=2142633882]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -0.919
+anchor_top = -0.87500006
+anchor_right = 1.9120001
+anchor_bottom = 1.812
+offset_left = 775.92004
+offset_top = 511.00003
+offset_right = -765.1599
+offset_bottom = -463.8
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainScreen/MainMenuContainer" unique_id=132391317]
+layout_mode = 2
+
+[node name="Play" type="Button" parent="MainScreen/MainMenuContainer/VBoxContainer" unique_id=501006811]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "Play Online!"
+
+[node name="Play2" type="Button" parent="MainScreen/MainMenuContainer/VBoxContainer" unique_id=1019882805]
+visible = false
+layout_mode = 2
+text = "Play Offline!"
+
+[node name="QuitGame" type="Button" parent="MainScreen/MainMenuContainer/VBoxContainer" unique_id=1435891460]
+layout_mode = 2
+theme_override_font_sizes/font_size = 25
+text = "Quit Game"
+
+[node name="CenterOfScreenReference" parent="." unique_id=206782658 instance=ExtResource("4_hnapd")]
+visible = false
+layout_mode = 0
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
+
+[connection signal="pressed" from="MainScreen/MainMenuContainer/VBoxContainer/Play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="MainScreen/MainMenuContainer/VBoxContainer/Play2" to="." method="_on_play_2_pressed"]
+[connection signal="pressed" from="MainScreen/MainMenuContainer/VBoxContainer/QuitGame" to="." method="_on_quit_game_pressed"]
