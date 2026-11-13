@@ -27,6 +27,11 @@ To be eligible to join, you must have the following:
 2. Be good enough at that skill and willing to learn alongside us.
 3. An attempted contribution to the Monkanics repo, a DM with a proposition to the game director (Discord: demetriusdixon), or the game director inviting you directly. 
 
+# What’s the Team Working on Right Now?
+
+- To find out what’s being worked on, check out the development tracker on the Github Wiki: (https://github.com/Demetrius-Dixon/Monkanics/wiki/Development-Tracker)
+- To find bug reports, head to the issues tab: (https://github.com/Demetrius-Dixon/Monkanics/issues)
+
 # Repo Branches
 
 Monkanics’ repo is split into 2 branches:
@@ -105,6 +110,7 @@ Since Monkanics is free-to-play and Wackshop Games is on a low-budget, the game 
 4. Some payout rates are unknown due to insufficient knowledge and will be updated later.
 5. Currency is also converted to their equivalent value if the commissioner is not from the United States. We do not adjust rates for non-US economies.
 6. Please do not rely on Wackshop Games alone for your income. Work assignments are on a need-to-do basis only.
+7. These payouts are only estimates.
 
 **Deliverable Payouts**
 
@@ -130,7 +136,7 @@ Wise is MUCH preferred because of its lower fees and 1:1 currency conversion (Yo
 
 # Monkanics Documentation
 
-*Documentation for Monkanics' codebase, game design, trivia, and more is a WIP and not available at the moment. This section will be filled out later.*
+*Documentation for Monkanics' codebase, game design, trivia, and more is a WIP and not available at the moment. This section will be made on the Monkanics Github Wiki page*
 
 # Monkanics Raw Asset Repo
 
