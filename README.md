@@ -38,6 +38,8 @@ In simple, non-legal terms, anyone can see, use, and fork the source code, but a
 
 Art assets are separate: they're free to use and remix *non-commercially*, but can't be sold or used commercially without permission from the copyright holder (AKA, me, Demetrius Dixon & one day, Wackshop Games).
 
+If you would like to sell/commercialize Monkanics' art for any purpose, please contact the game director on Discord (Username: demetriusdixon) so we can discuss terms.
+
 **The reason Monkanics is open-source is to allow:**
 - Easy moddability by players (You only need a PCK file with the game export).
 - Real-time development transparency.
