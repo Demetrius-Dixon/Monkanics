@@ -72,6 +72,7 @@ I plan to fund Monkanics' development via croudfunding, bootstrapping, and other
 
 ### Keep up with Monkanics Updates (Main Socials):
 
+- Monkanics Devblog: [Coming Soon]
 - Monkanics_Dev YouTube: https://www.youtube.com/@MonkanicsDev
 
 ### Community Hubs:
