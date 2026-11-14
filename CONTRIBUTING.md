@@ -130,16 +130,13 @@ Since Monkanics is free-to-play and Wackshop Games is on a low-budget, the game 
 - *Sound Effect: $??? - $??? USD*
 - *Music Track: $??? - $??? USD*
 
-Money is paid via 2 methods:
+Money is paid via 1 of 3 methods:
 
-1. PayPal (for infrequent contributors, better privacy, easy, but costly payments)
-2. Wise (For frequent, more committed, but much less fees and 1:1 currency conversion if it applies)
+1. Wise [Via your Wisetag]: (The best method for all parties. 100% private, low fees, and 1:1 currency conversion)
+2. PayPal [Via your Email]: (Used if your Wisetag doesn't work, but incurs high fees for us and worse currency conversion)
+3. Wise [Via Direct Deposit]: (Same monetary benefits as Wise and pays directly into your bank account, but requires you share VERY sensitive info. I.E. Your bank information, full legal name, and residential address)
 
-PayPal is much easier to set up and doesn't require you send any sensitive information. It's best for infrequent contributors. However, PayPal's fees (especially for currency conversion) are immense for Wackshop Games. **Think of PayPal like paying a freelancer.**
-
-Wise direct deposits are harder to set up and require you to provide your sensitive information. I.E. Your bank information, full legal name, and residential address. However, you get your money directly into your bank account, Wackshop Games pays much lower fees, and currency is converted 1:1 (you get paid more). **Think of Wise like paying an employee.**
-
-With either method, your information is kept strictly confidential and is NEVER shared beyond the alias you go by online.
+With any method, your personal information is kept strictly confidential and is NEVER shared beyond the alias you go by online.
 
 # Monkanics Documentation
 
