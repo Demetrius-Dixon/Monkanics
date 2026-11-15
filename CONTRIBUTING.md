@@ -16,6 +16,7 @@ By submitting a pull request to the Monkanics repository, you agree to the follo
 2. Your submitted art will be licensed under the CC BY-NC-SA 4.0 (See `ART_LICENSE`).
 3. Once merged, the code/assets are officially licensed and owned by Wackshop Games LLC.
 4. We reserve the right to modify and remove content at our discretion. License restrictions do not apply to the current copyright holders of Monkanics.
+5. `CONTRIBUTING` rules and notes only apply to the `development` branch. The `CONTRIBUTING` file in the `live` branch is **ALWAYS** outdated.
 
 # Where to Begin
 
