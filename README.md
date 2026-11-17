@@ -85,7 +85,7 @@ I plan to fund Monkanics' development via croudfunding, bootstrapping, and other
 ### Contribute to Monkanics Development:
 
 - Wackshop Games Developer and Contributor Discord (Approval Only): https://discord.gg/yMHaKU3Pnt
-- Monkanics Raw Source File Repo: [Coming Later]
+- Monkanics' Raw Source File Storage: [Coming Soon]
 - Monkanics Documentation: https://github.com/Demetrius-Dixon/Monkanics/wiki
 
 - Monkanics Ko-Fi: https://ko-fi.com/monkanics
