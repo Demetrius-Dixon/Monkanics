@@ -74,19 +74,19 @@ I plan to fund Monkanics' development via croudfunding, bootstrapping, and other
 
 ### Keep up with Monkanics Updates (Main Socials):
 
-- Monkanics Devblog: [Coming Soon]
+- Monkanics Announcements: https://github.com/Demetrius-Dixon/Monkanics/discussions/categories/announcements
 - Monkanics_Dev YouTube: https://www.youtube.com/@MonkanicsDev
 
 ### Community Hubs:
 
 - Monkanics Community Discord: https://discord.gg/kRkvwdnaVz
-- r/Monkanics: [Coming Soon]
+- r/Monkanics: [Coming Later]
 
 ### Contribute to Monkanics Development:
 
 - Wackshop Games Developer and Contributor Discord (Approval Only): https://discord.gg/yMHaKU3Pnt
 - Monkanics Raw Source File Repo: [Coming Later]
-- Monkanics Documentation: [Coming Later]
+- Monkanics Documentation: https://github.com/Demetrius-Dixon/Monkanics/wiki
 
 - Monkanics Ko-Fi: https://ko-fi.com/monkanics
 - Wackshop Games' Financial Records: [Coming first week of December]
