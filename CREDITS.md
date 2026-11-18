@@ -23,6 +23,7 @@ Contribute today and follow the contribution guidelines in the `CONTRIBUTING` fi
 - Hyperjragon - Programming
 - istubedmytoe - Programming
 - At_mr_James - Programming
+- Zebody (@project.taro.z) - 2D Artist
 
 ## Financial Backers (All-Time)
 
