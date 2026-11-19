@@ -8,6 +8,11 @@ Contribute today and follow the contribution guidelines in the `CONTRIBUTING` fi
 
 *If you’ve already contributed or want to request a change/removal, open a pull request with your changes to this file.*
 
+## Technology Used (Current)
+
+- Godot 4
+- Blender
+
 ## Monkanics' Core Team (Current)
 
 - Demetrius Dixon (@Monkanics_Dev) - Creator of Monkanics, Project Lead, Founder of Wackshop Games
