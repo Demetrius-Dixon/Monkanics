@@ -102,10 +102,12 @@ func poll_lobby_server_tpc() -> void:
 			
 			data_buffer.append_array(data)
 	
-	# Remove disconnected clients
+	# Remove disconnected clients and clear their data from memory
 	if not clients_to_erase.is_empty():
 		
 		for client: Variant in clients_to_erase:
+			
+			client[&"tcp_data_buffer"].clear()
 			
 			connected_clients.erase(client)
 		

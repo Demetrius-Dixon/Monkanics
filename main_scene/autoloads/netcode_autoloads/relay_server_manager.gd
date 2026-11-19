@@ -205,10 +205,16 @@ func poll_relay_to_client_manager_tcp() -> void:
 			
 			data_buffer.append_array(data)
 	
-	# Remove disconnected clients
+	# Remove disconnected clients and clear their data from memory
 	if not clients_to_erase.is_empty():
 		
 		for client: Variant in clients_to_erase:
+			
+			client[&"tcp_data_buffer"].clear()
+			
+			client[&"udp_peer"].close()
+			
+			client[&"ordered_udp_peer"].close()
 			
 			connected_clients.erase(client)
 		
@@ -301,6 +307,9 @@ func send_tcp_data_to_client(command: String, info: Variant, recipient: StreamPe
 	
 	recipient.put_u32(data.size())
 	recipient.put_data(data)
+
+
+
 
 
 func get_client_ids_from_session_id(session_id: int, include_host: bool) -> Array[int]:
