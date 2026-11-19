@@ -1,10 +1,11 @@
 [gd_scene format=3 uid="uid://bv5ucnu7shjsd"]
 
 [ext_resource type="Script" uid="uid://5ghw627ti26c" path="res://player/player.gd" id="1_oul6g"]
+[ext_resource type="PackedScene" uid="uid://josneysq4qbn" path="res://player/player_model/monkanic_player_model.glb" id="2_rkbax"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_m0ytv"]
 radius = 0.75443
-height = 3.283731
+height = 3.1646829
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_qjkh3"]
 size = Vector3(1.4907227, 2.8712158, 1.4303589)
@@ -68,7 +69,7 @@ platform_on_leave = 2
 script = ExtResource("1_oul6g")
 
 [node name="PlayerWorldCollision" type="CollisionShape3D" parent="." unique_id=618227573]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.704959, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.87674403, 0)
 shape = SubResource("CapsuleShape3D_m0ytv")
 
 [node name="PlayerDamageTaker" type="RigidBody3D" parent="." unique_id=948311641]
@@ -91,6 +92,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.679089, 0)
 transform = Transform3D(1.2499998, 0, 0, 0, 1.2499998, 0, 0, 0, 1.2499998, 0, 0.12018298, 0)
 
 [node name="Torso" type="Node3D" parent="BodyParts" unique_id=30535280]
+visible = false
 
 [node name="Body" type="MeshInstance3D" parent="BodyParts/Torso" unique_id=385455556]
 transform = Transform3D(0.999998, -0.00125173, 0.000302195, 0.00208652, 0.599998, -0.00101264, -0.000300076, 0.000607961, 0.999999, 0, 0.138749, 0)
@@ -106,6 +108,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_y3a4q")
 
 [node name="Hands" type="Node3D" parent="BodyParts" unique_id=421840992]
 transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0, 0)
+visible = false
 
 [node name="RightHand" type="MeshInstance3D" parent="BodyParts/Hands" unique_id=1196764347]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -1.02491, 0.160331, 0)
@@ -119,6 +122,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_o126h")
 
 [node name="Feet" type="Node3D" parent="BodyParts" unique_id=1456805946]
 transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0, 0)
+visible = false
 
 [node name="RightFoot" type="MeshInstance3D" parent="BodyParts/Feet" unique_id=487806409]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -0.268042, -0.871966, 0)
@@ -130,8 +134,12 @@ transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.263859, -0.881938, 0)
 mesh = SubResource("SphereMesh_emag6")
 surface_material_override/0 = SubResource("StandardMaterial3D_o126h")
 
+[node name="monkanic_player_model" parent="BodyParts" unique_id=1016498224 instance=ExtResource("2_rkbax")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 0, -0.63556343, 0)
+
 [node name="HeadParts" type="Node3D" parent="." unique_id=1795170649]
 transform = Transform3D(1.2499999, 0, 0, 0, 1.2499999, 0, 0, 0, 1.2499999, 0, 0.9483539, 0)
+visible = false
 
 [node name="Head" type="MeshInstance3D" parent="HeadParts" unique_id=571799220]
 transform = Transform3D(0.716454, 0, 0, 0, 0.7, 0, 0, 0, 0.669975, 0, 0.381033, 0)
@@ -208,13 +216,13 @@ visible = false
 [node name="CameraVerticalRotation" type="Node3D" parent="CameraHorizonalRotation" unique_id=332764294]
 
 [node name="CameraSpringArm" type="SpringArm3D" parent="CameraHorizonalRotation/CameraVerticalRotation" unique_id=1158340770]
-transform = Transform3D(-0.999827, 0.0176161, -0.00590412, 0.0160472, 0.97896, 0.203419, 0.00936334, 0.203289, -0.979074, 0.173, 3.323, 4)
+transform = Transform3D(-0.999827, 0.0176161, -0.00590412, 0.0160472, 0.97896, 0.203419, 0.00936334, 0.203289, -0.979074, 0.173, 3.8150916, 1.729948)
 shape = SubResource("SphereShape3D_qjkh3")
 spring_length = 12.0
 margin = 1.0
 
 [node name="Camera" type="Camera3D" parent="CameraHorizonalRotation/CameraVerticalRotation/CameraSpringArm" unique_id=1884407364]
-transform = Transform3D(0.99958, 0.0230555, -0.017559, -0.0244362, 0.996253, -0.0829678, 0.0155803, 0.0833621, 0.996397, -0.138757, 0.0314531, 5.01021)
+transform = Transform3D(0.9995803, 0.023055535, -0.01755898, -0.024436207, 0.9962529, -0.08296797, 0.015580306, 0.083362095, 0.9963975, -0.138757, 0.031453133, 5.01021)
 
 [node name="CameraRaycast" type="RayCast3D" parent="CameraHorizonalRotation/CameraVerticalRotation/CameraSpringArm/Camera" unique_id=2019117839]
 transform = Transform3D(-3589.56, 90.709, -20.1897, -117.827, -149.042, 615.165, 6.16094, 49999.7, 1.87036, 0.0434627, -0.0244007, 0.493888)
