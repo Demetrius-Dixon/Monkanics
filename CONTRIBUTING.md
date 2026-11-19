@@ -1,12 +1,25 @@
 # Contributing to Monkanics
 
-Monkanics is officially developed in **Godot version 4.7+ in GDscript only** (No C#/GDextention)
+Monkanics is officially developed in **Godot version 4.7+ in GDscript** (No C#/GDextention)
 
 Monkanics' project file can be downloaded on any operating system Godot 4 natively supports. However, the game was built for Windows and Linux first. Mac and Web and not supported natively.
 
 Collaboration is a mix of unpaid volunteer work and paid commissions. 
 
 Monkanics is primarily developed as a *game*, not a piece of independent software.
+
+# Current Godot Version and Engine Upgrade Policy
+
+This Monkanics repo currently uses **Godot 4.7.x**.
+
+Monkanics is liable to change Godot versions routinely for new Godot Engine releases for new engine features and fixes. 
+
+This means the following:
+
+1. All Monkanics related repositories and forks must clarify what Godot Engine version they use in this section of `CONTRIBUTING`.
+2. When the main Monkanics project file is due for an Engine upgrade, all contributors will be notified by the game director, and must upgrade to make any future commits.
+3. Wackshop Games will not guarantee compatibility with previous Godot Engine versions for forks and mods.
+4. Players are not impacted by engine upgrades.
 
 # Pull Request Disclaimers:
 

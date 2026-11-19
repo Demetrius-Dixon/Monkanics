@@ -10,7 +10,7 @@ Core Game Features:
 
 - Crazy, multiplayer, combat collect-a-thon gameplay.
 - In-depth projectile weaponcrafting.
-- FOSS forever with Godot v4.7+ on Windows and Linux.
+- FOSS forever with Godot 4 on Windows and Linux. (Always check specific engine version in `CONTRIBUTING`)
 
 Side Features:
 - In-depth monkanic customization (Purely visual).
