@@ -10,7 +10,7 @@ Contribute today and follow the contribution guidelines in the `CONTRIBUTING` fi
 
 ## Technology Used (Current)
 
-- Godot 4
+- Godot Engine
 - Blender
 
 ## Monkanics' Core Team (Current)
