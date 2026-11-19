@@ -80,7 +80,7 @@ func host_process() -> void:
 	if is_host == false: return
 	if is_connected_to_relay == false: return
 	
-	host_get_new_gamestate()
+	host_get_new_player_state()
 
 func client_process() -> void:
 	
@@ -456,11 +456,11 @@ func increment_ordered_packet_sequence_number() -> int:
 @warning_ignore("unused_parameter")
 func trigger_relay_server_ordered_udp_command(command:String, info:Variant) -> void:
 	
-	if command == "apply_new_gamestate":
+	if command == "apply_new_player_state":
 		
-		apply_new_gamestate_from_host(info)
+		apply_new_player_state_from_host(info)
 		
-		#print("Got Gamestate")
+		#print("Got Player State")
 	
 	if command == "send_and_apply_client_input":
 		pass
@@ -545,9 +545,9 @@ func send_player_position_to_host() -> void:
 		
 		send_ordered_udp_packet_to_relay_server("send_untrusted_position_to_server", untrusted_player_position)
 
-func host_get_new_gamestate() -> void:
+func host_get_new_player_state() -> void:
 	
-	var new_gamestate: Array[Dictionary] = []
+	var new_player_state: Array[Dictionary] = []
 	
 	# Get the state of all connected players
 	for player in players:
@@ -560,7 +560,7 @@ func host_get_new_gamestate() -> void:
 		player_node.trigger_move_and_slide()
 		
 		# Player info for server reference
-		new_gamestate.append({
+		new_player_state.append({
 			
 			&"node_name": player_node.get_name(),
 			#&"node_path": player_node.get_path(),
@@ -572,26 +572,26 @@ func host_get_new_gamestate() -> void:
 			&"head_rotation": player_node.head_parts.rotation
 			})
 	
-	send_ordered_udp_packet_to_relay_server("apply_new_gamestate", new_gamestate)
+	send_ordered_udp_packet_to_relay_server("apply_new_player_state", new_player_state)
 	
-	#print(new_gamestate)
+	#print(new_player_state)
 
-func apply_new_gamestate_from_host(new_gamestate:Array) -> void:
+func apply_new_player_state_from_host(new_player_state:Array) -> void:
 	
-	for new_player_state:Variant in new_gamestate:
+	for player_state:Variant in new_player_state:
 		
 		var player_node: Node = \
-		get_player_node_from_node_name(new_player_state[&"node_name"])
+		get_player_node_from_node_name(player_state[&"node_name"])
 		
 		if player_node == client_player_node: continue
 		if player_node == null: continue
 		
-		player_node.global_position.x = new_player_state[&"position_x"]
-		player_node.global_position.y = new_player_state[&"position_y"]
-		player_node.global_position.z = new_player_state[&"position_z"]
+		player_node.global_position.x = player_state[&"position_x"]
+		player_node.global_position.y = player_state[&"position_y"]
+		player_node.global_position.z = player_state[&"position_z"]
 		
 	
-	#print("Applied New Gamestate")
+	#print("Applied New Player State")
 
 func get_player_node_from_node_name(node_name:StringName) -> Node:
 	
