@@ -80,7 +80,8 @@ func host_process() -> void:
 	if is_host == false: return
 	if is_connected_to_relay == false: return
 	
-	host_get_new_player_state()
+	pass
+	#host_get_new_player_state()
 
 func client_process() -> void:
 	
@@ -474,9 +475,23 @@ func trigger_relay_server_ordered_udp_command(command:String, info:Variant, id:i
 		
 	
 	if command == "send_untrusted_position_to_host":
-		pass
+		#pass
 		
-		#var player: Variant = get_player_node_from_node_name(str(info[&"client_id"]))
+		var player: Variant = get_player_node_from_node_name(str(int(info[&"client_id"])))
+		
+		#print(info[&"untrusted_player_position"])
+		
+		#print(player)
+		
+		player.global_position = Vector3(
+			info[&"untrusted_player_position_x"],
+			info[&"untrusted_player_position_y"],
+			info[&"untrusted_player_position_z"]
+			)
+		
+		#player.global_position.x = info[&"untrusted_player_position_x"]
+		#player.global_position.y = info[&"untrusted_player_position_y"]
+		#player.global_position.z = info[&"untrusted_player_position_z"]
 		
 		#print(str(id))
 
@@ -618,7 +633,10 @@ func send_untrusted_player_position_to_host() -> void:
 		
 		var info: Dictionary = {
 			
-			&"untrusted_player_position": client_player_node.position,
+			&"untrusted_player_position": Vector3(client_player_node.position),
+			&"untrusted_player_position_x": client_player_node.position.x,
+			&"untrusted_player_position_y": client_player_node.position.y,
+			&"untrusted_player_position_z": client_player_node.position.z,
 			&"client_id": client_id
 		}
 		
