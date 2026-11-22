@@ -104,14 +104,14 @@ func _physics_process(delta: float) -> void:
 	
 	move_and_slide()
 	
-	if name != "own_player": 
+	if name != "OwnPlayer": 
 		return
 	else:
 		apply_movement_input(delta)
 
 func _process(_delta: float) -> void:
 	
-	if name != "own_player": 
+	if name != "OwnPlayer": 
 		return
 	else:
 		apply_jump_input()
@@ -363,7 +363,7 @@ func check_velocity() -> void:
 
 func _unhandled_input(event: InputEvent) -> void: ## Camera Controls
 	
-	if name != "own_player": return
+	if name != "OwnPlayer": return
 	
 	if MouseManager.is_mouse_visible == true: return
 	

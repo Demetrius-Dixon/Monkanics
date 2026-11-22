@@ -87,7 +87,9 @@ func client_process() -> void:
 	if is_host == true: return
 	if is_connected_to_relay == false: return
 	
-	pass
+	#pass
+	
+	send_untrusted_player_position_to_host()
 
 
 
@@ -339,6 +341,9 @@ func trigger_relay_server_tpc_command(command:String, info:Variant) -> void:
 	# Game Logic
 	
 	if command == "add_new_client_id_to_client_instance":
+		
+		if client_ids_in_lobby.has(info): return
+		
 		client_ids_in_lobby.append(info)
 	
 	if command == "load_map":
@@ -418,6 +423,7 @@ func poll_client_to_relay_server_ordered_udp() -> void:
 		
 		var command: String = json_translation[&"command"]
 		var info: Variant = json_translation[&"info"]
+		var id: int = int(json_translation[&"client_id"])
 		var sequence_number: int = json_translation[&"sequence_number"]
 		var last_sequence_number: int = json_translation[&"last_sequence_number"]
 		
@@ -432,7 +438,7 @@ func poll_client_to_relay_server_ordered_udp() -> void:
 			
 		else:
 			
-			trigger_relay_server_ordered_udp_command(command, info)
+			trigger_relay_server_ordered_udp_command(command, info, id)
 
 func send_ordered_udp_packet_to_relay_server(command:String, info:Variant) -> void:
 	
@@ -454,7 +460,7 @@ func increment_ordered_packet_sequence_number() -> int:
 	return current_ordered_packet_sequence_number
 
 @warning_ignore("unused_parameter")
-func trigger_relay_server_ordered_udp_command(command:String, info:Variant) -> void:
+func trigger_relay_server_ordered_udp_command(command:String, info:Variant, id:int) -> void:
 	
 	if command == "apply_new_player_state":
 		
@@ -466,6 +472,13 @@ func trigger_relay_server_ordered_udp_command(command:String, info:Variant) -> v
 		pass
 		
 		
+	
+	if command == "send_untrusted_position_to_host":
+		pass
+		
+		#var player: Variant = get_player_node_from_node_name(str(info[&"client_id"]))
+		
+		#print(str(id))
 
 
 
@@ -503,7 +516,7 @@ func spawn_own_player() -> void:
 	
 	var own_player: Node = SpawnManager.spawn_local("player", 0,0,0)
 	
-	own_player.name = "own_player"
+	own_player.name = "OwnPlayer"
 	
 	own_player.camera.current = true
 	
@@ -532,18 +545,6 @@ func spawn_other_player(node_name:String) -> void:
 		})
 	
 	#print(client_players)
-
-func send_player_position_to_host() -> void:
-	
-	if client_player_node == null: 
-		
-		return
-		
-	else:
-		
-		var untrusted_player_position: Vector3 = client_player_node.position
-		
-		send_ordered_udp_packet_to_relay_server("send_untrusted_position_to_server", untrusted_player_position)
 
 func host_get_new_player_state() -> void:
 	
@@ -606,6 +607,22 @@ func get_player_node_from_node_name(node_name:StringName) -> Node:
 
 
 
+
+func send_untrusted_player_position_to_host() -> void:
+	
+	if client_player_node == null: 
+		
+		return
+		
+	else:
+		
+		var info: Dictionary = {
+			
+			&"untrusted_player_position": client_player_node.position,
+			&"client_id": client_id
+		}
+		
+		send_ordered_udp_packet_to_relay_server("send_untrusted_position_to_host", info)
 
 
 

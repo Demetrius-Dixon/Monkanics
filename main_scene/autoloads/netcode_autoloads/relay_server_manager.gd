@@ -478,6 +478,7 @@ func poll_relay_server_ordered_udp() -> void:
 		
 		#print("Server Received Ordered Packet: ", packet)
 		
+		# Relay ordered UDP registration
 		if command == "register_to_relay_server_ordered_udp":
 			
 			for client in connected_clients:
@@ -509,6 +510,7 @@ func poll_relay_server_ordered_udp() -> void:
 			
 			var command: String = json_translation[&"command"]
 			var info: Variant = json_translation[&"info"]
+			var id: int = client[&"client_id"]
 			var current_session: Variant = client[&"current_session"]
 			var is_host: Variant = client[&"is_host"]
 			var packet_sequence_number: int = json_translation[&"sequence_number"]
@@ -531,7 +533,7 @@ func poll_relay_server_ordered_udp() -> void:
 							
 							send_ordered_udp_packet_to_client(command, info, \
 							get_ordered_udp_peer_from_client_id(client_id), \
-							packet_sequence_number, last_sequence_number)
+							packet_sequence_number, last_sequence_number, id)
 			
 			# Client forwarding logic (All Clients -> Host)
 			if is_host == false:
@@ -545,8 +547,8 @@ func poll_relay_server_ordered_udp() -> void:
 						var host_peer: PacketPeerUDP = get_ordered_udp_peer_from_client_id(host_id)
 						
 						send_ordered_udp_packet_to_client(command, info, \
-						host_peer, \
-						packet_sequence_number, last_sequence_number)
+						host_peer, packet_sequence_number, \
+						last_sequence_number, id)
 
 func get_ordered_udp_peer_from_client_id(client_id:int) -> PacketPeerUDP:
 	
@@ -558,12 +560,14 @@ func get_ordered_udp_peer_from_client_id(client_id:int) -> PacketPeerUDP:
 	return null
 
 func send_ordered_udp_packet_to_client(command:String, info:Variant, 
-recipient:PacketPeerUDP, sequence_number:int, last_sequence_number:int) -> void:
+recipient:PacketPeerUDP, sequence_number:int, last_sequence_number:int,
+client_id:int) -> void:
 	
 	var packet: Dictionary = {
 		
 		&"command": command, 
 		&"info": info,
+		&"client_id": client_id,
 		&"sequence_number": sequence_number,
 		&"last_sequence_number": last_sequence_number
 	}
@@ -629,6 +633,7 @@ func join_relay_session(info:Variant) -> void:
 			# Update client info
 			for client in connected_clients:
 			
+			# Get the correct session
 				if client[&"client_id"] == info[&"client_id"]:
 					
 					client[&"current_session"] = session[&"session_id"]
@@ -644,23 +649,7 @@ func join_relay_session(info:Variant) -> void:
 					{&"x": 0, &"y": 0, &"z": 0} , 
 					new_client_peer)
 					
-					# Spawn old clients on the newly joined client
-					for session_client_id:Variant in session[&"client_ids"]:
-						
-						var old_client_id: int = session_client_id
-						
-						var old_client_peer: StreamPeerTCP = \
-						get_tcp_peer_from_client_id(session_client_id)
-						
-						if old_client_peer == new_client_peer: continue
-						
-						send_tcp_data_to_client("add_new_client_id_to_client_instance", \
-						old_client_id, new_client_peer)
-						
-						send_tcp_data_to_client("spawn_other_player", \
-						old_client_id, new_client_peer)
-					
-					# Send info to all other clients
+					# Spawn new player on all other client instances
 					for session_peer:Variant in \
 					get_client_ids_from_session_id(session[&"session_id"], true):
 						
@@ -670,10 +659,24 @@ func join_relay_session(info:Variant) -> void:
 						get_tcp_peer_from_client_id(session_peer)
 						
 						send_tcp_data_to_client("add_new_client_id_to_client_instance", \
-						session_peer, session_tcp_peer)
+						new_client_id, session_tcp_peer)
 						
 						send_tcp_data_to_client("spawn_other_player", \
-						session_peer, session_tcp_peer)
+						new_client_id, session_tcp_peer)
+					
+					# Spawn all old client players on the newly joined client instance
+					for session_client_id:Variant in session[&"client_ids"]:
+						
+						var old_client_peer: StreamPeerTCP = \
+						get_tcp_peer_from_client_id(session_client_id)
+						
+						if old_client_peer == new_client_peer: continue
+						
+						send_tcp_data_to_client("add_new_client_id_to_client_instance", \
+						session_client_id, new_client_peer)
+						
+						send_tcp_data_to_client("spawn_other_player", \
+						session_client_id, new_client_peer)
 					
 				else: continue
 			
