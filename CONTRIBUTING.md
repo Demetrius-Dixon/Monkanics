@@ -154,13 +154,15 @@ With any method, your personal information is kept strictly confidential and is 
 
 # Monkanics Documentation
 
-*Documentation for Monkanics' codebase, game design, trivia, and more is a WIP and not available at the moment. This section will be made on the Monkanics Github Wiki page*
+Documentation for Monkanics' codebase, game design, trivia, and more is available here on the Monkanics Github wiki page: (https://github.com/Demetrius-Dixon/Monkanics/wiki)
+
+The documentation is updated as Monkanics develops. If you have a suggestion or addition you’d like to add/change regarding the wiki, create a new issue on the issues tab and add a **wiki suggestion** label.
 
 # Monkanics Raw Asset Repo
 
-This repository stores the raw game assets. This needs to be a separate repo, as putting large non-game files into the main repo takes up too much space and bloats the player download.
+This repository stores the raw game assets. Storage of *raw*, non-game ready assets MUST be separate, as putting large non-game files into the main repo takes up too much space and bloats the player download.
 
-*This repo is not available at this time, as it’s currently a WIP.*
+*This repo is not available at this time, it’s currently a WIP and will be released sometime in 2027 when the asset pipeline is more refined*
 
 # Development Authority
 
