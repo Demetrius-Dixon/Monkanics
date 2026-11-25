@@ -69,6 +69,12 @@ How to pull request from Github Desktop:
 7. Communicate your changes on Github and the Wackshop Games Discord.
 8. Await review.
 
+# How to Playtest Monkanics in the Godot Engine
+
+Unlike a single-player Godot game, Monkanics requires multiple instances in order to be playtested in the engine, as it is a multiplayer game that requires servers and multiple clients. Running the project as a standalone client will simply not work.
+
+To learn how, head over to the wiki guide on how to do it: (https://github.com/Demetrius-Dixon/Monkanics/wiki/Running-Monkanics-in-the-Godot-Editor)
+
 # Pull Request Rules:
 
 **General Disclaimers:**
