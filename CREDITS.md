@@ -29,6 +29,8 @@ Contribute today and follow the contribution guidelines in the `CONTRIBUTING` fi
 - istubedmytoe - Programming
 - At_mr_James - Programming
 - Zebody (@project.taro.z) - 2D Artist
+- Birru Madani (@birrumadani on Fiverr) - 3D Modeler and Rigger
+- Jashvant Khatri (@jashvant_khatri on Fiverr) - 3D Modeler and Rigger
 
 ## Financial Backers (All-Time)
 
