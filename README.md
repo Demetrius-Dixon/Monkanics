@@ -98,5 +98,9 @@ I plan to fund Monkanics' development via croudfunding, bootstrapping, and other
 - Monkanics-Dev Tumblr: https://www.tumblr.com/blog/monkanics-dev
 - Monkanics_Dev TikTok: https://www.tiktok.com/@monkanicsdev
 
+### Contact Wackshop Games
+
+- Demetrius Dixon (Studio Head): demetriusdixon on Discord (https://discord.com/users/1203983922996707362)
+
 --------------------------------------------------------------
 <img width="500" height="500" alt="Monkanics_Icon_2" src="https://github.com/user-attachments/assets/12ea6d07-5bfe-43e7-b08d-2f7a94b6ae0a" />
